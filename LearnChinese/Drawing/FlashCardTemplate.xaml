@@ -1,0 +1,187 @@
+﻿<UserControl x:Class="YellowDuck.LearnChinese.Drawing.FlashCardTemplate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:drawing="clr-namespace:YellowDuck.LearnChinese.Drawing"
+             mc:Ignorable="d" MaxWidth="200">
+    <UserControl.Resources>
+
+        <x:Array x:Key="OriginalWord"  Type="{x:Type  drawing:SyllableView}">
+            <drawing:SyllableView Brush="Blue" Text="爱"   />
+            <drawing:SyllableView Brush="Black" Text="人"  />
+        </x:Array>
+
+        <x:Array x:Key="Pinyin" Type="{x:Type  drawing:SyllableView}">
+            <drawing:SyllableView Brush="Blue" Text="ài"   />
+            <drawing:SyllableView Brush="Black" Text="ren"  />
+        </x:Array>
+
+
+        <x:Array x:Key="Variants" Type="{x:Type  drawing:VariantView}">
+            <drawing:VariantView OrderNumber="1"  Text="Рыба" ChineseFontVisibility="Collapsed"  />
+            <drawing:VariantView OrderNumber="2"  Text="Конь" ChineseFontVisibility="Collapsed"  />
+            <drawing:VariantView OrderNumber="3"  Text="Пчела" ChineseFontVisibility="Collapsed"  />
+            <drawing:VariantView OrderNumber="4"  Text="Супруг" ChineseFontVisibility="Collapsed"  />
+        </x:Array>
+
+        <drawing:FlashCardView  x:Key="Dc" 
+                                Usage="她是我的爱人" 
+                                TranslationNative="Супруг" 
+                                Pinyin="{StaticResource ResourceKey=Pinyin}" 
+                                OriginalWord="{StaticResource ResourceKey=OriginalWord}"
+                                Variants="{StaticResource ResourceKey=Variants}"
+                                TotalLearnCount="40"
+                                SuccessLearnCount="32"
+                                Mode="OriginalWordAndPronunciation" />
+    </UserControl.Resources>
+
+    <Border BorderThickness="1" 
+            Padding="5" 
+            BorderBrush="Black" 
+            CornerRadius="10" 
+            d:DataContext="{StaticResource ResourceKey=Dc}">
+        <Border.Background>
+            <SolidColorBrush Color="Green" Opacity="0.1"/>
+        </Border.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <ItemsControl ItemsSource="{Binding OriginalWord}" 
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center" 
+                          MaxHeight="80" 
+                          Visibility="{Binding OriginalWordVisibility}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type drawing:SyllableView}">
+                            <TextBlock FontFamily="KaiTi" 
+                                   FontSize="34" 
+                                   Foreground="{Binding Brush}" 
+                                   TextWrapping="Wrap"
+                                   Text="{Binding Text}"
+                                   TextTrimming="CharacterEllipsis"  
+                                   HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl ItemsSource="{Binding Pinyin}" 
+                          Grid.Row="1" 
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Center" 
+                          Margin="0 5 0 5" 
+                          MaxHeight="40" 
+                          Visibility="{Binding PinyinVisibility}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type drawing:SyllableView}">
+                            <TextBlock  TextWrapping="Wrap" 
+                                    FontFamily="Georgia" 
+                                    FontSize="14"
+                                    Text="{Binding Text}" 
+                                    Foreground="{Binding Brush}" 
+                                    TextTrimming="CharacterEllipsis" 
+                                    HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Grid.Row="2" 
+                       TextWrapping="Wrap" 
+                       FontFamily="Georgia" 
+                       FontSize="14" 
+                       Text="{Binding TranslationNative}" 
+                       TextTrimming="WordEllipsis"  
+                       HorizontalAlignment="Center" 
+                       MaxHeight="40"  
+                       Visibility="{Binding TranslationVisibility}" />
+
+                <TextBlock Grid.Row="3" 
+                       TextWrapping="Wrap" 
+                       FontFamily="KaiTi" 
+                       FontSize="14" 
+                       Text="{Binding Usage}" 
+                       TextTrimming="WordEllipsis"  
+                       HorizontalAlignment="Center" 
+                       MaxHeight="20" 
+                       Foreground="Gray"
+                       Visibility="{Binding StatisticVisibility}"/>
+
+                <TextBlock Grid.Row="4" 
+                       TextWrapping="Wrap" 
+                       Foreground="Gray" 
+                       FontFamily="Georgia" 
+                       FontSize="8"   
+                       TextTrimming="WordEllipsis"  
+                       HorizontalAlignment="Right"
+                       MaxHeight="20" 
+                       Visibility="{Binding StatisticVisibility }">
+                <Run Text="{Binding SuccessLearnCount }"/>
+                /
+                <Run Text="{Binding TotalLearnCount }"/>
+                </TextBlock>
+
+            </Grid>
+
+            <Grid Grid.Row="1" Visibility="{Binding VariantsVisibility}">
+                <ItemsControl ItemsSource="{Binding Variants}" 
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center" 
+                          MaxHeight="80" 
+                          Visibility="{Binding OriginalWordVisibility}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical"  />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type drawing:VariantView}">
+                            <Grid>
+                                <TextBlock  Visibility="{Binding CommonFontVisibility}"
+                                   FontSize="14" 
+                                   FontFamily="Georgia" 
+                                   TextWrapping="Wrap"
+                                   TextTrimming="CharacterEllipsis"  
+                                   HorizontalAlignment="Left">
+                                <Run Text="{Binding OrderNumber}" />.
+                                <Run Text="{Binding Text}" />
+                                </TextBlock>
+
+                                <TextBlock  Visibility="{Binding ChineseFontVisibility}"
+                                   FontSize="14" 
+                                   FontFamily="KaiTi" 
+                                   TextWrapping="Wrap"
+                                   TextTrimming="CharacterEllipsis"  
+                                   HorizontalAlignment="Left">
+                                <Run Text="{Binding OrderNumber}" FontFamily="Georgia" />.
+                                <Run Text="{Binding Text}" />
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Grid>
+
+    </Border>
+</UserControl>
