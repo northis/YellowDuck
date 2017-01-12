@@ -23,13 +23,10 @@ namespace YellowDuck.LearnChinese.Data
         [StringLength(50)]
         public string PinyinWord { get; set; }
 
-        public DateTime DateAdded { get; set; }
+        public DateTime LastModified { get; set; }
 
         [StringLength(250)]
-        public string TranslationNative { get; set; }
-
-        [StringLength(250)]
-        public string TranslationEng { get; set; }
+        public string Translation { get; set; }
 
         public string Usage { get; set; }
 

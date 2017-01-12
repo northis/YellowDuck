@@ -54,8 +54,7 @@ namespace YellowDuck.LearnChinese.Data
                         $"Правка невозможна, такого слова в хранилище нет. Id={idWord}, ChineseWord={chineseWord}");
 
                 originalWord.PinyinWord = word.PinyinWord;
-                originalWord.TranslationEng = word.TranslationEng;
-                originalWord.TranslationNative = word.TranslationNative;
+                originalWord.Translation = word.Translation;
 
                 cntxt.SaveChanges();
             }
@@ -107,7 +106,7 @@ namespace YellowDuck.LearnChinese.Data
                     throw new Exception(
                         $"Ошибка при получении прогресса обучения. Аргументы недопустимы idUser={idUser}, idWord={idWord}");
 
-                score = new Score {User = user, Word = word, CheckCount = 0, SuccessCount = 0};
+                score = new Score {User = user, Word = word, OriginalWordCount = 0, OriginalWordSuccessCount = 0};
                 cntxt.Scores.Add(score);
                 cntxt.SaveChanges();
 
@@ -126,8 +125,8 @@ namespace YellowDuck.LearnChinese.Data
                     throw new Exception(
                         $"Обновление прогресса невозможно, такой сущности в хранилище нет. idScore={idScore}");
 
-                originalScore.CheckCount = score.CheckCount;
-                originalScore.SuccessCount = score.SuccessCount;
+                originalScore.OriginalWordCount = score.OriginalWordCount;
+                originalScore.OriginalWordSuccessCount = score.OriginalWordSuccessCount;
                 cntxt.SaveChanges();
             }
         }

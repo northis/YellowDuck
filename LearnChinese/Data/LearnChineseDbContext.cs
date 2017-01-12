@@ -35,13 +35,9 @@ namespace YellowDuck.LearnChinese.Data
                 .IsUnicode(true);
 
             modelBuilder.Entity<Word>()
-                .Property(e => e.TranslationNative)
+                .Property(e => e.Translation)
                 .IsUnicode(true);
-
-            modelBuilder.Entity<Word>()
-                .Property(e => e.TranslationEng)
-                .IsUnicode(true);
-
+            
             modelBuilder.Entity<Word>()
                 .Property(e => e.Usage)
                 .IsUnicode(true);

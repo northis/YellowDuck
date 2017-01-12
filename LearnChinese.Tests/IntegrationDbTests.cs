@@ -37,10 +37,9 @@ namespace YellowDuck.LearnChineseBotService.Tests
             iCntxt.AddWord(new Word
             {
                 ChineseWord = chineseWord,
-                DateAdded = iCntxt.GetRepositoryTime(),
+                LastModified = iCntxt.GetRepositoryTime(),
                 PinyinWord = "tǐyùguǎn",
-                TranslationEng = "gym",
-                TranslationNative = "Спортзал"
+                Translation = "Спортзал"
             });
 
             using (var cn = GetDbContext())
@@ -61,10 +60,9 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 cn.Words.Add(new Word
                 {
                     ChineseWord = chineseWord,
-                    DateAdded = iCntxt.GetRepositoryTime(),
+                    LastModified = iCntxt.GetRepositoryTime(),
                     PinyinWord = "tǐyùguǎn",
-                    TranslationEng = "gym",
-                    TranslationNative = "Спортзал"
+                    Translation = "Спортзал"
                 });
                 cn.SaveChanges();
             }
@@ -92,10 +90,9 @@ namespace YellowDuck.LearnChineseBotService.Tests
             var word = (new Word
             {
                 ChineseWord = chineseWord,
-                DateAdded = iCntxt.GetRepositoryTime(),
+                LastModified = iCntxt.GetRepositoryTime(),
                 PinyinWord = "tǐyùguǎn",
-                TranslationEng = "gym",
-                TranslationNative = "Спортзал"
+                Translation = "Спортзал"
             });
 
             using (var cn = GetDbContext())
@@ -105,15 +102,14 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
 
                 var guid = Guid.NewGuid().ToString();
-                word.TranslationEng = word.TranslationNative = word.PinyinWord = guid;
+                word.Translation = word.PinyinWord = guid;
 
                 iCntxt.EditWord(word);
 
                 var newWord = cn.Words.FirstOrDefault(a => a.ChineseWord == word.ChineseWord);
                 Assert.IsNotNull(newWord);
                 Assert.AreEqual(guid, newWord.PinyinWord);
-                Assert.AreEqual(guid, newWord.TranslationEng);
-                Assert.AreEqual(guid, newWord.TranslationNative);
+                Assert.AreEqual(guid, newWord.Translation);
             }
         }
 

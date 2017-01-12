@@ -76,7 +76,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
             Assert.IsTrue(wordsResult.SuccessfulWords.Length == 1);
             Assert.IsTrue(wordsResult.SuccessfulWords[0].ChineseWord == "明!!白!");
             Assert.IsTrue(wordsResult.SuccessfulWords[0].PinyinWord == "míng|bai");
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].TranslationNative == "понимать");
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].Translation == "понимать");
 
             stringsToImport = new [] { "你有病吗?你有药吗?;- ты больной? (шутл.) - а есть лекарство?" };
 
@@ -87,7 +87,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
             Assert.IsTrue(wordsResult.SuccessfulWords.Length == 1);
             Assert.IsTrue(wordsResult.SuccessfulWords[0].ChineseWord == "你有病吗?你有药吗?");
             //Assert.IsTrue(wordsResult.SuccessfulWords[0].PinyinWord == "míng|bai");
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].TranslationNative == "- ты больной? (шутл.) - а есть лекарство?");
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].Translation == "- ты больной? (шутл.) - а есть лекарство?");
 
 
             var result = prov.GetOrderedSyllables(wordsResult.SuccessfulWords[0]);
@@ -106,8 +106,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
             {
                 ChineseWord = "明?白!!",
                 PinyinWord = "míng|bai",
-                TranslationNative = "понимать",
-                TranslationEng = "understand"
+                Translation = "понимать"
             };
 
             var result = prov.GetOrderedSyllables(word);
@@ -154,8 +153,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
             {
                 ChineseWord = "明?白!!",
                 PinyinWord = "míng|bai",
-                TranslationNative = "понимать",
-                TranslationEng = "understand"
+                Translation = "понимать"
             };
 
             var result = grn.Generate(word);

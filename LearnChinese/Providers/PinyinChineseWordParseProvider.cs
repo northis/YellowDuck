@@ -138,7 +138,7 @@ namespace YellowDuck.LearnChinese.Providers
                         {
                             ChineseWord = mainWord,
                             PinyinWord = separatedSyllables,
-                            TranslationNative = translationNative
+                            Translation = translationNative
                         });
                     }
                     else if (syllables.Length > MaxSyllablesToParse)
@@ -190,7 +190,7 @@ namespace YellowDuck.LearnChinese.Providers
                                 ChineseWord = mainWord,
                                 PinyinWord =
                                     _syllablesToStringConverter.Join(importedSyllables.Select(a => a.Pinyin)),
-                                TranslationNative = translationNative
+                                Translation = translationNative
                             });
                         }
                         else
@@ -205,7 +205,7 @@ namespace YellowDuck.LearnChinese.Providers
                 {
                     ChineseWord = mainWord,
                     PinyinWord = separatedSyllables,
-                    TranslationNative = translationNative
+                    Translation = translationNative
                 });
             }
 
