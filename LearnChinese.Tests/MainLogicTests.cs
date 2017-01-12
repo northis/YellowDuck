@@ -128,6 +128,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
         [TestMethod]
         public void GetWordByCharactersTest()
         {
+
         }
 
         [TestMethod]
