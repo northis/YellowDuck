@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
 
 namespace YellowDuck.LearnChinese.Data
@@ -106,12 +107,17 @@ namespace YellowDuck.LearnChinese.Data
                     throw new Exception(
                         $"Ошибка при получении прогресса обучения. Аргументы недопустимы idUser={idUser}, idWord={idWord}");
 
-                score = new Score {User = user, Word = word, OriginalWordCount = 0, OriginalWordSuccessCount = 0};
+                score = new Score {User = user, Word = word, LastView = GetRepositoryTime()};
                 cntxt.Scores.Add(score);
                 cntxt.SaveChanges();
 
                 return score;
             }
+        }
+
+        public void SetPollMode(EPollModes pollMode, long userId, long wordId)
+        {
+            
         }
 
         public void SetScore(Score score)
@@ -125,8 +131,21 @@ namespace YellowDuck.LearnChinese.Data
                     throw new Exception(
                         $"Обновление прогресса невозможно, такой сущности в хранилище нет. idScore={idScore}");
 
+                originalScore.IsInLearnMode = score.IsInLearnMode;
+                originalScore.LastLearned = score.LastLearned;
+                originalScore.LastLearnMode = score.LastLearnMode;
+                originalScore.LastView = score.LastView;
+
                 originalScore.OriginalWordCount = score.OriginalWordCount;
                 originalScore.OriginalWordSuccessCount = score.OriginalWordSuccessCount;
+                originalScore.PronunciationCount = score.PronunciationCount;
+                originalScore.PronunciationSuccessCount = score.PronunciationSuccessCount;
+                originalScore.TranslationCount = score.TranslationCount;
+                originalScore.TranslationSuccessCount = score.TranslationSuccessCount;
+
+                originalScore.RightAnswerNumber = score.RightAnswerNumber;
+                originalScore.ViewCount = score.ViewCount;
+
                 cntxt.SaveChanges();
             }
         }

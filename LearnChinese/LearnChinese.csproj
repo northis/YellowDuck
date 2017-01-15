@@ -72,7 +72,8 @@
     <Compile Include="Drawing\FlashCardView.cs" />
     <Compile Include="Drawing\SyllableView.cs" />
     <Compile Include="Drawing\VariantView.cs" />
-    <Compile Include="Enums\ELearnModes.cs" />
+    <Compile Include="Enums\EPollModes.cs" />
+    <Compile Include="Enums\EViewModes.cs" />
     <Compile Include="Enums\EToneTypes.cs" />
     <Compile Include="Interfaces\IChinesePinyinConverter.cs" />
     <Compile Include="Interfaces\IChineseWordParseProvider.cs" />

@@ -15,7 +15,9 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
             using (var cn = GetDbContext())
             {
+                cn.Scores.RemoveRange(cn.Scores);
                 cn.Words.RemoveRange(cn.Words);
+                cn.Users.RemoveRange(cn.Users);
                 cn.SaveChanges();
             }
 
@@ -28,7 +30,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
         }
 
         [TestMethod]
-        public void AddWordToRepTest()
+        public void AddWordTest()
         {
             var cntxt = GetCleanDb();
             ILearnWordRepository iCntxt = cntxt;
@@ -81,7 +83,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
         }
 
         [TestMethod]
-        public void EditWordInRepTest()
+        public void EditWordTest()
         {
             var cntxt = GetCleanDb();
             ILearnWordRepository iCntxt = cntxt;
@@ -100,9 +102,11 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 cn.Words.Add(word);
                 cn.SaveChanges();
 
-
                 var guid = Guid.NewGuid().ToString();
-                word.Translation = word.PinyinWord = guid;
+                var dt = iCntxt.GetRepositoryTime();
+                word.LastModified = dt;
+
+                word.Usage = word.Translation = word.PinyinWord = guid;
 
                 iCntxt.EditWord(word);
 
@@ -110,6 +114,42 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 Assert.IsNotNull(newWord);
                 Assert.AreEqual(guid, newWord.PinyinWord);
                 Assert.AreEqual(guid, newWord.Translation);
+                Assert.AreEqual(guid, newWord.Usage);
+                Assert.AreEqual(dt, newWord.LastModified);
+            }
+        }
+
+        [TestMethod]
+        public void EditScoreTest()
+        {
+            var cntxt = GetCleanDb();
+            ILearnWordRepository iCntxt = cntxt;
+
+            var idUser = 10;
+            var user = new User
+            {
+                IdUser = idUser,
+                Name = string.Empty
+            };
+
+            var chineseWord = "体育馆";
+            var word = (new Word
+            {
+                ChineseWord = chineseWord,
+                LastModified = iCntxt.GetRepositoryTime(),
+                PinyinWord = "tǐyùguǎn",
+                Translation = "Спортзал"
+            });
+
+            using (var cn = GetDbContext())
+            {
+                cn.Words.Add(word);
+                cn.Users.Add(user);
+                cn.SaveChanges();
+
+                var score = iCntxt.GetScore(idUser, word.Id);
+
+                Assert.IsNotNull(score);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace YellowDuck.LearnChinese.Enums
 {
-    public enum ELearnModes
+    public enum EViewModes
     {
         OriginalWordOnly = 1,
         TranslationOnly = 2,
