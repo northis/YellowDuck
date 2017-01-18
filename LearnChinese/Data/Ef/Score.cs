@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YellowDuck.LearnChinese.Data
+namespace YellowDuck.LearnChinese.Data.Ef
 {
     [Table("Score")]
     public  partial class Score

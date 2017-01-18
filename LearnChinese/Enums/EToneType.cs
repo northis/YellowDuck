@@ -1,6 +1,6 @@
 ﻿namespace YellowDuck.LearnChinese.Enums
 {
-    public enum EToneTypes
+    public enum EToneType
     {
         Without = 1,
         Number = 2,

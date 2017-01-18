@@ -13,7 +13,7 @@ namespace YellowDuck.LearnChinese.Drawing
             //Mode = ELearnModes.All;
         }
 
-        public FlashCardView(SyllableView[] originalWord, SyllableView[] pinyin, string translationNative, int successLearnCount, int totalLearnCount, string usage, EViewModes mode, VariantView[] variants)
+        public FlashCardView(SyllableView[] originalWord, SyllableView[] pinyin, string translationNative, int successLearnCount, int totalLearnCount, string usage, EViewMode mode, VariantView[] variants)
         {
             OriginalWord = originalWord;
             TranslationNative = translationNative;
@@ -36,27 +36,24 @@ namespace YellowDuck.LearnChinese.Drawing
         public int SuccessLearnCount { get; set; }
         public int TotalLearnCount { get; set; }
         public string Usage { get; set; }
-        public EViewModes Mode { get; set; }
+        public EViewMode Mode { get; set; }
 
-        public Visibility OriginalWordVisibility => Mode == EViewModes.All || Mode == EViewModes.OriginalWordOnly ||
-                                                Mode == EViewModes.OriginalWordAndPronunciation
+        public Visibility OriginalWordVisibility => Mode == EViewMode.All || Mode == EViewMode.OriginalWordOnly ||
+                                                Mode == EViewMode.OriginalWordAndPronunciation
             ? Visibility.Visible
             : Visibility.Collapsed;
 
-        public Visibility PinyinVisibility => Mode == EViewModes.All || Mode == EViewModes.PronunciationOnly ||
-                                                Mode == EViewModes.PronunciationAndTranslation || Mode == EViewModes.OriginalWordAndPronunciation
+        public Visibility PinyinVisibility => Mode == EViewMode.All || Mode == EViewMode.PronunciationOnly ||
+                                                Mode == EViewMode.PronunciationAndTranslation || Mode == EViewMode.OriginalWordAndPronunciation
             ? Visibility.Visible
             : Visibility.Collapsed;
 
 
-        public Visibility TranslationVisibility => Mode == EViewModes.All || Mode == EViewModes.TranslationOnly || Mode == EViewModes.PronunciationAndTranslation
+        public Visibility TranslationVisibility => Mode == EViewMode.All || Mode == EViewMode.TranslationOnly || Mode == EViewMode.PronunciationAndTranslation
             ? Visibility.Visible
             : Visibility.Collapsed;
 
-        public Visibility StatisticVisibility => Mode == EViewModes.All ? Visibility.Visible : Visibility.Collapsed;
-
-
-        public Visibility VariantsVisibility => Mode != EViewModes.All ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility StatisticVisibility => Mode == EViewMode.All ? Visibility.Visible : Visibility.Collapsed;
 
         #endregion
 

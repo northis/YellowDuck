@@ -1,10 +1,12 @@
-﻿namespace YellowDuck.LearnChinese.Data
+﻿using YellowDuck.LearnChinese.Interfaces.Data;
+
+namespace YellowDuck.LearnChinese.Data
 {
     public sealed class Poll
     {
         #region Constructors
 
-        public Poll(Word[] answers, Word wordToCheck)
+        public Poll(string[] answers, IWord wordToCheck)
         {
             Answers = answers;
             WordToCheck = wordToCheck;
@@ -14,8 +16,8 @@
 
         #region Properties
 
-        public Word[] Answers { get; }
-        public Word WordToCheck { get; }
+        public string[] Answers { get;  }
+        public IWord WordToCheck { get;  }
 
         #endregion
     }

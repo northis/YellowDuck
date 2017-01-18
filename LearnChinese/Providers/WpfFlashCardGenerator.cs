@@ -7,12 +7,13 @@ using System.Windows.Media.Imaging;
 using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Drawing;
 using YellowDuck.LearnChinese.Interfaces;
+using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Providers
 {
     public class WpfFlashCardGenerator : IFlashCardGenerator
     {
-        public byte[] Generate(Word word)
+        public byte[] Generate(IWord word)
         {
             var control = new FlashCardTemplate {DataContext = word};
 

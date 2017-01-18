@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Linq.Expressions;
 using YellowDuck.LearnChinese.Data;
+using YellowDuck.LearnChinese.Data.Ef;
+using YellowDuck.LearnChinese.Enums;
+using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Interfaces
 {
     public interface ILearnWordRepository
     {
-        Word[] GetWords(Expression<Func<Word, bool>> whereCondition);
+        IWord[] GetWords(Expression<Func<IWord, bool>> whereCondition);
         
 
         DateTime GetRepositoryTime();
         
-        void EditWord(Word word);
+        void EditWord(IWord word);
 
         void DeleteWord(long wordId);
 
-        void AddWord(Word word);
+        void AddWord(IWord word);
 
-        Score GetScore(long idUser, long idWord);
+        Poll LearnWord(long userId, ELearnMode learnMode, EGettingWordsStrategy strategy);
 
         void SetScore(Score score);
 
 
-        void AddUser(User user);
+        void AddUser(IUser user);
         void RemoveUser(long userId);
     }
 }

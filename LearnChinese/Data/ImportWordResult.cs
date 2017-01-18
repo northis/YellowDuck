@@ -1,4 +1,6 @@
-﻿namespace YellowDuck.LearnChinese.Data
+﻿using YellowDuck.LearnChinese.Data.Ef;
+
+namespace YellowDuck.LearnChinese.Data
 {
     public class ImportWordResult
     {

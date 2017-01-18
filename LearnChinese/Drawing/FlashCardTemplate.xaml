@@ -46,67 +46,62 @@
         </Border.Background>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
 
-                <ItemsControl ItemsSource="{Binding OriginalWord}" 
+            <ItemsControl ItemsSource="{Binding OriginalWord}" 
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center" 
                           MaxHeight="80" 
                           Visibility="{Binding OriginalWordVisibility}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type drawing:SyllableView}">
-                            <TextBlock FontFamily="KaiTi" 
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type drawing:SyllableView}">
+                        <TextBlock FontFamily="KaiTi" 
                                    FontSize="34" 
                                    Foreground="{Binding Brush}" 
                                    TextWrapping="Wrap"
                                    Text="{Binding Text}"
                                    TextTrimming="CharacterEllipsis"  
                                    HorizontalAlignment="Center"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-                <ItemsControl ItemsSource="{Binding Pinyin}" 
+            <ItemsControl ItemsSource="{Binding Pinyin}" 
                           Grid.Row="1" 
                           HorizontalAlignment="Center" 
                           VerticalAlignment="Center" 
                           Margin="0 5 0 5" 
                           MaxHeight="40" 
                           Visibility="{Binding PinyinVisibility}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type drawing:SyllableView}">
-                            <TextBlock  TextWrapping="Wrap" 
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type drawing:SyllableView}">
+                        <TextBlock  TextWrapping="Wrap" 
                                     FontFamily="Georgia" 
                                     FontSize="14"
                                     Text="{Binding Text}" 
                                     Foreground="{Binding Brush}" 
                                     TextTrimming="CharacterEllipsis" 
                                     HorizontalAlignment="Center"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-                <TextBlock Grid.Row="2" 
+            <TextBlock Grid.Row="2" 
                        TextWrapping="Wrap" 
                        FontFamily="Georgia" 
                        FontSize="14" 
@@ -116,7 +111,7 @@
                        MaxHeight="40"  
                        Visibility="{Binding TranslationVisibility}" />
 
-                <TextBlock Grid.Row="3" 
+            <TextBlock Grid.Row="3" 
                        TextWrapping="Wrap" 
                        FontFamily="KaiTi" 
                        FontSize="14" 
@@ -127,7 +122,7 @@
                        Foreground="Gray"
                        Visibility="{Binding StatisticVisibility}"/>
 
-                <TextBlock Grid.Row="4" 
+            <TextBlock Grid.Row="4" 
                        TextWrapping="Wrap" 
                        Foreground="Gray" 
                        FontFamily="Georgia" 
@@ -139,48 +134,8 @@
                 <Run Text="{Binding SuccessLearnCount }"/>
                 /
                 <Run Text="{Binding TotalLearnCount }"/>
-                </TextBlock>
+            </TextBlock>
 
-            </Grid>
-
-            <Grid Grid.Row="1" Visibility="{Binding VariantsVisibility}">
-                <ItemsControl ItemsSource="{Binding Variants}" 
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center" 
-                          MaxHeight="80" 
-                          Visibility="{Binding OriginalWordVisibility}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Vertical"  />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type drawing:VariantView}">
-                            <Grid>
-                                <TextBlock  Visibility="{Binding CommonFontVisibility}"
-                                   FontSize="14" 
-                                   FontFamily="Georgia" 
-                                   TextWrapping="Wrap"
-                                   TextTrimming="CharacterEllipsis"  
-                                   HorizontalAlignment="Left">
-                                <Run Text="{Binding OrderNumber}" />.
-                                <Run Text="{Binding Text}" />
-                                </TextBlock>
-
-                                <TextBlock  Visibility="{Binding ChineseFontVisibility}"
-                                   FontSize="14" 
-                                   FontFamily="KaiTi" 
-                                   TextWrapping="Wrap"
-                                   TextTrimming="CharacterEllipsis"  
-                                   HorizontalAlignment="Left">
-                                <Run Text="{Binding OrderNumber}" FontFamily="Georgia" />.
-                                <Run Text="{Binding Text}" />
-                                </TextBlock>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
         </Grid>
 
     </Border>

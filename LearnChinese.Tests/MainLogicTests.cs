@@ -1,6 +1,7 @@
 ﻿using System.Windows.Media;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using YellowDuck.LearnChinese.Data;
+using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Providers;
 
 namespace YellowDuck.LearnChineseBotService.Tests
@@ -74,8 +75,8 @@ namespace YellowDuck.LearnChineseBotService.Tests
             Assert.IsNotNull(wordsResult);
             Assert.IsTrue(wordsResult.FailedWords.Length == 0);
             Assert.IsTrue(wordsResult.SuccessfulWords.Length == 1);
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].ChineseWord == "明!!白!");
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].PinyinWord == "míng|bai");
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].OriginalWord == "明!!白!");
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].Pronunciation == "míng|bai");
             Assert.IsTrue(wordsResult.SuccessfulWords[0].Translation == "понимать");
 
             stringsToImport = new [] { "你有病吗?你有药吗?;- ты больной? (шутл.) - а есть лекарство?" };
@@ -85,7 +86,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
             Assert.IsNotNull(wordsResult);
             Assert.IsTrue(wordsResult.FailedWords.Length == 0);
             Assert.IsTrue(wordsResult.SuccessfulWords.Length == 1);
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].ChineseWord == "你有病吗?你有药吗?");
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].OriginalWord == "你有病吗?你有药吗?");
             //Assert.IsTrue(wordsResult.SuccessfulWords[0].PinyinWord == "míng|bai");
             Assert.IsTrue(wordsResult.SuccessfulWords[0].Translation == "- ты больной? (шутл.) - а есть лекарство?");
 
@@ -104,8 +105,8 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
             var word = new Word
             {
-                ChineseWord = "明?白!!",
-                PinyinWord = "míng|bai",
+                OriginalWord = "明?白!!",
+                Pronunciation = "míng|bai",
                 Translation = "понимать"
             };
 
@@ -151,8 +152,8 @@ namespace YellowDuck.LearnChineseBotService.Tests
             var grn = new WpfFlashCardGenerator();
             var word = new Word
             {
-                ChineseWord = "明?白!!",
-                PinyinWord = "míng|bai",
+                OriginalWord = "明?白!!",
+                Pronunciation = "míng|bai",
                 Translation = "понимать"
             };
 

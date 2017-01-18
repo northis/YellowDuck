@@ -58,23 +58,28 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\EfRepository.cs" />
+    <Compile Include="Data\Ef\EfRepository.cs" />
     <Compile Include="Data\ImportWordResult.cs" />
+    <Compile Include="Data\WordDatesView.cs" />
+    <Compile Include="Interfaces\Data\IUser.cs" />
+    <Compile Include="Interfaces\Data\IWord.cs" />
     <Compile Include="Data\LearnChineseDbContext.cs" />
     <Compile Include="Data\Poll.cs" />
-    <Compile Include="Data\Score.cs" />
+    <Compile Include="Data\Ef\Score.cs" />
     <Compile Include="Data\Syllable.cs" />
-    <Compile Include="Data\User.cs" />
-    <Compile Include="Data\Word.cs" />
+    <Compile Include="Data\Ef\User.cs" />
+    <Compile Include="Data\UserWord.cs" />
+    <Compile Include="Data\Ef\Word.cs" />
     <Compile Include="Drawing\FlashCardTemplate.xaml.cs">
       <DependentUpon>FlashCardTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Drawing\FlashCardView.cs" />
     <Compile Include="Drawing\SyllableView.cs" />
     <Compile Include="Drawing\VariantView.cs" />
-    <Compile Include="Enums\EPollModes.cs" />
-    <Compile Include="Enums\EViewModes.cs" />
-    <Compile Include="Enums\EToneTypes.cs" />
+    <Compile Include="Enums\EGettingWordsStrategy.cs" />
+    <Compile Include="Enums\ELearnMode.cs" />
+    <Compile Include="Enums\EViewMode.cs" />
+    <Compile Include="Enums\EToneType.cs" />
     <Compile Include="Interfaces\IChinesePinyinConverter.cs" />
     <Compile Include="Interfaces\IChineseWordParseProvider.cs" />
     <Compile Include="Interfaces\IFlashCardGenerator.cs" />
@@ -99,6 +104,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

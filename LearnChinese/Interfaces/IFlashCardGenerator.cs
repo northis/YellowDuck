@@ -1,9 +1,9 @@
-﻿using YellowDuck.LearnChinese.Data;
+﻿using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Interfaces
 {
     public interface IFlashCardGenerator
     {
-        byte[] Generate(Word word);
+        byte[] Generate(IWord word);
     }
 }

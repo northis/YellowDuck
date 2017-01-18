@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using YellowDuck.LearnChinese.Data.Ef;
 
 namespace YellowDuck.LearnChinese.Data
 {
@@ -27,11 +28,11 @@ namespace YellowDuck.LearnChinese.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Word>()
-                .Property(e => e.ChineseWord)
+                .Property(e => e.OriginalWord)
                 .IsUnicode(true);
 
             modelBuilder.Entity<Word>()
-                .Property(e => e.PinyinWord)
+                .Property(e => e.Pronunciation)
                 .IsUnicode(true);
 
             modelBuilder.Entity<Word>()

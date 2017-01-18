@@ -33,7 +33,7 @@ namespace YellowDuck.LearnChinese.Providers
 
         #region Methods
 
-        public string[] Convert(char chineseCharacter, EToneTypes toneType)
+        public string[] Convert(char chineseCharacter, EToneType toneType)
         {
             var format = new HanyuPinyinOutputFormat
             {
@@ -44,11 +44,11 @@ namespace YellowDuck.LearnChinese.Providers
 
             switch (toneType)
             {
-                case EToneTypes.Without:
+                case EToneType.Without:
                     format.ToneType = HanyuPinyinToneType.WITHOUT_TONE;
                     break;
 
-                case EToneTypes.Number:
+                case EToneType.Number:
                     format.ToneType = HanyuPinyinToneType.WITH_TONE_NUMBER;
                     break;
             }
