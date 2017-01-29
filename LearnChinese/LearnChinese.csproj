@@ -78,7 +78,6 @@
     <Compile Include="Drawing\VariantView.cs" />
     <Compile Include="Enums\EGettingWordsStrategy.cs" />
     <Compile Include="Enums\ELearnMode.cs" />
-    <Compile Include="Enums\EViewMode.cs" />
     <Compile Include="Enums\EToneType.cs" />
     <Compile Include="Interfaces\IChinesePinyinConverter.cs" />
     <Compile Include="Interfaces\IChineseWordParseProvider.cs" />
@@ -96,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Fonts\KaiTi.ttf" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

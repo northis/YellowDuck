@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Data.Ef;
+using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Providers;
 
 namespace YellowDuck.LearnChineseBotService.Tests
@@ -149,7 +150,13 @@ namespace YellowDuck.LearnChineseBotService.Tests
         [TestMethod]
         public void GenerateImageForWordTest()
         {
-            var grn = new WpfFlashCardGenerator();
+
+            var colorProv = new ClassicSyllableColorProvider();
+            var pinyinProv = new Pinyin4NetConverter();
+            var tostrConv = new ClassicSyllablesToStringConverter();
+            var prov = new PinyinChineseWordParseProvider(colorProv, pinyinProv, tostrConv);
+
+            var grn = new WpfFlashCardGenerator(prov);
             var word = new Word
             {
                 OriginalWord = "明?白!!",
@@ -157,7 +164,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 Translation = "понимать"
             };
 
-            var result = grn.Generate(word);
+            var result = grn.Generate(word, ELearnMode.FullView);
 
             Assert.IsTrue(result.Length > 0);
             System.IO.File.WriteAllBytes(@"D:\test.png", result);

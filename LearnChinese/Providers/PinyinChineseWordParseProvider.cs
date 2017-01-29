@@ -44,7 +44,6 @@ namespace YellowDuck.LearnChinese.Providers
                 _syllableColorProvider.GetSyllableColor(charWord, _chinesePinyinConverter.ToSyllableNumberTone(pinyinWithMark)));
         }
 
-
         public Syllable[] GetOrderedSyllables(string word)
         {
             return GetOrderedSyllables(word, EToneType.Mark);
@@ -64,12 +63,23 @@ namespace YellowDuck.LearnChinese.Providers
             var syllArray = syllableStrings.ToArray();
 
             var sylls = new List<Syllable>();
-            var chineseOnly = word.OriginalWord.Where(IsChineseCharacter).ToArray();
+            var chineseOnly = word.OriginalWord.ToArray();
+            
+            var chineseCharsCount = 0;
 
-            for (var i = 0; i < chineseOnly.Length; i++)
+            foreach (var character in chineseOnly)
             {
-                var character = chineseOnly[i];
-                sylls.Add(GetSyllable(character, syllArray[i]));
+                var isChineseChar = IsChineseCharacter(character);
+
+                if (isChineseChar)
+                {
+                    sylls.Add(GetSyllable(character, syllArray[chineseCharsCount]));
+                    chineseCharsCount++;
+                }
+                else
+                {
+                    sylls.Add(new Syllable(character));
+                }
             }
             return sylls.ToArray();
         }

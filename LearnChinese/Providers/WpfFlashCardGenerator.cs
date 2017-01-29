@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Drawing;
+using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
@@ -13,13 +15,26 @@ namespace YellowDuck.LearnChinese.Providers
 {
     public class WpfFlashCardGenerator : IFlashCardGenerator
     {
-        public byte[] Generate(IWord word)
+        private readonly IChineseWordParseProvider _wordParseProvider;
+
+        public WpfFlashCardGenerator(IChineseWordParseProvider wordParseProvider)
         {
-            var control = new FlashCardTemplate {DataContext = word};
+            _wordParseProvider = wordParseProvider;
+        }
 
+        public byte[] Generate(IWord word, ELearnMode learnMode)
+        {
+            var syllables = _wordParseProvider.GetOrderedSyllables(word);
+            var wordSyllables = syllables.Select(a => new SyllableView(a.ChineseChar.ToString(), a.Color)).ToArray();
+            var pinYinSyllables = syllables.Select(a => new SyllableView(a.Pinyin.ToString(), a.Color)).ToArray();
 
-            control.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+            var view = new FlashCardView(wordSyllables, pinYinSyllables, word.Translation, word.Usage, learnMode);
+
+            var control = new FlashCardTemplate {DataContext = view };
+            
+            control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             control.Arrange(new Rect(control.DesiredSize));
+            control.UpdateLayout();
 
             var res = SaveControlImage(control);
             return res;

@@ -13,6 +13,11 @@ namespace YellowDuck.LearnChinese.Data
             Color = color;
         }
 
+        public Syllable(char commonChar):this(commonChar,string.Empty, Colors.Black)
+        {
+            
+        }
+
         #endregion
 
         #region Properties

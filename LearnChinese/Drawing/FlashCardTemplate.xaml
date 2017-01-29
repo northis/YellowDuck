@@ -17,24 +17,14 @@
             <drawing:SyllableView Brush="Black" Text="ren"  />
         </x:Array>
 
-
-        <x:Array x:Key="Variants" Type="{x:Type  drawing:VariantView}">
-            <drawing:VariantView OrderNumber="1"  Text="Рыба" ChineseFontVisibility="Collapsed"  />
-            <drawing:VariantView OrderNumber="2"  Text="Конь" ChineseFontVisibility="Collapsed"  />
-            <drawing:VariantView OrderNumber="3"  Text="Пчела" ChineseFontVisibility="Collapsed"  />
-            <drawing:VariantView OrderNumber="4"  Text="Супруг" ChineseFontVisibility="Collapsed"  />
-        </x:Array>
-
         <drawing:FlashCardView  x:Key="Dc" 
                                 Usage="她是我的爱人" 
                                 TranslationNative="Супруг" 
                                 Pinyin="{StaticResource ResourceKey=Pinyin}" 
                                 OriginalWord="{StaticResource ResourceKey=OriginalWord}"
-                                Variants="{StaticResource ResourceKey=Variants}"
-                                TotalLearnCount="40"
-                                SuccessLearnCount="32"
-                                Mode="OriginalWordAndPronunciation" />
+                                Mode="FullView"/>
     </UserControl.Resources>
+    
 
     <Border BorderThickness="1" 
             Padding="5" 
@@ -66,7 +56,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type drawing:SyllableView}">
                         <TextBlock FontFamily="KaiTi" 
-                                   FontSize="34" 
+                                   FontSize="48" 
                                    Foreground="{Binding Brush}" 
                                    TextWrapping="Wrap"
                                    Text="{Binding Text}"
@@ -92,7 +82,7 @@
                     <DataTemplate DataType="{x:Type drawing:SyllableView}">
                         <TextBlock  TextWrapping="Wrap" 
                                     FontFamily="Georgia" 
-                                    FontSize="14"
+                                    FontSize="22"
                                     Text="{Binding Text}" 
                                     Foreground="{Binding Brush}" 
                                     TextTrimming="CharacterEllipsis" 
@@ -104,7 +94,7 @@
             <TextBlock Grid.Row="2" 
                        TextWrapping="Wrap" 
                        FontFamily="Georgia" 
-                       FontSize="14" 
+                       FontSize="22" 
                        Text="{Binding TranslationNative}" 
                        TextTrimming="WordEllipsis"  
                        HorizontalAlignment="Center" 
@@ -114,29 +104,14 @@
             <TextBlock Grid.Row="3" 
                        TextWrapping="Wrap" 
                        FontFamily="KaiTi" 
-                       FontSize="14" 
+                       FontSize="22" 
                        Text="{Binding Usage}" 
                        TextTrimming="WordEllipsis"  
                        HorizontalAlignment="Center" 
                        MaxHeight="20" 
                        Foreground="Gray"
-                       Visibility="{Binding StatisticVisibility}"/>
-
-            <TextBlock Grid.Row="4" 
-                       TextWrapping="Wrap" 
-                       Foreground="Gray" 
-                       FontFamily="Georgia" 
-                       FontSize="8"   
-                       TextTrimming="WordEllipsis"  
-                       HorizontalAlignment="Right"
-                       MaxHeight="20" 
-                       Visibility="{Binding StatisticVisibility }">
-                <Run Text="{Binding SuccessLearnCount }"/>
-                /
-                <Run Text="{Binding TotalLearnCount }"/>
-            </TextBlock>
+                       Visibility="{Binding UsageVisibility}"/>
 
         </Grid>
-
     </Border>
 </UserControl>

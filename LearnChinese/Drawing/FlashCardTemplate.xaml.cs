@@ -1,4 +1,6 @@
-﻿namespace YellowDuck.LearnChinese.Drawing
+﻿using System.Windows;
+
+namespace YellowDuck.LearnChinese.Drawing
 {
     public partial class FlashCardTemplate
     {
