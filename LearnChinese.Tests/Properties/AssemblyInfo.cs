@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+
 [assembly: AssemblyTitle("Yellow Duck - LearnChineseBotService.Tests")]
 [assembly: AssemblyDescription("Yellow Duck - unit tests project")]
 [assembly: AssemblyConfiguration("")]

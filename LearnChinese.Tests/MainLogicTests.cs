@@ -1,8 +1,8 @@
 ﻿using System.Windows.Media;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Enums;
+using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Providers;
 
 namespace YellowDuck.LearnChineseBotService.Tests
@@ -93,7 +93,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
 
             var result = prov.GetOrderedSyllables(wordsResult.SuccessfulWords[0]);
-            Assert.AreEqual("yào", result[6].Pinyin);
+            Assert.AreEqual("yào", result[7].Pinyin);
         }
 
         [TestMethod]
@@ -114,15 +114,15 @@ namespace YellowDuck.LearnChineseBotService.Tests
             var result = prov.GetOrderedSyllables(word);
 
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Length == 2);
+            Assert.IsTrue(result.Length == 5);
             Assert.IsTrue(result[0].ChineseChar == '明');
             Assert.IsTrue(result[0].Color == Colors.Orange);
             Assert.IsTrue(result[0].Pinyin == "míng");
 
 
-            Assert.IsTrue(result[1].ChineseChar == '白');
-            Assert.IsTrue(result[1].Color == Colors.Black);
-            Assert.IsTrue(result[1].Pinyin == "bai");
+            Assert.IsTrue(result[2].ChineseChar == '白');
+            Assert.IsTrue(result[2].Color == Colors.Black);
+            Assert.IsTrue(result[2].Pinyin == "bai");
 
         }
 
@@ -147,14 +147,18 @@ namespace YellowDuck.LearnChineseBotService.Tests
         {
         }
 
-        [TestMethod]
-        public void GenerateImageForWordTest()
+        public static IChineseWordParseProvider GetChineseWordParseProvider()
         {
-
             var colorProv = new ClassicSyllableColorProvider();
             var pinyinProv = new Pinyin4NetConverter();
             var tostrConv = new ClassicSyllablesToStringConverter();
-            var prov = new PinyinChineseWordParseProvider(colorProv, pinyinProv, tostrConv);
+            return new PinyinChineseWordParseProvider(colorProv, pinyinProv, tostrConv);
+        }
+
+        [TestMethod]
+        public void GenerateImageForWordTest()
+        {
+            var prov = GetChineseWordParseProvider();
 
             var grn = new WpfFlashCardGenerator(prov);
             var word = new Word
@@ -167,7 +171,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
             var result = grn.Generate(word, ELearnMode.FullView);
 
             Assert.IsTrue(result.Length > 0);
-            System.IO.File.WriteAllBytes(@"D:\test.png", result);
+            //System.IO.File.WriteAllBytes(@"D:\test.png", result);
         }
     }
 }

@@ -7,7 +7,7 @@ using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Data.Ef
 {
-    public sealed class EfRepository : ILearnWordRepository
+    public sealed class EfRepository : ILearnWordRepository, IStudyProvider
     {
         #region Fields
 
@@ -167,7 +167,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 case ELearnMode.OriginalWord:
                     return
                         scores.OrderByDescending(
-                            a => a.OriginalWordCount > 0 ? a.OriginalWordSuccessCount/a.OriginalWordCount : 0);
+                            a => a.OriginalWordCount > 0 ? a.OriginalWordSuccessCount / a.OriginalWordCount : 0);
 
                 case ELearnMode.Pronunciation:
                     return
@@ -197,7 +197,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
         }
 
 
-        public Poll LearnWord(long userId, ELearnMode learnMode, EGettingWordsStrategy strategy)
+        public string[] LearnWord(long userId, ELearnMode learnMode, EGettingWordsStrategy strategy)
         {
             IWord word;
 
@@ -296,11 +296,20 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
                 cntxt.SaveChanges();
 
-                return new Poll(stringAnswers, word);
+                return stringAnswers;
             }
         }
-        
 
+        public AnswerResult AnswerWord(long userId, string possibleAnswer)
+        {
+            using (var cntxt = _getContext())
+            {
+                var userScore = cntxt.Scores.FirstOrDefault(a => a.IdUser == userId);
+
+            }
+
+            return null;
+        }
 
         public void AddUser(IUser user)
         {
@@ -332,6 +341,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 cntxt.SaveChanges();
             }
         }
+
 
         #endregion
     }

@@ -20,12 +20,11 @@ namespace YellowDuck.LearnChinese.Interfaces
 
         void AddWord(IWord word);
 
-        Poll LearnWord(long userId, ELearnMode learnMode, EGettingWordsStrategy strategy);
 
         void SetScore(Score score);
 
-
         void AddUser(IUser user);
+
         void RemoveUser(long userId);
     }
 }

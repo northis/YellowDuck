@@ -27,9 +27,8 @@
     
 
     <Border BorderThickness="1" 
-            Padding="5" 
-            BorderBrush="Black" 
-            CornerRadius="10" 
+            Padding="5" SnapsToDevicePixels="True"
+            BorderBrush="Black" CornerRadius="5"
             d:DataContext="{StaticResource ResourceKey=Dc}">
         <Border.Background>
             <SolidColorBrush Color="Green" Opacity="0.1"/>
