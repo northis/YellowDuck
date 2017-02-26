@@ -42,5 +42,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Score> Scores { get; set; }
         public long IdOwner { get; set; }
+
+
+        public User UserOwner { get; set; }
     }
 }

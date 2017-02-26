@@ -19,11 +19,12 @@ namespace YellowDuck.LearnChinese.Data
         public virtual DbSet<Score> Scores { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Word> Words { get; set; }
+        public virtual DbSet<UserSharing> UserSharings { get; set; }
 
         #endregion
 
         #region Methods
-        
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -48,6 +49,26 @@ namespace YellowDuck.LearnChinese.Data
                 .WithRequired(e => e.Word)
                 .HasForeignKey(e => e.IdWord)
                 .WillCascadeOnDelete(false);
+
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.Words)
+                .WithRequired(e => e.UserOwner)
+                .HasForeignKey(e => e.IdOwner)
+                .WillCascadeOnDelete(true);
+
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.FriendUserSharings)
+                .WithRequired(e => e.UserFriend)
+                .HasForeignKey(e => e.IdFriend)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.OwnerUserSharings)
+                .WithRequired(e => e.UserOwner)
+                .HasForeignKey(e => e.IdOwner)
+                .WillCascadeOnDelete(true);
         }
 
         #endregion

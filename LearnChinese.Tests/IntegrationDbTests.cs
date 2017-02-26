@@ -39,7 +39,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
         public void AddWordTest()
         {
             var cntxt = GetCleanDb();
-            ILearnWordRepository iCntxt = cntxt;
+            IWordRepository iCntxt = cntxt;
 
             var chineseWord = "体育馆";
             iCntxt.AddWord(new Word
@@ -65,7 +65,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
         public void RemoveWordFromRepTest()
         {
             var cntxt = GetCleanDb();
-            ILearnWordRepository iCntxt = cntxt;
+            IWordRepository iCntxt = cntxt;
 
             var chineseWord = "体育馆";
             using (var cn = GetDbContext())
@@ -98,7 +98,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
         public void EditWordTest()
         {
             var cntxt = GetCleanDb();
-            ILearnWordRepository iCntxt = cntxt;
+            IWordRepository iCntxt = cntxt;
 
             var chineseWord = "体育馆";
             var word = new Word
@@ -158,9 +158,9 @@ namespace YellowDuck.LearnChineseBotService.Tests
         public void LearnWordTest()
         {
             var cntxt = GetCleanDb();
-            ILearnWordRepository iCntxt = cntxt;
-            IStudyProvider iStudyProvider = cntxt;
-
+            IWordRepository iCntxt = cntxt;
+            var iStudyProvider = new ClassicStudyProvider(GetDbContext, iCntxt);
+            
             var idUser = 10;
             var user = new User
             {
@@ -220,21 +220,21 @@ namespace YellowDuck.LearnChineseBotService.Tests
                     word.LastModified = iCntxt.GetRepositoryTime();
                     cn.SaveChanges();
                 }
- /*
+ 
                 var lastIndex = words.Length - 1;
                 var leftAnswersCount = lastIndex;
-                var firstIndex = 0;
+                //var firstIndex = 0;
                
                 var score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.NewFirst);
                 Assert.IsNotNull(score);
-                Assert.IsNotNull(score.WordToCheck.OriginalWord == words[lastIndex].OriginalWord);
+                //Assert.IsNotNull(score.WordToCheck.OriginalWord == words[lastIndex].OriginalWord);
 
 
                 score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.NewMostDifficult);
                 Assert.IsNotNull(score);
-                Assert.IsNotNull(score.WordToCheck.OriginalWord == words[lastIndex].OriginalWord);
+               // Assert.IsNotNull(score.WordToCheck.OriginalWord == words[lastIndex].OriginalWord);
                 
 
                 score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
@@ -245,35 +245,35 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.OldFirst);
                 Assert.IsNotNull(score);
-                Assert.IsNotNull(score.WordToCheck.OriginalWord == words[firstIndex].OriginalWord);
+               // Assert.IsNotNull(score.WordToCheck.OriginalWord == words[firstIndex].OriginalWord);
                 
 
                 score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.OldMostDifficult);
                 Assert.IsNotNull(score);
-                Assert.IsNotNull(score.WordToCheck.OriginalWord == words[firstIndex].OriginalWord);
+                //Assert.IsNotNull(score.WordToCheck.OriginalWord == words[firstIndex].OriginalWord);
 
 
-                var scoreNew = score;
-                var intersectedRows = score.Answers.Intersect(
-                    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.OriginalWord));
-                Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
+                //var scoreNew = score;
+                //var intersectedRows = score.Intersect(
+                //    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.OriginalWord));
+                //Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
 
-                score = iCntxt.LearnWord(user.IdUser, ELearnMode.Pronunciation,
-                    EGettingWordsStrategy.NewFirst);
-                intersectedRows = score.Answers.Intersect(
-                    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.Pronunciation));
-                Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
+                //score = iCntxt.LearnWord(user.IdUser, ELearnMode.Pronunciation,
+                //    EGettingWordsStrategy.NewFirst);
+                //intersectedRows = score.Answers.Intersect(
+                //    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.Pronunciation));
+                //Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
 
-                score = iCntxt.LearnWord(user.IdUser, ELearnMode.Translation,
-                    EGettingWordsStrategy.NewFirst);
-                intersectedRows = score.Answers.Intersect(
-                    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.Translation));
-                Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
+                //score = iCntxt.LearnWord(user.IdUser, ELearnMode.Translation,
+                //    EGettingWordsStrategy.NewFirst);
+                //intersectedRows = score.Answers.Intersect(
+                //    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.Translation));
+                //Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
 
-                score = iCntxt.LearnWord(user.IdUser, ELearnMode.FullView,
-                    EGettingWordsStrategy.NewFirst);
-                Assert.AreEqual(0, score.Answers.Length);*/
+                //score = iCntxt.LearnWord(user.IdUser, ELearnMode.FullView,
+                //    EGettingWordsStrategy.NewFirst);
+                //Assert.AreEqual(0, score.Answers.Length);
             }
         }
 
@@ -281,7 +281,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
         public void UserAddRemoveTest()
         {
             var cntxt = GetDbContext();
-            ILearnWordRepository iCntxt = GetCleanDb();
+            IWordRepository iCntxt = GetCleanDb();
 
             var idUser = 100;
             var user = new User {IdUser = idUser, Name = string.Empty};

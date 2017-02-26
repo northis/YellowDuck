@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Data\AnswerResult.cs" />
     <Compile Include="Data\Ef\EfRepository.cs" />
+    <Compile Include="Data\Ef\UserSharing.cs" />
     <Compile Include="Data\ImportWordResult.cs" />
     <Compile Include="Data\WordDatesView.cs" />
     <Compile Include="Interfaces\Data\IUser.cs" />
@@ -82,11 +83,12 @@
     <Compile Include="Interfaces\IChinesePinyinConverter.cs" />
     <Compile Include="Interfaces\IChineseWordParseProvider.cs" />
     <Compile Include="Interfaces\IFlashCardGenerator.cs" />
-    <Compile Include="Interfaces\ILearnWordRepository.cs" />
+    <Compile Include="Interfaces\IWordRepository.cs" />
     <Compile Include="Interfaces\IStudyProvider.cs" />
     <Compile Include="Interfaces\ISyllableColorProvider.cs" />
     <Compile Include="Interfaces\ISyllableSetConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\ClassicStudyProvider.cs" />
     <Compile Include="Providers\ClassicSyllableColorProvider.cs" />
     <Compile Include="Providers\ClassicSyllablesToStringConverter.cs" />
     <Compile Include="Providers\Pinyin4NetConverter.cs" />
