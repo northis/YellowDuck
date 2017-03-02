@@ -12,18 +12,22 @@ namespace YellowDuck.LearnChineseBotService.Tests
     [TestClass]
     public class IntegrationDbTests
     {
-        private long IdTestUser = 0;
+        private const long IdTestUser = 0;
+        private const long IdFriendTestUser = 1;
 
         private EfRepository GetCleanDb()
         {
-            var cntxt = new EfRepository(GetDbContext);
+            var cntxt = new EfRepository(new LearnChineseDbContext());
 
             using (var cn = GetDbContext())
             {
                 cn.Scores.RemoveRange(cn.Scores);
                 cn.Words.RemoveRange(cn.Words);
                 cn.Users.RemoveRange(cn.Users);
-                cn.Users.Add(new User {IdUser = IdTestUser, Name = string.Empty});
+                cn.UserSharings.RemoveRange(cn.UserSharings);
+                cn.Users.Add(new User {IdUser = IdTestUser, Name = nameof(IdTestUser)});
+                cn.Users.Add(new User {IdUser = IdFriendTestUser, Name = nameof(IdFriendTestUser)});
+                cn.UserSharings.Add(new UserSharing {IdOwner = IdTestUser, IdFriend = IdFriendTestUser});
                 cn.SaveChanges();
             }
 
@@ -159,14 +163,9 @@ namespace YellowDuck.LearnChineseBotService.Tests
         {
             var cntxt = GetCleanDb();
             IWordRepository iCntxt = cntxt;
-            var iStudyProvider = new ClassicStudyProvider(GetDbContext, iCntxt);
+            var iStudyProvider = new ClassicStudyProvider(iCntxt);
             
-            var idUser = 10;
-            var user = new User
-            {
-                IdUser = idUser,
-                Name = string.Empty
-            };
+            var idUser = IdFriendTestUser;
 
             var words = new[]
             {
@@ -211,8 +210,6 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
             using (var cn = GetDbContext())
             {
-                cn.Users.Add(user);
-                cn.SaveChanges();
 
                 foreach (var word in words)
                 {
@@ -225,30 +222,30 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 var leftAnswersCount = lastIndex;
                 //var firstIndex = 0;
                
-                var score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
+                var score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.NewFirst);
                 Assert.IsNotNull(score);
                 //Assert.IsNotNull(score.WordToCheck.OriginalWord == words[lastIndex].OriginalWord);
 
 
-                score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
+                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.NewMostDifficult);
                 Assert.IsNotNull(score);
                // Assert.IsNotNull(score.WordToCheck.OriginalWord == words[lastIndex].OriginalWord);
                 
 
-                score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
+                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.Random);
                 Assert.IsNotNull(score);
                 
 
-                score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
+                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.OldFirst);
                 Assert.IsNotNull(score);
                // Assert.IsNotNull(score.WordToCheck.OriginalWord == words[firstIndex].OriginalWord);
                 
 
-                score = iStudyProvider.LearnWord(user.IdUser, ELearnMode.OriginalWord,
+                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.OldMostDifficult);
                 Assert.IsNotNull(score);
                 //Assert.IsNotNull(score.WordToCheck.OriginalWord == words[firstIndex].OriginalWord);

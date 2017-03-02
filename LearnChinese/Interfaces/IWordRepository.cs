@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
 using YellowDuck.LearnChinese.Data;
-using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
@@ -10,7 +9,8 @@ namespace YellowDuck.LearnChinese.Interfaces
     public interface IWordRepository
     {
         IWord[] GetWords(Expression<Func<IWord, bool>> whereCondition);
-        
+
+        string[] GetNexWord(GettingWordSettings settings);
 
         DateTime GetRepositoryTime();
         
@@ -20,10 +20,10 @@ namespace YellowDuck.LearnChinese.Interfaces
 
         void AddWord(IWord word);
         
-
         void AddUser(IUser user);
 
         void AddFriendUser(long ownerUserId, long friendUserId);
+
         void RemoveFriendUser(long ownerUserId, long friendUserId);
 
         void RemoveUser(long userId);

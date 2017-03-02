@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="Data\AnswerResult.cs" />
     <Compile Include="Data\Ef\EfRepository.cs" />
+    <Compile Include="Data\GettingWordSettings.cs" />
+    <Compile Include="Interfaces\Data\IScore.cs" />
     <Compile Include="Data\Ef\UserSharing.cs" />
     <Compile Include="Data\ImportWordResult.cs" />
     <Compile Include="Data\WordDatesView.cs" />
