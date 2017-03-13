@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using YellowDuck.LearnChinese.Data.DbViews;
+using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Enums;
+using YellowDuck.LearnChinese.Extentions;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
@@ -62,15 +65,15 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
 
 
-        public string[] GetNexWord(GettingWordSettings settings)
+        public LearnUnit GetNextWord(WordSettings settings)
         {
             var userId = settings.UserId;
             var learnMode = settings.LearnMode;
             var strategy = settings.Strategy;
             var pollAnswersCount = settings.PollAnswersCount;
 
-
             var scores = _context.Scores.Where(a => a.IdUser == userId);
+            
             var difficultScores = GetDifficultScores(learnMode, scores);
 
             var userAllowedWords =
@@ -138,38 +141,41 @@ namespace YellowDuck.LearnChinese.Data.Ef
             score.LastLearned = GetRepositoryTime();
 
             var answers = userWords.Where(a => a.Id != word.Id).OrderBy(a => Guid.NewGuid()).Take(pollAnswersCount);
-
-            string[] stringAnswers = null;
+            var questionItem = new LearnUnit();
 
             switch (learnMode)
             {
                 case ELearnMode.OriginalWord:
                     score.OriginalWordCount++;
-                    stringAnswers = answers.Select(a => a.OriginalWord).ToArray();
+                    questionItem.Options = answers.Select(a => a.OriginalWord).ToArray();
+                    questionItem.Picture = word.CardOriginalWord;
                     break;
 
                 case ELearnMode.Pronunciation:
                     score.PronunciationCount++;
-                    stringAnswers = answers.Select(a => a.Pronunciation).ToArray();
+                    questionItem.Options = answers.Select(a => a.Pronunciation).ToArray();
+                    questionItem.Picture = word.CardPronunciation;
                     break;
 
                 case ELearnMode.Translation:
                     score.TranslationCount++;
-                    stringAnswers = answers.Select(a => a.Translation).ToArray();
+                    questionItem.Options = answers.Select(a => a.Translation).ToArray();
+                    questionItem.Picture = word.CardTranslation;
                     break;
 
                 case ELearnMode.FullView:
                     score.ViewCount++;
-                    stringAnswers = new string[0];
+                    questionItem.Options = new string[0];
+                    questionItem.Picture = word.CardAll;
                     break;
             }
 
             _context.SaveChanges();
 
-            return stringAnswers;
+            return questionItem;
         }
 
-        public IScore GetScore(long idUser, long idWord)
+        public Score GetScore(long idUser, long idWord)
         {
             var score = _context.Scores.FirstOrDefault(a => a.IdUser == idUser && a.IdWord == idWord);
 
@@ -316,6 +322,43 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     $"Забрать доступ к своему словарю невозможно. friendUserId={friendUserId}");
 
             ownerUser.OwnerUserSharings.Remove(ownerUser.OwnerUserSharings.First(a => a.UserFriend == friendUser));
+            _context.SaveChanges();
+        }
+
+        public WordStatistic GetCurrentUserWordStatistic(long userId)
+        {
+            var score =
+                _context.Scores.FirstOrDefault(a => a.IdUser == userId && a.IsInLearnMode);
+
+            if (score == null)
+                return null;
+
+            return new WordStatistic{ Score = score, Word = score.Word};
+        }
+
+        public void SetScore(IScore score)
+        {
+            var userId = score.IdUser;
+            var wordId = score.IdWord;
+            var scoreEntity = GetScore(userId, wordId);
+
+            var learnMode = scoreEntity.ToELearnMode();
+
+            scoreEntity.LastLearnMode = score.LastLearnMode;
+            scoreEntity.IsInLearnMode = score.IsInLearnMode;
+            scoreEntity.OriginalWordCount = score.OriginalWordCount;
+            scoreEntity.OriginalWordSuccessCount = score.OriginalWordSuccessCount;
+            scoreEntity.PronunciationCount = score.PronunciationCount;
+            scoreEntity.PronunciationSuccessCount = score.PronunciationSuccessCount;
+            scoreEntity.TranslationCount = score.TranslationCount;
+            scoreEntity.TranslationSuccessCount = score.TranslationSuccessCount;
+            scoreEntity.ViewCount = score.ViewCount;
+
+            if (learnMode == ELearnMode.FullView)
+                scoreEntity.LastView = GetRepositoryTime();
+            else
+                scoreEntity.LastLearned = GetRepositoryTime();
+
             _context.SaveChanges();
         }
 

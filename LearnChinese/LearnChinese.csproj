@@ -58,20 +58,22 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\AnswerResult.cs" />
+    <Compile Include="Data\ObjectModels\AnswerResult.cs" />
     <Compile Include="Data\Ef\EfRepository.cs" />
-    <Compile Include="Data\GettingWordSettings.cs" />
+    <Compile Include="Data\ObjectModels\WordSettings.cs" />
+    <Compile Include="Data\ObjectModels\LearnUnit.cs" />
+    <Compile Include="Data\ObjectModels\WordStatistic.cs" />
+    <Compile Include="Extentions\MainExtensions.cs" />
     <Compile Include="Interfaces\Data\IScore.cs" />
     <Compile Include="Data\Ef\UserSharing.cs" />
-    <Compile Include="Data\ImportWordResult.cs" />
-    <Compile Include="Data\WordDatesView.cs" />
+    <Compile Include="Data\ObjectModels\ImportWordResult.cs" />
+    <Compile Include="Data\ObjectModels\WordDatesView.cs" />
     <Compile Include="Interfaces\Data\IUser.cs" />
     <Compile Include="Interfaces\Data\IWord.cs" />
-    <Compile Include="Data\LearnChineseDbContext.cs" />
+    <Compile Include="Data\Ef\LearnChineseDbContext.cs" />
     <Compile Include="Data\Ef\Score.cs" />
-    <Compile Include="Data\Syllable.cs" />
+    <Compile Include="Data\ObjectModels\Syllable.cs" />
     <Compile Include="Data\Ef\User.cs" />
-    <Compile Include="Data\UserWord.cs" />
     <Compile Include="Data\Ef\Word.cs" />
     <Compile Include="Drawing\FlashCardTemplate.xaml.cs">
       <DependentUpon>FlashCardTemplate.xaml</DependentUpon>

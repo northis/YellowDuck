@@ -1,6 +1,6 @@
 using System;
 
-namespace YellowDuck.LearnChinese.Data.Ef
+namespace YellowDuck.LearnChinese.Interfaces.Data
 {
     public interface IScore
     {

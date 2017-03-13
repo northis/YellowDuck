@@ -1,7 +1,7 @@
 ﻿using System;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
-namespace YellowDuck.LearnChinese.Data
+namespace YellowDuck.LearnChinese.Data.DbViews
 {
 
     public class WordDatesView

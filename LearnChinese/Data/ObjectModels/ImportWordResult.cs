@@ -1,6 +1,6 @@
 ﻿using YellowDuck.LearnChinese.Data.Ef;
 
-namespace YellowDuck.LearnChinese.Data
+namespace YellowDuck.LearnChinese.Data.ObjectModels
 {
     public class ImportWordResult
     {

@@ -1,18 +1,19 @@
 ﻿using System;
-using System.Linq.Expressions;
 using YellowDuck.LearnChinese.Data;
-using YellowDuck.LearnChinese.Enums;
+using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Interfaces
 {
     public interface IWordRepository
     {
-        IWord[] GetWords(Expression<Func<IWord, bool>> whereCondition);
+        WordStatistic GetCurrentUserWordStatistic(long userId);
 
-        string[] GetNexWord(GettingWordSettings settings);
+        LearnUnit GetNextWord(WordSettings settings);
 
         DateTime GetRepositoryTime();
+
+        void SetScore(IScore score);
         
         void EditWord(IWord word);
 

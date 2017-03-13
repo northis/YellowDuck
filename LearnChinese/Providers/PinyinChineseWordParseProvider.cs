@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Data.Ef;
+using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Interfaces.Data;

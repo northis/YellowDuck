@@ -1,7 +1,6 @@
 using System.Data.Entity;
-using YellowDuck.LearnChinese.Data.Ef;
 
-namespace YellowDuck.LearnChinese.Data
+namespace YellowDuck.LearnChinese.Data.Ef
 {
     public class LearnChineseDbContext : DbContext
     {

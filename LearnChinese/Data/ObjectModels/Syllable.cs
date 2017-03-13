@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace YellowDuck.LearnChinese.Data
+namespace YellowDuck.LearnChinese.Data.ObjectModels
 {
     public  class Syllable
     {
