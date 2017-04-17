@@ -166,47 +166,106 @@ namespace YellowDuck.LearnChineseBotService.Tests
             var iStudyProvider = new ClassicStudyProvider(iCntxt);
             
             var idUser = IdFriendTestUser;
+            var baseTime = iCntxt.GetRepositoryTime();
+
+            var newWord1 = new Word
+            {
+                OriginalWord = "句子",
+                Pronunciation = "jù|zi",
+                Translation = "предложение; фраза",
+                IdOwner = IdTestUser,
+                LastModified = baseTime
+            };
+            newWord1.Scores.Add(new Score{IdUser = idUser, IsInLearnMode = false, LastView = baseTime });
+
+            var prevTime = baseTime.AddMinutes(-10);
+            var newWord2 = new Word
+            {
+                OriginalWord = "够了",
+                Pronunciation = "gòu|le",
+                Translation = "довольно; хватит",
+                IdOwner = IdTestUser,
+                LastModified = prevTime
+            };
+            newWord2.Scores.Add(new Score { IdUser = idUser, IsInLearnMode = false, LastView = prevTime });
+
+            prevTime = prevTime.AddMinutes(-10);
+            var middleWord = new Word
+            {
+                OriginalWord = "收",
+                Pronunciation = "shōu",
+                Translation = "получать",
+                IdOwner = IdTestUser,
+                LastModified = prevTime
+            };
+            middleWord.Scores.Add(new Score
+            {
+                IdUser = idUser,
+                IsInLearnMode = false,
+                LastView = prevTime,
+                LastLearned = prevTime,
+                LastLearnMode = ELearnMode.OriginalWord.ToString(),
+                ViewCount = 2,
+                OriginalWordSuccessCount = 1,
+                OriginalWordCount = 1
+            });
+
+            prevTime = prevTime.AddMinutes(-10);
+            var oldWord1 = new Word
+            {
+                OriginalWord = "接送",
+                Pronunciation = "jiē|sòng",
+                Translation = "забирать",
+                IdOwner = IdTestUser,
+                LastModified = prevTime
+            };
+            oldWord1.Scores.Add(new Score
+            {
+                IdUser = idUser,
+                IsInLearnMode = false,
+                LastView = prevTime,
+                LastLearned = prevTime,
+                LastLearnMode = ELearnMode.Translation.ToString(),
+                ViewCount = 8,
+                OriginalWordSuccessCount = 1,
+                OriginalWordCount = 1,
+                TranslationCount = 2,
+                TranslationSuccessCount = 1
+            });
+
+            prevTime = prevTime.AddMinutes(-10);
+            var oldWord2 = new Word
+            {
+                OriginalWord = "路",
+                Pronunciation = "lù",
+                Translation = "дорога, улица",
+                IdOwner = IdTestUser,
+                LastModified = prevTime
+            };
+            oldWord2.Scores.Add(new Score
+            {
+                IdUser = idUser,
+                IsInLearnMode = false,
+                LastView = prevTime,
+                LastLearned = prevTime,
+                LastLearnMode = ELearnMode.Pronunciation.ToString(),
+                ViewCount = 8,
+                OriginalWordSuccessCount = 1,
+                OriginalWordCount = 3,
+                TranslationCount = 2,
+                TranslationSuccessCount = 1,
+                PronunciationCount = 3,
+                PronunciationSuccessCount = 2
+            });
 
             var words = new[]
             {
-                new Word
-                {
-                    OriginalWord = "句子",
-                    Pronunciation = "jù|zi",
-                    Translation = "предложение; фраза",
-                IdOwner = IdTestUser
-                },
-                new Word
-                {
-                    OriginalWord = "够了",
-                    Pronunciation = "gòu|le",
-                    Translation = "довольно; хватит",
-                IdOwner = IdTestUser
-                },
-                new Word
-                {
-                    OriginalWord = "收",
-                    Pronunciation = "shōu",
-                    Translation = "получать",
-                IdOwner = IdTestUser
-                },
-                new Word
-                {
-                    OriginalWord = "接送",
-                    Pronunciation = "jiē|sòng",
-                    Translation = "забирать",
-                IdOwner = IdTestUser
-                },
-                new Word
-                {
-                    OriginalWord = "路",
-                    
-                    Pronunciation = "lù",
-                    Translation = "дорога, улица",
-                IdOwner = IdTestUser
-                }
+                middleWord,
+                oldWord2,
+                newWord2,
+                oldWord1,
+                newWord1
             };
-            
 
             using (var cn = GetDbContext())
             {
@@ -214,25 +273,20 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 foreach (var word in words)
                 {
                     cn.Words.Add(word);
-                    word.LastModified = iCntxt.GetRepositoryTime();
                     cn.SaveChanges();
                 }
  
-                var lastIndex = words.Length - 1;
-                var leftAnswersCount = lastIndex;
-                //var firstIndex = 0;
-               
                 var score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.NewFirst);
                 Assert.IsNotNull(score);
-                //Assert.IsNotNull(score.WordToCheck.OriginalWord == words[lastIndex].OriginalWord);
+                Assert.IsTrue(score.Options.Contains(newWord1.OriginalWord));
 
 
                 score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.NewMostDifficult);
                 Assert.IsNotNull(score);
-               // Assert.IsNotNull(score.WordToCheck.OriginalWord == words[lastIndex].OriginalWord);
-                
+                Assert.IsTrue(score.Options.Contains(newWord2.OriginalWord));
+
 
                 score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.Random);
@@ -242,35 +296,13 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.OldFirst);
                 Assert.IsNotNull(score);
-               // Assert.IsNotNull(score.WordToCheck.OriginalWord == words[firstIndex].OriginalWord);
-                
+                Assert.IsTrue(score.Options.Contains(oldWord1.OriginalWord));
+
 
                 score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
                     EGettingWordsStrategy.OldMostDifficult);
                 Assert.IsNotNull(score);
-                //Assert.IsNotNull(score.WordToCheck.OriginalWord == words[firstIndex].OriginalWord);
-
-
-                //var scoreNew = score;
-                //var intersectedRows = score.Intersect(
-                //    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.OriginalWord));
-                //Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
-
-                //score = iCntxt.LearnWord(user.IdUser, ELearnMode.Pronunciation,
-                //    EGettingWordsStrategy.NewFirst);
-                //intersectedRows = score.Answers.Intersect(
-                //    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.Pronunciation));
-                //Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
-
-                //score = iCntxt.LearnWord(user.IdUser, ELearnMode.Translation,
-                //    EGettingWordsStrategy.NewFirst);
-                //intersectedRows = score.Answers.Intersect(
-                //    words.Where(a => a.OriginalWord != scoreNew.WordToCheck.OriginalWord).Select(a => a.Translation));
-                //Assert.IsTrue(intersectedRows.Count() == leftAnswersCount);
-
-                //score = iCntxt.LearnWord(user.IdUser, ELearnMode.FullView,
-                //    EGettingWordsStrategy.NewFirst);
-                //Assert.AreEqual(0, score.Answers.Length);
+                Assert.IsTrue(score.Options.Contains(oldWord2.OriginalWord));
             }
         }
 

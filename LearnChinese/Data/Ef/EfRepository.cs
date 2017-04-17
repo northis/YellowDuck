@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using YellowDuck.LearnChinese.Data.DbViews;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Extentions;
@@ -40,30 +39,53 @@ namespace YellowDuck.LearnChinese.Data.Ef
             return _context.Database.SqlQuery<DateTime>("select getdate()", "").FirstOrDefault();
         }
         
-        public IQueryable<IScore> GetDifficultScores(ELearnMode learnMode, IQueryable<IScore> scores)
+        IOrderedQueryable<Score> GetDifficultScores(ELearnMode learnMode, IQueryable<Score> scores)
         {
             switch (learnMode)
             {
                 case ELearnMode.OriginalWord:
                     return
                         scores.OrderByDescending(
-                            a => a.OriginalWordCount > 0 ? a.OriginalWordSuccessCount / a.OriginalWordCount : 0);
+                            a =>
+                                a.OriginalWordCount > 0 && a.OriginalWordCount > 0
+                                    ? a.OriginalWordSuccessCount / a.OriginalWordCount
+                                    : 0);
 
                 case ELearnMode.Pronunciation:
                     return
                         scores.OrderByDescending(
-                            a => a.PronunciationCount > 0 ? a.PronunciationSuccessCount / a.PronunciationCount : 0);
+                            a =>
+                                a.PronunciationCount > 0 && a.PronunciationCount > 0
+                                    ? a.PronunciationSuccessCount / a.PronunciationCount
+                                    : 0);
 
                 case ELearnMode.Translation:
                     return
                         scores.OrderByDescending(
-                            a => a.TranslationCount > 0 ? a.TranslationSuccessCount / a.TranslationCount : 0);
+                            a =>
+                                a.TranslationCount > 0 && a.TranslationCount > 0
+                                    ? a.TranslationSuccessCount / a.TranslationCount
+                                    : 0);
             }
 
-            return scores;
+            return scores.OrderBy(a => 0);
         }
 
+        void SetUnscoredWords(long idUser)
+        {
 
+            var unscoredUserWordIds =
+                _context.Words.Where(
+                        a =>
+                            !a.Scores.Any() &&
+                            (a.IdOwner == idUser || a.UserOwner.OwnerUserSharings.Any(b => b.IdFriend == idUser)))
+                    .Select(a => a.Id);
+
+            foreach (var idWord in unscoredUserWordIds)
+            {
+                GetScore(idUser, idWord);
+            }
+        }
 
         public LearnUnit GetNextWord(WordSettings settings)
         {
@@ -72,22 +94,20 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var strategy = settings.Strategy;
             var pollAnswersCount = settings.PollAnswersCount;
 
-            var scores = _context.Scores.Where(a => a.IdUser == userId);
-            
+            SetUnscoredWords(userId);
+
+            var scores =
+                _context.Scores.Where(a => a.IdUser == userId).OrderBy(a => 0);
+
             var difficultScores = GetDifficultScores(learnMode, scores);
-
-            var userAllowedWords =
-                _context.Words.Where(a => a.UserOwner.OwnerUserSharings.Any(b => b.IdFriend == userId));
-
-            var wordScoresLeftJoin = GetWordDates(userAllowedWords, scores);
-            var wordDifficultScoresLeftJoin = GetWordDates(userAllowedWords, difficultScores);
+            
 
             IQueryable<IWord> userWords;
             switch (strategy)
             {
                 case EGettingWordsStrategy.NewFirst:
 
-                    userWords = wordScoresLeftJoin.OrderByDescending(a => a.LastLearned)
+                    userWords = scores.ThenByDescending(a => a.LastLearned ?? DateTime.MaxValue)
                         .ThenByDescending(a => a.LastView)
                         .ThenByDescending(a => a.Word.LastModified)
                         .Select(a => a.Word);
@@ -95,7 +115,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
                 case EGettingWordsStrategy.NewMostDifficult:
 
-                    userWords = wordDifficultScoresLeftJoin.OrderByDescending(a => a.LastLearned)
+                    userWords = difficultScores.ThenByDescending(a => a.LastLearned ?? DateTime.MaxValue)
                         .ThenByDescending(a => a.LastView)
                         .ThenByDescending(a => a.Word.LastModified)
                         .Select(a => a.Word);
@@ -103,7 +123,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
                 case EGettingWordsStrategy.OldFirst:
 
-                    userWords = wordScoresLeftJoin.OrderBy(a => a.LastLearned)
+                    userWords = scores.ThenBy(a => a.LastLearned ?? DateTime.MaxValue)
                         .ThenBy(a => a.LastView)
                         .ThenBy(a => a.Word.LastModified)
                         .Select(a => a.Word);
@@ -111,7 +131,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
                 case EGettingWordsStrategy.OldMostDifficult:
 
-                    userWords = wordDifficultScoresLeftJoin.OrderBy(a => a.LastLearned)
+                    userWords = difficultScores.ThenBy(a => a.LastLearned ?? DateTime.MaxValue)
                         .ThenBy(a => a.LastView)
                         .ThenBy(a => a.Word.LastModified)
                         .Select(a => a.Word);
@@ -140,7 +160,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             score.IsInLearnMode = learnMode != ELearnMode.FullView;
             score.LastLearned = GetRepositoryTime();
 
-            var answers = userWords.Where(a => a.Id != word.Id).OrderBy(a => Guid.NewGuid()).Take(pollAnswersCount);
+            var answers = userWords.Take(pollAnswersCount).OrderBy(a => Guid.NewGuid());
             var questionItem = new LearnUnit();
 
             switch (learnMode)
@@ -195,7 +215,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
             return score;
         }
 
-        public IQueryable<WordDatesView> GetWordDates(IQueryable<IWord> words, IQueryable<IScore> scores)
+        /*
+        public IOrderedQueryable<WordDatesView> GetWordDates(IQueryable<IWord> words, IOrderedQueryable<IScore> scores)
         {
             return words.GroupJoin(scores, w => w.Id, s => s.IdWord, (w, s) => new { w, s })
                 .SelectMany(a => a.s.DefaultIfEmpty(),
@@ -206,7 +227,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
                             LastLearned = b != null ? b.LastLearned : null,
                             LastView = b != null ? (DateTime?)b.LastView : null
                         });
-        }
+        }*/
+
         public IQueryable<IScore> GetUserScores(long idUser)
         {
             return _context.Scores.Where(a => a.IdUser == idUser);

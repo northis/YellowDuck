@@ -67,7 +67,7 @@
     <Compile Include="Interfaces\Data\IScore.cs" />
     <Compile Include="Data\Ef\UserSharing.cs" />
     <Compile Include="Data\ObjectModels\ImportWordResult.cs" />
-    <Compile Include="Data\ObjectModels\WordDatesView.cs" />
+    <Compile Include="Data\ObjectModels\ScoreDto.cs" />
     <Compile Include="Interfaces\Data\IUser.cs" />
     <Compile Include="Interfaces\Data\IWord.cs" />
     <Compile Include="Data\Ef\LearnChineseDbContext.cs" />
