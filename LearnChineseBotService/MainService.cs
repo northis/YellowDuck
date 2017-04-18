@@ -14,11 +14,12 @@ namespace YellowDuck.LearnChineseBotService
 
         protected override void OnStart(string[] args)
         {
-
+            MainFactory.MainWorker.Start();
         }
 
         protected override void OnStop()
         {
+            MainFactory.MainWorker.Stop();
         }
 
         public void StartUserInteractive()
@@ -26,6 +27,7 @@ namespace YellowDuck.LearnChineseBotService
             Console.WriteLine("Нажмите любую клавишу для выхода");
             OnStart(null);
             Console.ReadKey();
+            OnStop();
         }
     }
 }

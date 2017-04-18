@@ -23,6 +23,11 @@ namespace YellowDuck.LearnChinese.Interfaces
         
         void AddUser(IUser user);
 
+        bool IsUserExist(long userId);
+
+        void SetUserCommand(long userId, string command);
+        string GetUserCommand(long userId);
+
         void AddFriendUser(long ownerUserId, long friendUserId);
 
         void RemoveFriendUser(long ownerUserId, long friendUserId);

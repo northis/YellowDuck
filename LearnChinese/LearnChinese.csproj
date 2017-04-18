@@ -90,7 +90,7 @@
     <Compile Include="Interfaces\IWordRepository.cs" />
     <Compile Include="Interfaces\IStudyProvider.cs" />
     <Compile Include="Interfaces\ISyllableColorProvider.cs" />
-    <Compile Include="Interfaces\ISyllableSetConverter.cs" />
+    <Compile Include="Interfaces\ISyllablesToStringConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ClassicStudyProvider.cs" />
     <Compile Include="Providers\ClassicSyllableColorProvider.cs" />

@@ -4,5 +4,6 @@ namespace YellowDuck.LearnChinese.Interfaces.Data
     {
         long IdUser { get; set; }
         string Name { get; set; }
+        string LastCommand { get; set; }
     }
 }

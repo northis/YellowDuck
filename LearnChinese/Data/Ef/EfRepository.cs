@@ -100,7 +100,6 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 _context.Scores.Where(a => a.IdUser == userId).OrderBy(a => 0);
 
             var difficultScores = GetDifficultScores(learnMode, scores);
-            
 
             IQueryable<IWord> userWords;
             switch (strategy)
@@ -382,6 +381,32 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 scoreEntity.LastLearned = GetRepositoryTime();
 
             _context.SaveChanges();
+        }
+
+        public bool IsUserExist(long userId)
+        {
+            return _context.Users.Any(a => a.IdUser == userId);
+        }
+
+        public void SetUserCommand(long userId, string command)
+        {
+            var user = _context.Users.FirstOrDefault(a => a.IdUser == userId);
+
+            if (user == null)
+                throw new Exception($"Пользователь с Id={userId} не найден");
+
+            user.LastCommand = command;
+            _context.SaveChanges();
+        }
+
+        public string GetUserCommand(long userId)
+        {
+            var user = _context.Users.FirstOrDefault(a => a.IdUser == userId);
+
+            if (user == null)
+                throw new Exception($"Пользователь с Id={userId} не найден");
+
+            return user.LastCommand;
         }
 
         #endregion
