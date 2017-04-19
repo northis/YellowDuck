@@ -28,7 +28,8 @@ namespace YellowDuck.LearnChinese.Providers
         #region Fields
 
         public const ushort MaxSyllablesToParse = 10;
-        public const string ImportSeparator= ";";
+        public const char ImportSeparator1= ';';
+        public const char ImportSeparator2 = '；';
         public const string PinyinExludeRegexPattern = "[^a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]";
         private readonly ISyllableColorProvider _syllableColorProvider;
         private readonly IChinesePinyinConverter _chinesePinyinConverter;
@@ -121,7 +122,7 @@ namespace YellowDuck.LearnChinese.Providers
 
             foreach (var word in rawWords)
             {
-                var arrayToParse = word.Split(new[] {ImportSeparator}, StringSplitOptions.RemoveEmptyEntries);
+                var arrayToParse = word.Split(new[] {ImportSeparator1,ImportSeparator2 }, StringSplitOptions.RemoveEmptyEntries);
                 if (arrayToParse.Length < 2)
                 {
                     badWords.Add(word);
@@ -131,7 +132,7 @@ namespace YellowDuck.LearnChinese.Providers
                 var mainWord = arrayToParse[0];
 
                 var translationIndex = usePinyin ? 2 : 1;
-                var translationNative = string.Join(ImportSeparator, arrayToParse.Skip(translationIndex));
+                var translationNative = string.Join(ImportSeparator1.ToString(), arrayToParse.Skip(translationIndex));
 
                 var syllables = GetOrderedSyllables(mainWord, EToneType.Mark);
                 

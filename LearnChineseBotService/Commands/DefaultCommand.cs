@@ -1,12 +1,10 @@
-﻿using System.IO;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
+﻿using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
 
 namespace YellowDuck.LearnChineseBotService.Commands
 {
-    public class HelpCommand: CommandBase
+    public class DefaultCommand: CommandBase
     {
         public override AnswerItem Reply(MessageItem mItem)
         {
@@ -14,15 +12,15 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             return new AnswerItem
             {
-                Message = "",
-                Markup = new ReplyKeyboardMarkup {Keyboard = new[] {buttons}, ResizeKeyboard = true, OneTimeKeyboard = true}
+                Message = "Установлена клавиатура по умолчанию",
+                Markup = new ReplyKeyboardMarkup {Keyboard = new[] {buttons}, ResizeKeyboard = true, OneTimeKeyboard = false}
             };
         }
 
 
         public override ECommands GetCommandType()
         {
-            return ECommands.Help;
+            return ECommands.Default;
         }
     }
 }

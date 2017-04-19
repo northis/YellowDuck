@@ -82,10 +82,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\AnswerItem.cs" />
     <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\CleanCommand.cs" />
     <Compile Include="Commands\Enums\ECommands.cs" />
-    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\DefaultCommand.cs" />
     <Compile Include="Commands\ImportCommand.cs" />
     <Compile Include="LayoutRoot\LayoutRootConfiguration.cs" />
     <Compile Include="LayoutRoot\MainFactory.cs" />

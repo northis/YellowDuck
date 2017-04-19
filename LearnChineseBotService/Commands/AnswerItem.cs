@@ -6,6 +6,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
     {
         public string Message { get; set; }
 
-        public ReplyKeyboardMarkup Markup { get; set; }
+        public ReplyMarkup Markup { get; set; }
     }
 }

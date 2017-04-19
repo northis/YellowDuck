@@ -1,4 +1,7 @@
-﻿using Ninject.Modules;
+﻿using System;
+using System.Configuration;
+using Ninject.Modules;
+using Telegram.Bot;
 using YellowDuck.Common.Logging;
 using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Interfaces;
@@ -18,6 +21,10 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<IChinesePinyinConverter>().To<Pinyin4NetConverter>();
             Bind<IFlashCardGenerator>().To<WpfFlashCardGenerator>();
             Bind<ILogService>().To<Log4NetService>().InSingletonScope();
+            Bind<TelegramBotClient>()
+                .ToSelf()
+                .WithConstructorArgument(ConfigurationManager.AppSettings["TelegramBotKey"])
+                .WithPropertyValue("PollingTimeout", TimeSpan.Parse(ConfigurationManager.AppSettings["PollInterval"]));
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System;
 using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
 using User = YellowDuck.LearnChinese.Data.Ef.User;
@@ -93,7 +93,15 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             if (firstEntity?.Type == MessageEntityType.BotCommand)
             {
                 var commandOnly = e.Message.Text.Substring(firstEntity.Offset, firstEntity.Length);
-                HandleCommand(new MessageItem {Command = commandOnly, ChatId = e.Message.Chat.Id, UserId = userId});
+                var textOnly = e.Message.Text.Replace(commandOnly,"");
+                HandleCommand(new MessageItem
+                {
+                    Command = commandOnly,
+                    ChatId = e.Message.Chat.Id,
+                    UserId = userId,
+                    Text = e.Message.Text,
+                    TextOnly = textOnly
+                });
 
                 _repository.SetUserCommand(userId, commandOnly);
             }
@@ -102,25 +110,32 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                 var possiblePreviousCommand = _repository.GetUserCommand(userId);
                 if (!string.IsNullOrWhiteSpace(possiblePreviousCommand))
                 {
+                    var mItem = new MessageItem
+                    {
+                        Command = possiblePreviousCommand,
+                        ChatId = e.Message.Chat.Id,
+                        UserId = userId,
+                        Text = e.Message.Text,
+                        TextOnly = e.Message.Text.Replace(possiblePreviousCommand, "")
+                    };
+
                     if (e.Message.Document != null)
                     {
                         var file = await _client.GetFileAsync(e.Message.Document.FileId);
-                        HandleCommand(new MessageItem
-                        {
-                            Command = possiblePreviousCommand,
-                            ChatId = e.Message.Chat.Id,
-                            FileStream = file.FileStream,
-                            UserId = userId
-                        });
+
+                        mItem.FileStream = file.FileStream;
                     }
+
+                    HandleCommand(mItem);
                 }
             }
         }
 
         void HandleCommand(MessageItem mItem)
-        {
+        { 
             var handler = MainFactory.GetCommandHandler(mItem.Command);
             var reply = handler.Reply(mItem);
+            
             _client.SendTextMessageAsync(mItem.ChatId, reply.Message, true, false, 0, reply.Markup);
         }
     }

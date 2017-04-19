@@ -2,7 +2,9 @@
 {
     public enum ECommands
     {
-        Help,
-        Import
+        Default,
+        Import,
+        Add,
+        Clean
     }
 }
