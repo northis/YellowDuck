@@ -72,7 +72,9 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                     ECommands.Help, new HelpCommand()
                 },
                 {
-                    ECommands.Import, new ImportCommand(NinjectKernel.Get<IChineseWordParseProvider>())
+                    ECommands.Import,
+                    new ImportCommand(NinjectKernel.Get<IChineseWordParseProvider>(),
+                        NinjectKernel.Get<IWordRepository>(), NinjectKernel.Get<IFlashCardGenerator>())
                 }
             };
 

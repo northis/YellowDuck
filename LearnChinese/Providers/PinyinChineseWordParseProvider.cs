@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Enums;

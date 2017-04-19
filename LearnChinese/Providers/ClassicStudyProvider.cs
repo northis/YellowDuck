@@ -1,5 +1,4 @@
 ﻿using System;
-using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Extentions;

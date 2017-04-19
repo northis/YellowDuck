@@ -261,7 +261,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             _context.SaveChanges();
         }
 
-        public void AddWord(IWord word)
+        public void AddWord(IWord word, long idUser)
         {
             var chineseWord = word.OriginalWord;
             var originalWord = _context.Words.FirstOrDefault(a => a.OriginalWord == chineseWord);
@@ -280,7 +280,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 Pronunciation = word.Pronunciation,
                 Translation = word.Translation,
                 Usage = word.Usage,
-                Id = word.Id
+                Id = word.Id,
+                IdOwner = idUser
             });
             _context.SaveChanges();
         }

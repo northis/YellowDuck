@@ -1,5 +1,4 @@
 ﻿using System;
-using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
@@ -19,7 +18,7 @@ namespace YellowDuck.LearnChinese.Interfaces
 
         void DeleteWord(long wordId);
 
-        void AddWord(IWord word);
+        void AddWord(IWord word, long idUser);
         
         void AddUser(IUser user);
 

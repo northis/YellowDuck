@@ -1,5 +1,4 @@
-﻿using YellowDuck.LearnChinese.Data;
-using YellowDuck.LearnChinese.Data.ObjectModels;
+﻿using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Enums;
 
 namespace YellowDuck.LearnChinese.Interfaces

@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
-using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Interfaces;
-using YellowDuck.LearnChineseBotService.Commands;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
+using User = YellowDuck.LearnChinese.Data.Ef.User;
 
 namespace YellowDuck.LearnChineseBotService.MainExecution
 {
@@ -78,12 +77,14 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             
         }
 
-        private void _client_OnMessage(object sender, MessageEventArgs e)
+        private async void _client_OnMessage(object sender, MessageEventArgs e)
         {
+            var userId = e.Message.From.Id;
+
             if (e.Message.NewChatMember != null)
                 _repository.AddUser(new User
                 {
-                    IdUser = e.Message.NewChatMember.Id,
+                    IdUser = userId,
                     Name = e.Message.NewChatMember.Username
                 });
 
@@ -92,19 +93,35 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             if (firstEntity?.Type == MessageEntityType.BotCommand)
             {
                 var commandOnly = e.Message.Text.Substring(firstEntity.Offset, firstEntity.Length);
+                HandleCommand(new MessageItem {Command = commandOnly, ChatId = e.Message.Chat.Id, UserId = userId});
 
-                var handler = MainFactory.GetCommandHandler(commandOnly);
-                var reply = handler.Reply(e.Message);
-
-                _client.SendTextMessageAsync(e.Message.Chat.Id, reply.Message, true, false, 0, reply.Markup);
-
-                _repository.SetUserCommand(e.Message.From.Id, commandOnly);
+                _repository.SetUserCommand(userId, commandOnly);
             }
             else
             {
-
+                var possiblePreviousCommand = _repository.GetUserCommand(userId);
+                if (!string.IsNullOrWhiteSpace(possiblePreviousCommand))
+                {
+                    if (e.Message.Document != null)
+                    {
+                        var file = await _client.GetFileAsync(e.Message.Document.FileId);
+                        HandleCommand(new MessageItem
+                        {
+                            Command = possiblePreviousCommand,
+                            ChatId = e.Message.Chat.Id,
+                            FileStream = file.FileStream,
+                            UserId = userId
+                        });
+                    }
+                }
             }
+        }
 
+        void HandleCommand(MessageItem mItem)
+        {
+            var handler = MainFactory.GetCommandHandler(mItem.Command);
+            var reply = handler.Reply(mItem);
+            _client.SendTextMessageAsync(mItem.ChatId, reply.Message, true, false, 0, reply.Markup);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
@@ -54,7 +53,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 Translation = "Спортзал",
                 CardAll = new byte[] {0x1, 0x2},
                 IdOwner = IdTestUser
-            });
+            }, IdTestUser);
 
             using (var cn = GetDbContext())
             {

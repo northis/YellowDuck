@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using YellowDuck.LearnChinese.Data;
 using YellowDuck.LearnChinese.Drawing;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
@@ -24,19 +23,30 @@ namespace YellowDuck.LearnChinese.Providers
 
         public byte[] Generate(IWord word, ELearnMode learnMode)
         {
-            var syllables = _wordParseProvider.GetOrderedSyllables(word);
-            var wordSyllables = syllables.Select(a => new SyllableView(a.ChineseChar.ToString(), a.Color)).ToArray();
-            var pinYinSyllables = syllables.Select(a => new SyllableView(a.Pinyin.ToString(), a.Color)).ToArray();
 
-            var view = new FlashCardView(wordSyllables, pinYinSyllables, word.Translation, word.Usage, learnMode);
+            byte[] res = null;
+            var tsk = new Thread(() =>
+            {
+                var syllables = _wordParseProvider.GetOrderedSyllables(word);
+                var wordSyllables = syllables.Select(a => new SyllableView(a.ChineseChar.ToString(), a.Color)).ToArray();
+                var pinYinSyllables = syllables.Select(a => new SyllableView(a.Pinyin.ToString(), a.Color)).ToArray();
 
-            var control = new FlashCardTemplate {DataContext = view };
-            
-            control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            control.Arrange(new Rect(control.DesiredSize));
-            control.UpdateLayout();
+                var view = new FlashCardView(wordSyllables, pinYinSyllables, word.Translation, word.Usage, learnMode);
 
-            var res = SaveControlImage(control);
+                var control = new FlashCardTemplate {DataContext = view};
+
+                control.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                control.Arrange(new Rect(control.DesiredSize));
+                control.UpdateLayout();
+
+                res = SaveControlImage(control);
+
+            });
+            tsk.SetApartmentState(ApartmentState.STA);
+
+            tsk.Start();
+            tsk.Join();
+
             return res;
         }
         

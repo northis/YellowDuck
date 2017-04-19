@@ -5,6 +5,7 @@ namespace YellowDuck.LearnChineseBotService
 {
     static class Program
     {
+        [STAThread]
         static void Main()
         {
             if (Environment.UserInteractive)
