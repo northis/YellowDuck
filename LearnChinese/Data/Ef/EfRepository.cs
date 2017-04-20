@@ -358,6 +358,27 @@ namespace YellowDuck.LearnChinese.Data.Ef
             return new WordStatistic{ Score = score, Word = score.Word};
         }
 
+        public WordStatistic GetUserWordStatistic(long userId, long wordId)
+        {
+            var score =
+                _context.Scores.FirstOrDefault(a => a.IdUser == userId && a.IdWord == wordId);
+
+            if (score == null)
+            {
+                var userOwners = _context.UserSharings.Where(a => a.IdFriend == userId).Select(a=>a.IdOwner).Distinct();
+                var word =
+                    _context.Words.FirstOrDefault(
+                        a => a.Id == wordId && (a.IdOwner == userId || userOwners.Contains(a.IdOwner)));
+
+                if(word == null)
+                    return null;
+
+                return new WordStatistic {Score = null, Word = word};
+            }
+
+            return new WordStatistic{ Score = score, Word = score.Word};
+        }
+
         public void SetScore(IScore score)
         {
             var userId = score.IdUser;
@@ -408,6 +429,16 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 throw new Exception($"Пользователь с Id={userId} не найден");
 
             return user.LastCommand;
+        }
+
+        public IWord GetWord(string wordOriginal)
+        {
+            var word = _context.Words.FirstOrDefault(a => a.OriginalWord == wordOriginal);
+
+            if (word == null)
+                throw new Exception($"Слова/фразы '{wordOriginal}' нет в хранилище");
+
+            return word;
         }
 
         #endregion

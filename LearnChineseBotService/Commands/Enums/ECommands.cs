@@ -5,6 +5,7 @@
         Default,
         Import,
         Add,
-        Clean
+        Clean,
+        View
     }
 }

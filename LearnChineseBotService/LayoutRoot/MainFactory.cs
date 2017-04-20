@@ -57,6 +57,9 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 },
                 {
                     ECommands.Clean, NinjectKernel.Get<CleanCommand>()
+                },
+                {
+                    ECommands.View, NinjectKernel.Get<ViewCommand>()
                 }
             };
         }

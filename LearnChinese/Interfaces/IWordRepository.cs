@@ -7,6 +7,7 @@ namespace YellowDuck.LearnChinese.Interfaces
     public interface IWordRepository
     {
         WordStatistic GetCurrentUserWordStatistic(long userId);
+        WordStatistic GetUserWordStatistic(long userId, long wordId);
 
         LearnUnit GetNextWord(WordSettings settings);
 
@@ -21,6 +22,8 @@ namespace YellowDuck.LearnChinese.Interfaces
         void AddWord(IWord word, long idUser);
         
         void AddUser(IUser user);
+
+        IWord GetWord(string wordOriginal);
 
         bool IsUserExist(long userId);
 

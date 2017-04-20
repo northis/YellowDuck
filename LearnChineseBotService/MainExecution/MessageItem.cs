@@ -15,5 +15,6 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         public string Text { get; set; }
 
         public string TextOnly { get; set; }
+        public byte[] Picture { get; set; }
     }
 }

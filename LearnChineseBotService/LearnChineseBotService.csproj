@@ -86,6 +86,7 @@
     <Compile Include="Commands\AnswerItem.cs" />
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\CleanCommand.cs" />
+    <Compile Include="Commands\ViewCommand.cs" />
     <Compile Include="Commands\Enums\ECommands.cs" />
     <Compile Include="Commands\DefaultCommand.cs" />
     <Compile Include="Commands\ImportCommand.cs" />

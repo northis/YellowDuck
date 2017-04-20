@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
 using User = YellowDuck.LearnChinese.Data.Ef.User;
@@ -14,23 +15,16 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
     public class MainWorker
     {
         private readonly TelegramBotClient _client;
-        private readonly IStudyProvider _studyProvider;
         private readonly IWordRepository _repository;
 
-        public MainWorker(TelegramBotClient client, IStudyProvider studyProvider, IWordRepository repository)
+        public MainWorker(TelegramBotClient client, IWordRepository repository)
         {
             _client = client;
-            _studyProvider = studyProvider;
             _repository = repository;
             _client.OnMessage += _client_OnMessage;
             _client.OnMessageEdited += _client_OnMessageEdited;
             _client.OnReceiveError += _client_OnReceiveError;
             _client.OnReceiveGeneralError += _client_OnReceiveGeneralError;
-
-            _client.OnCallbackQuery += _client_OnCallbackQuery;
-            _client.OnInlineQuery += _client_OnInlineQuery;
-            _client.OnInlineResultChosen += _client_OnInlineResultChosen;
-            _client.OnUpdate += _client_OnUpdate;
             
         }
 
@@ -42,24 +36,6 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         public void Stop()
         {
             _client.StopReceiving();
-        }
-
-        private void _client_OnUpdate(object sender, UpdateEventArgs e)
-        {
-        }
-
-        private void _client_OnInlineResultChosen(object sender, ChosenInlineResultEventArgs e)
-        {
-        }
-
-        private void _client_OnInlineQuery(object sender, InlineQueryEventArgs e)
-        {
-            
-        }
-
-        private void _client_OnCallbackQuery(object sender, CallbackQueryEventArgs e)
-        {
-            
         }
 
         private void _client_OnReceiveGeneralError(object sender, ReceiveGeneralErrorEventArgs e)
@@ -122,7 +98,6 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                     if (e.Message.Document != null)
                     {
                         var file = await _client.GetFileAsync(e.Message.Document.FileId);
-
                         mItem.FileStream = file.FileStream;
                     }
 
@@ -131,12 +106,24 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
         }
 
-        void HandleCommand(MessageItem mItem)
+        async void HandleCommand(MessageItem mItem)
         { 
             var handler = MainFactory.GetCommandHandler(mItem.Command);
             var reply = handler.Reply(mItem);
-            
-            _client.SendTextMessageAsync(mItem.ChatId, reply.Message, true, false, 0, reply.Markup);
+
+            if (reply.Picture == null)
+            {
+                await _client.SendTextMessageAsync(mItem.ChatId, reply.Message, true, false, 0, reply.Markup);
+            }
+            else
+            {
+                using (var ms = new MemoryStream(reply.Picture))
+                {
+                   await _client.SendPhotoAsync(mItem.ChatId, new FileToSend(Guid.NewGuid() + ".png", ms), mItem.Text, false,
+                        0, reply.Markup);
+                }
+
+            }
         }
     }
 }

@@ -33,7 +33,8 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return new[]
             {
                  new KeyboardButton{Text = $"{CommandStartChar}{ECommands.Import}"},
-                 new KeyboardButton{Text = $"{CommandStartChar}{ECommands.Add}"}
+                 new KeyboardButton{Text = $"{CommandStartChar}{ECommands.Add}"},
+                 new KeyboardButton{Text = $"{CommandStartChar}{ECommands.View}"}
             };
         }
     }
