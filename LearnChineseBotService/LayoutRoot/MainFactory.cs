@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Ninject;
 using YellowDuck.Common.Logging;
 using YellowDuck.LearnChineseBotService.Commands;
@@ -43,25 +44,17 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             if (MainWorker == null)
                 MainWorker = NinjectKernel.Get<MainWorker>();
 
-
-            CommandHandlers = new Dictionary<ECommands, CommandBase>
+            var handlers = new CommandBase[]
             {
-                {
-                    ECommands.Default, NinjectKernel.Get<DefaultCommand>()
-                },
-                {
-                    ECommands.Import,NinjectKernel.Get<ImportCommand>()
-                },
-                {
-                    ECommands.Add,NinjectKernel.Get<AddCommand>()
-                },
-                {
-                    ECommands.Clean, NinjectKernel.Get<CleanCommand>()
-                },
-                {
-                    ECommands.View, NinjectKernel.Get<ViewCommand>()
-                }
+                NinjectKernel.Get<DefaultCommand>(),
+                NinjectKernel.Get<ImportCommand>(),
+                NinjectKernel.Get<AddCommand>(),
+                NinjectKernel.Get<CleanCommand>(),
+                NinjectKernel.Get<ViewCommand>(),
+                NinjectKernel.Get<DeleteCommand>()
             };
+
+            CommandHandlers = handlers.ToDictionary(a => a.GetCommandType(), a => a);
         }
 
         #endregion

@@ -207,26 +207,19 @@ namespace YellowDuck.LearnChinese.Data.Ef
             if (user == null || word == null)
                 return null;
 
-            score = new Score {User = user, Word = word, LastView = GetRepositoryTime()};
+            score = new Score
+            {
+                User = user,
+                Word = word,
+                LastView = GetRepositoryTime(),
+                LastLearnMode = ELearnMode.FullView.ToString(),
+                IsInLearnMode = false
+            };
             _context.Scores.Add(score);
             _context.SaveChanges();
 
             return score;
         }
-
-        /*
-        public IOrderedQueryable<WordDatesView> GetWordDates(IQueryable<IWord> words, IOrderedQueryable<IScore> scores)
-        {
-            return words.GroupJoin(scores, w => w.Id, s => s.IdWord, (w, s) => new { w, s })
-                .SelectMany(a => a.s.DefaultIfEmpty(),
-                    (a, b) =>
-                        new WordDatesView
-                        {
-                            Word = a.w,
-                            LastLearned = b != null ? b.LastLearned : null,
-                            LastView = b != null ? (DateTime?)b.LastView : null
-                        });
-        }*/
 
         public IQueryable<IScore> GetUserScores(long idUser)
         {
@@ -257,6 +250,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 throw new Exception(
                     $"Удаление невозможно, такого слова в хранилище нет. Id={wordId}");
 
+            _context.Scores.RemoveRange(_context.Scores.Where(a => a.IdWord == wordId));
             _context.Words.Remove(originalWord);
             _context.SaveChanges();
         }
@@ -373,9 +367,23 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 if(word == null)
                     return null;
 
-                return new WordStatistic {Score = null, Word = word};
+                score = new Score
+                {
+                    IdUser = userId,
+                    IdWord = wordId,
+                    LastView = GetRepositoryTime(),
+                    ViewCount = 1,
+                    LastLearnMode = ELearnMode.FullView.ToString()
+                };
+                
+            }
+            else
+            {
+                score.LastView = GetRepositoryTime();
+                score.ViewCount += 1;
             }
 
+            SetScore(score);
             return new WordStatistic{ Score = score, Word = score.Word};
         }
 
@@ -385,7 +393,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var wordId = score.IdWord;
             var scoreEntity = GetScore(userId, wordId);
 
-            var learnMode = scoreEntity.ToELearnMode();
+            var learnMode =  score.ToELearnMode();
 
             scoreEntity.LastLearnMode = score.LastLearnMode;
             scoreEntity.IsInLearnMode = score.IsInLearnMode;

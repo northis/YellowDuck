@@ -6,6 +6,7 @@
         Import,
         Add,
         Clean,
-        View
+        View,
+        Delete
     }
 }

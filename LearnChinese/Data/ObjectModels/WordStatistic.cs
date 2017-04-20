@@ -10,9 +10,10 @@ namespace YellowDuck.LearnChinese.Data.ObjectModels
         public override string ToString()
         {
             if (Score == null)
-                return base.ToString();
+                return "0";
 
-            return Score.ViewCount.ToString();//TODO
+            return
+                $"写{Score.OriginalWordSuccessCount??0}({Score.OriginalWordCount??0}), 听{Score.PronunciationSuccessCount??0}({Score.PronunciationCount??0}), 翻译{Score.TranslationSuccessCount??0}({Score.TranslationCount??0}), 看{Score.ViewCount}";
         }
     }
 }

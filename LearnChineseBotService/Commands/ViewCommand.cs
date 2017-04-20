@@ -21,7 +21,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             var answer = new AnswerItem
             {
                 Message = string.Empty,
-                Markup = new ReplyKeyboardMarkup { Keyboard = new[] { GetDefaultButtons() }, ResizeKeyboard = true, OneTimeKeyboard = false }
+                Markup = new ReplyKeyboardMarkup { Keyboard = GetDefaultButtons(), ResizeKeyboard = true, OneTimeKeyboard = false }
             };
 
             if (string.IsNullOrEmpty(mItem.TextOnly))
@@ -44,7 +44,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
                 var stat = _repository.GetUserWordStatistic(mItem.UserId, word.Id);
 
-                answer.Message = stat?.ToString() ?? "0";
+                //answer.Message = stat?.ToString();
 
                 answer.Picture = word.CardAll;
             }

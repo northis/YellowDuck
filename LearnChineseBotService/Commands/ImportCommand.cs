@@ -63,7 +63,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             {
                 Message = string.Empty,
                 Markup =
-                    new ReplyKeyboardMarkup { Keyboard = new[] { GetDefaultButtons() }, ResizeKeyboard = true, OneTimeKeyboard = false }
+                    new ReplyKeyboardMarkup { Keyboard = GetDefaultButtons(), ResizeKeyboard = true, OneTimeKeyboard = false }
             };
 
             if (goodWords.Any())

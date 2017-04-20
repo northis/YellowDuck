@@ -28,13 +28,21 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return commandEnum;
         }
 
-        public virtual KeyboardButton[] GetDefaultButtons()
+        public virtual KeyboardButton[][] GetDefaultButtons()
         {
             return new[]
             {
-                 new KeyboardButton{Text = $"{CommandStartChar}{ECommands.Import}"},
-                 new KeyboardButton{Text = $"{CommandStartChar}{ECommands.Add}"},
-                 new KeyboardButton{Text = $"{CommandStartChar}{ECommands.View}"}
+                new[]
+                {
+                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.Import}"},
+                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.Add}"}
+                },
+
+                new[]
+                {
+                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.View}"},
+                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.Delete}"}
+                }
             };
         }
     }

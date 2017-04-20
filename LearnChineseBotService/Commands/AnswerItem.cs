@@ -6,7 +6,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
     {
         public string Message { get; set; }
 
-        public ReplyMarkup Markup { get; set; }
+        public IReplyMarkup Markup { get; set; }
 
         public byte[] Picture { get; set; }
     }

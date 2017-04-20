@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
@@ -21,61 +22,64 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         {
             _client = client;
             _repository = repository;
-            _client.OnMessage += _client_OnMessage;
-            _client.OnMessageEdited += _client_OnMessageEdited;
+            _client.OnMessage += TryClientOnMessage;
             _client.OnReceiveError += _client_OnReceiveError;
             _client.OnReceiveGeneralError += _client_OnReceiveGeneralError;
-            
+            _client.OnCallbackQuery += TryOnCallbackQuery;
         }
 
-        public void Start()
+        private async void TryOnCallbackQuery(object sender, CallbackQueryEventArgs e)
         {
-            _client.StartReceiving();
+            try
+            {
+                await OnOnCallbackQuery(e);
+            }
+            catch (Exception ex)
+            {
+                MainFactory.Log.Write("OnOnCallbackQuery", ex, null);
+            }
         }
 
-        public void Stop()
+        private async Task OnOnCallbackQuery(CallbackQueryEventArgs e)
         {
-            _client.StopReceiving();
+            await HandleArgumentCommand(e.CallbackQuery.Message, e.CallbackQuery.Data,e.CallbackQuery.From.Id);
         }
 
-        private void _client_OnReceiveGeneralError(object sender, ReceiveGeneralErrorEventArgs e)
+        private async void TryClientOnMessage(object sender, MessageEventArgs e)
         {
-            MainFactory.Log.Write(nameof(_client_OnReceiveGeneralError), e.Exception, null);
+            try
+            {
+                 await OnMessage(e.Message);
+            }
+            catch (Exception ex)
+            {
+                MainFactory.Log.Write("OnMessage", ex, null);
+            }
         }
 
-        private void _client_OnReceiveError(object sender, ReceiveErrorEventArgs e)
+        private async Task OnMessage(Message msg)
         {
-            MainFactory.Log.Write(nameof(_client_OnReceiveError), e.ApiRequestException, null);
-        }
+            var userId = msg.From.Id;
 
-        private void _client_OnMessageEdited(object sender, MessageEventArgs e)
-        {
-            
-        }
-
-        private async void _client_OnMessage(object sender, MessageEventArgs e)
-        {
-            var userId = e.Message.From.Id;
-
-            if (e.Message.NewChatMember != null)
+            if (msg.NewChatMember != null)
                 _repository.AddUser(new User
                 {
                     IdUser = userId,
-                    Name = e.Message.NewChatMember.Username
+                    Name = msg.NewChatMember.Username
                 });
 
-            var firstEntity = e.Message.Entities.FirstOrDefault();
+            var firstEntity = msg.Entities.FirstOrDefault();
 
             if (firstEntity?.Type == MessageEntityType.BotCommand)
             {
-                var commandOnly = e.Message.Text.Substring(firstEntity.Offset, firstEntity.Length);
-                var textOnly = e.Message.Text.Replace(commandOnly,"");
-                HandleCommand(new MessageItem
+                var commandOnly = msg.Text.Substring(firstEntity.Offset, firstEntity.Length);
+                var textOnly = msg.Text.Replace(commandOnly,"");
+                await HandleCommand(new MessageItem
                 {
                     Command = commandOnly,
-                    ChatId = e.Message.Chat.Id,
+                    ChatId = msg.Chat.Id,
                     UserId = userId,
-                    Text = e.Message.Text,
+                    Text = msg.Text,
                     TextOnly = textOnly
                 });
 
@@ -83,30 +87,36 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
             else
             {
-                var possiblePreviousCommand = _repository.GetUserCommand(userId);
-                if (!string.IsNullOrWhiteSpace(possiblePreviousCommand))
-                {
-                    var mItem = new MessageItem
-                    {
-                        Command = possiblePreviousCommand,
-                        ChatId = e.Message.Chat.Id,
-                        UserId = userId,
-                        Text = e.Message.Text,
-                        TextOnly = e.Message.Text.Replace(possiblePreviousCommand, "")
-                    };
-
-                    if (e.Message.Document != null)
-                    {
-                        var file = await _client.GetFileAsync(e.Message.Document.FileId);
-                        mItem.FileStream = file.FileStream;
-                    }
-
-                    HandleCommand(mItem);
-                }
+                await HandleArgumentCommand(msg, msg.Text,userId);
             }
         }
 
-        async void HandleCommand(MessageItem mItem)
+        async Task HandleArgumentCommand(Message msg, string argumentCommand, long userId)
+        {
+            var possiblePreviousCommand = _repository.GetUserCommand(userId);
+
+            if (!string.IsNullOrWhiteSpace(possiblePreviousCommand))
+            {
+                var mItem = new MessageItem
+                {
+                    Command = possiblePreviousCommand,
+                    ChatId = msg.Chat.Id,
+                    UserId = msg.From.Id,
+                    Text = msg.Text,
+                    TextOnly = argumentCommand.Replace(possiblePreviousCommand, string.Empty)
+                };
+
+                if (msg.Document != null)
+                {
+                    var file = await _client.GetFileAsync(msg.Document.FileId);
+                    mItem.FileStream = file.FileStream;
+                }
+
+                await HandleCommand(mItem);
+            }
+        }
+
+        async Task HandleCommand(MessageItem mItem)
         { 
             var handler = MainFactory.GetCommandHandler(mItem.Command);
             var reply = handler.Reply(mItem);
@@ -119,11 +129,31 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             {
                 using (var ms = new MemoryStream(reply.Picture))
                 {
-                   await _client.SendPhotoAsync(mItem.ChatId, new FileToSend(Guid.NewGuid() + ".png", ms), mItem.Text, false,
+                   await _client.SendPhotoAsync(mItem.ChatId, new FileToSend(Guid.NewGuid() + ".png", ms), reply.Message, false,
                         0, reply.Markup);
                 }
 
             }
+        }
+
+        private void _client_OnReceiveGeneralError(object sender, ReceiveGeneralErrorEventArgs e)
+        {
+            MainFactory.Log.Write(nameof(_client_OnReceiveGeneralError), e.Exception, null);
+        }
+
+        private void _client_OnReceiveError(object sender, ReceiveErrorEventArgs e)
+        {
+            MainFactory.Log.Write(nameof(_client_OnReceiveError), e.ApiRequestException, null);
+        }
+
+        public void Start()
+        {
+            _client.StartReceiving();
+        }
+
+        public void Stop()
+        {
+            _client.StopReceiving();
         }
     }
 }

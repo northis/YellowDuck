@@ -13,7 +13,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return new AnswerItem
             {
                 Message = "Установлена клавиатура по умолчанию",
-                Markup = new ReplyKeyboardMarkup {Keyboard = new[] {buttons}, ResizeKeyboard = true, OneTimeKeyboard = false}
+                Markup = new ReplyKeyboardMarkup {Keyboard = buttons, ResizeKeyboard = true, OneTimeKeyboard = false}
             };
         }
 
