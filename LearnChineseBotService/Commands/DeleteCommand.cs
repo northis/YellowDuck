@@ -24,7 +24,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             IReplyMarkup markup = new ReplyKeyboardMarkup
             {
-                Keyboard = GetDefaultButtons(),
+                Keyboard = GetDictionaryButtons(),
                 ResizeKeyboard = true,
                 OneTimeKeyboard = false
             };
@@ -59,7 +59,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 markup = new InlineKeyboardMarkup
                 {
                     InlineKeyboard = new[] { new[] { new InlineKeyboardButton("Да", $"yes{mItem.TextOnly}"), new InlineKeyboardButton("Нет","no") } }
-                };//.Keyboard = new[] {new[] {new KeyboardButton("Да"), new KeyboardButton("Нет")}};
+                };
             }
 
             var answer = new AnswerItem
@@ -75,6 +75,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override ECommands GetCommandType()
         {
             return ECommands.Delete;
+        }
+        public override string GetCommandDescription()
+        {
+            return "Удалить слово из словаря";
         }
     }
 }

@@ -19,5 +19,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             return ECommands.Clean;
         }
+
+        public override string GetCommandDescription()
+        {
+            return "Убрать все кнопки";
+        }
     }
 }

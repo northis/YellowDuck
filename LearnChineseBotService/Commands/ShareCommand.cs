@@ -4,27 +4,25 @@ using YellowDuck.LearnChineseBotService.MainExecution;
 
 namespace YellowDuck.LearnChineseBotService.Commands
 {
-    public class DefaultCommand: CommandBase
+    public class ShareCommand : CommandBase
     {
         public override AnswerItem Reply(MessageItem mItem)
         {
-            var buttons = GetDictionaryButtons();
-
             return new AnswerItem
             {
-                Message = "Установлена клавиатура по умолчанию",
-                Markup = new ReplyKeyboardMarkup {Keyboard = buttons, ResizeKeyboard = true, OneTimeKeyboard = false}
+                Message = "Выберите друга из списка контактов. Внимание! Перед этим он должен добавить бота себе.",
+                Markup = new ReplyKeyboardMarkup { Keyboard = GetDictionaryButtons(), ResizeKeyboard = true, OneTimeKeyboard = false }
             };
         }
 
-
         public override ECommands GetCommandType()
         {
-            return ECommands.Default;
+            return ECommands.Share;
         }
+
         public override string GetCommandDescription()
         {
-            return "Установить умолчания";
+            return "Поделиться своим списком слов с другом";
         }
     }
 }

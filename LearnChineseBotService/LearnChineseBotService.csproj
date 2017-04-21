@@ -84,6 +84,8 @@
   <ItemGroup>
     <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\AnswerItem.cs" />
+    <Compile Include="Commands\ShareCommand.cs" />
+    <Compile Include="Commands\ModeCommand.cs" />
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\CleanCommand.cs" />
     <Compile Include="Commands\ViewCommand.cs" />

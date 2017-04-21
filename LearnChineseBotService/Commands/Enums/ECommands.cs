@@ -7,6 +7,8 @@
         Add,
         Clean,
         View,
-        Delete
+        Delete,
+        Mode,
+        Share
     }
 }

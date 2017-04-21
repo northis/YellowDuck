@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 using Ninject.Modules;
 using Telegram.Bot;
 using YellowDuck.Common.Logging;
 using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Providers;
+using YellowDuck.LearnChineseBotService.Commands;
 
 namespace YellowDuck.LearnChineseBotService.LayoutRoot
 {
@@ -25,6 +27,10 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .ToSelf()
                 .WithConstructorArgument(ConfigurationManager.AppSettings["TelegramBotKey"])
                 .WithPropertyValue("PollingTimeout", TimeSpan.Parse(ConfigurationManager.AppSettings["PollInterval"]));
+
+            Bind<ModeCommand>()
+                .ToSelf()
+                .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.CommandHandlers.Values.ToArray());
         }
     }
 }

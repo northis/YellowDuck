@@ -63,7 +63,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             {
                 Message = string.Empty,
                 Markup =
-                    new ReplyKeyboardMarkup { Keyboard = GetDefaultButtons(), ResizeKeyboard = true, OneTimeKeyboard = false }
+                    new ReplyKeyboardMarkup { Keyboard = GetDictionaryButtons(), ResizeKeyboard = true, OneTimeKeyboard = false }
             };
 
             if (goodWords.Any())
@@ -129,6 +129,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     yield return line;
                 }
             }
+        }
+        public override string GetCommandDescription()
+        {
+            return "Выполнить импорт слов из файла";
         }
     }
 }

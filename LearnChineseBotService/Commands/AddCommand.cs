@@ -47,5 +47,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             return ECommands.Add;
         }
+
+        public override string GetCommandDescription()
+        {
+            return "Добавить новое слово/фразу";
+        }
     }
 }
