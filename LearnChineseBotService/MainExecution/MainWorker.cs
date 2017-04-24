@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -17,6 +18,9 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
     {
         private readonly TelegramBotClient _client;
         private readonly IWordRepository _repository;
+
+        public const string EmojiFilterString = @"[^\u0000-\u007F]+";
+
 
         public MainWorker(TelegramBotClient client, IWordRepository repository)
         {
@@ -73,7 +77,10 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             if (firstEntity?.Type == MessageEntityType.BotCommand)
             {
                 var commandOnly = msg.Text.Substring(firstEntity.Offset, firstEntity.Length);
-                var textOnly = msg.Text.Replace(commandOnly,"");
+
+                var noEmoji = GetNoEmojiString(msg.Text);
+
+                var textOnly = noEmoji.Replace(commandOnly,"");
                 await HandleCommand(new MessageItem
                 {
                     Command = commandOnly,
@@ -97,13 +104,15 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
 
             if (!string.IsNullOrWhiteSpace(possiblePreviousCommand))
             {
+                var noEmojiCmd = GetNoEmojiString(argumentCommand);
+
                 var mItem = new MessageItem
                 {
                     Command = possiblePreviousCommand,
                     ChatId = msg.Chat.Id,
                     UserId = msg.From.Id,
                     Text = msg.Text,
-                    TextOnly = argumentCommand.Replace(possiblePreviousCommand, string.Empty)
+                    TextOnly = noEmojiCmd.Replace(possiblePreviousCommand, string.Empty)
                 };
 
                 if (msg.Document != null)
@@ -154,6 +163,11 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         public void Stop()
         {
             _client.StopReceiving();
+        }
+
+        string GetNoEmojiString(string str)
+        {
+            return Regex.Replace(str, EmojiFilterString, "");
         }
     }
 }

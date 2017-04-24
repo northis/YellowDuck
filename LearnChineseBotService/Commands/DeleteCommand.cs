@@ -58,7 +58,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 message = $"Вы действительно хотите удалить слово '{mItem.TextOnly}'?";
                 markup = new InlineKeyboardMarkup
                 {
-                    InlineKeyboard = new[] { new[] { new InlineKeyboardButton("Да", $"yes{mItem.TextOnly}"), new InlineKeyboardButton("Нет","no") } }
+                    InlineKeyboard = new[] { new[] { new InlineKeyboardButton("✅Да", $"yes{mItem.TextOnly}"), new InlineKeyboardButton("❌Нет", "no") } }
                 };
             }
 
@@ -78,7 +78,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         }
         public override string GetCommandDescription()
         {
-            return "Удалить слово из словаря";
+            return "🗑Удалить слово из словаря";
         }
     }
 }

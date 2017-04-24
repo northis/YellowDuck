@@ -22,7 +22,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public override string GetCommandDescription()
         {
-            return "Убрать все кнопки";
+            return "🚿Убрать все кнопки";
         }
     }
 }

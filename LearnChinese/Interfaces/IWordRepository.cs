@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
@@ -22,6 +23,9 @@ namespace YellowDuck.LearnChinese.Interfaces
         void AddWord(IWord word, long idUser);
         
         void AddUser(IUser user);
+
+        IQueryable<IUser> GetUsers();
+        IQueryable<IUser> GetUserFriends(long userId);
 
         IWord GetWord(string wordOriginal);
 

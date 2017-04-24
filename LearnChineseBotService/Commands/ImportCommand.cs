@@ -132,7 +132,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         }
         public override string GetCommandDescription()
         {
-            return "Выполнить импорт слов из файла";
+            return "🚛Выполнить импорт слов из файла";
         }
     }
 }

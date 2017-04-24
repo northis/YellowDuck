@@ -24,7 +24,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         }
         public override string GetCommandDescription()
         {
-            return "Установить умолчания";
+            return "👌Установить умолчания";
         }
     }
 }

@@ -31,6 +31,9 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<ModeCommand>()
                 .ToSelf()
                 .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.CommandHandlers.Values.ToArray());
+            Bind<HelpCommand>()
+                .ToSelf()
+                .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.CommandHandlers.Values.ToArray());
         }
     }
 }

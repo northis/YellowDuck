@@ -59,7 +59,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         }
         public override string GetCommandDescription()
         {
-            return "Просмотр карточки слова";
+            return "👀Просмотр карточки слова";
         }
     }
 }

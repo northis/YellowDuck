@@ -45,15 +45,17 @@ namespace YellowDuck.LearnChineseBotService.Commands
             {
                 new[]
                 {
-                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.Import}"},
-                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.Add}"},
-                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.Mode}"}
+                    new KeyboardButton {Text = $"🚛{CommandStartChar}{ECommands.Import}"},
+                    new KeyboardButton {Text = $"➕{CommandStartChar}{ECommands.Add}"},
+                    new KeyboardButton {Text = $"⚙️{CommandStartChar}{ECommands.Mode}"}
                 },
 
                 new[]
                 {
-                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.View}"},
-                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.Delete}"}
+                    new KeyboardButton {Text = $"👀{CommandStartChar}{ECommands.View}"},
+                    new KeyboardButton {Text = $"🗑{CommandStartChar}{ECommands.Delete}"},
+                    new KeyboardButton {Text = $"🤝{CommandStartChar}{ECommands.Share}"},
+                    new KeyboardButton {Text = $"❓{CommandStartChar}{ECommands.Help}"}
                 }
             };
         }
@@ -64,7 +66,8 @@ namespace YellowDuck.LearnChineseBotService.Commands
             {
                 new[]
                 {
-                    new KeyboardButton {Text = $"{CommandStartChar}{ECommands.Mode}"}
+                    new KeyboardButton {Text = $"⚙️{CommandStartChar}{ECommands.Mode}"},
+                    new KeyboardButton {Text = $"❓{CommandStartChar}{ECommands.Help}"}
                 }
             };
         }

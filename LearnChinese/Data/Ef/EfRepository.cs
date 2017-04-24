@@ -449,6 +449,15 @@ namespace YellowDuck.LearnChinese.Data.Ef
             return word;
         }
 
+        public IQueryable<IUser> GetUsers()
+        {
+            return _context.Users;
+        }
+        public IQueryable<IUser> GetUserFriends(long userId)
+        {
+            return _context.UserSharings.Where(a => a.IdOwner == userId).Select(a => a.UserFriend);
+        }
+
         #endregion
     }
 }

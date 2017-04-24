@@ -7,13 +7,10 @@ using YellowDuck.LearnChineseBotService.MainExecution;
 
 namespace YellowDuck.LearnChineseBotService.Commands
 {
-    public class ModeCommand : CommandBase
+    public class ModeCommand : HelpCommand
     {
-        Func<CommandBase[]> GetAllComands { get; }
-
-        public ModeCommand(Func<CommandBase[]> getAllComands)
+        public ModeCommand(Func<CommandBase[]> getAllComands):base(getAllComands)
         {
-            GetAllComands = getAllComands;
         }
 
         public override AnswerItem Reply(MessageItem mItem)
@@ -30,9 +27,9 @@ namespace YellowDuck.LearnChineseBotService.Commands
                             {
                                 new[]
                                 {
-                                    new InlineKeyboardButton("Обучение", "learn"),
-                                    new InlineKeyboardButton("Словарь", "dic"),
-                                    new InlineKeyboardButton("Команды", "help")
+                                    new InlineKeyboardButton("‍🎓Обучение", "learn"),
+                                    new InlineKeyboardButton("📚Словарь", "dic"),
+                                    new InlineKeyboardButton("❓Команды", "help")
                                 }
                             }
                     }
@@ -89,13 +86,9 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return ECommands.Mode;
         }
 
-        public string GetHelpMessage()
-        {
-            return string.Join(Environment.NewLine, GetAllComands().Select(a => a.GetFormattedDescription()));
-        }
         public override string GetCommandDescription()
         {
-            return "Открыть меню выбора режима";
+            return "⚙️Открыть меню выбора режима";
         }
     }
 }

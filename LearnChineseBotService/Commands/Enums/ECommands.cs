@@ -9,6 +9,7 @@
         View,
         Delete,
         Mode,
-        Share
+        Share,
+        Help
     }
 }
