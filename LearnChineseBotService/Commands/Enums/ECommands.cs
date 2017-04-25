@@ -10,6 +10,11 @@
         Delete,
         Mode,
         Share,
-        Help
+        Help,
+        Start,
+        LearnWriting,
+        LearnTranslation,
+        LearnPronunciation,
+        LearnView
     }
 }

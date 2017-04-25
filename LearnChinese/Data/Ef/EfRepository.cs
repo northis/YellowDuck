@@ -159,7 +159,10 @@ namespace YellowDuck.LearnChinese.Data.Ef
             score.IsInLearnMode = learnMode != ELearnMode.FullView;
             score.LastLearned = GetRepositoryTime();
 
-            var answers = userWords.Take(pollAnswersCount).OrderBy(a => Guid.NewGuid());
+            var answers =
+                userWords.Where(a => a.SyllablesCount == word.SyllablesCount)
+                    .Take(pollAnswersCount)
+                    .OrderBy(a => Guid.NewGuid());
             var questionItem = new LearnUnit();
 
             switch (learnMode)
@@ -290,7 +293,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 throw new Exception(
                     $"Добавление невозможно, такой пользователь уже существует. idUser={idUser}");
 
-            _context.Users.Add(new User { IdUser = user.IdUser, Name = user.Name });
+            _context.Users.Add(new User { IdUser = user.IdUser, Name = user.Name, JoinDate = GetRepositoryTime() });
             _context.SaveChanges();
         }
 
@@ -337,7 +340,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 throw new Exception(
                     $"Забрать доступ к своему словарю невозможно. friendUserId={friendUserId}");
 
-            ownerUser.OwnerUserSharings.Remove(ownerUser.OwnerUserSharings.First(a => a.UserFriend == friendUser));
+            _context.UserSharings.RemoveRange(
+                ownerUser.OwnerUserSharings.Where(a => a.IdOwner == ownerUserId && a.IdFriend == friendUserId));
             _context.SaveChanges();
         }
 

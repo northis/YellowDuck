@@ -24,8 +24,8 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 cn.Words.RemoveRange(cn.Words);
                 cn.Users.RemoveRange(cn.Users);
                 cn.UserSharings.RemoveRange(cn.UserSharings);
-                cn.Users.Add(new User {IdUser = IdTestUser, Name = nameof(IdTestUser)});
-                cn.Users.Add(new User {IdUser = IdFriendTestUser, Name = nameof(IdFriendTestUser)});
+                cn.Users.Add(new User {IdUser = IdTestUser, Name = nameof(IdTestUser), JoinDate = cntxt.GetRepositoryTime()});
+                cn.Users.Add(new User {IdUser = IdFriendTestUser, Name = nameof(IdFriendTestUser), JoinDate = cntxt.GetRepositoryTime() });
                 cn.UserSharings.Add(new UserSharing {IdOwner = IdTestUser, IdFriend = IdFriendTestUser});
                 cn.SaveChanges();
             }

@@ -89,6 +89,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Db\dbCreate.sql">
+      <SubType>Component</SubType>
+    </Content>
     <Content Include="Db\LearnChinese.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

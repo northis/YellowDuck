@@ -54,10 +54,13 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 NinjectKernel.Get<DeleteCommand>(),
                 NinjectKernel.Get<ModeCommand>(),
                 NinjectKernel.Get<ShareCommand>(),
-                NinjectKernel.Get<HelpCommand>()
+                NinjectKernel.Get<HelpCommand>(),
+                NinjectKernel.Get<StartCommand>(),
+                NinjectKernel.Get<LearnWritingCommand>()
             };
 
-            CommandHandlers = handlers.ToDictionary(a => a.GetCommandType(), a => a);
+            CommandHandlers = handlers.OrderBy(a => a.GetCommandType().ToString())
+                .ToDictionary(a => a.GetCommandType(), a => a);
         }
 
         #endregion

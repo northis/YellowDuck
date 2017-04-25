@@ -26,8 +26,13 @@ namespace YellowDuck.LearnChinese.Providers
             byte[] res = null;
             var tsk = new Thread(() =>
             {
+                var isPronunciationMode = learnMode == ELearnMode.Pronunciation;
+
                 var syllables = _wordParseProvider.GetOrderedSyllables(word);
-                var wordSyllables = syllables.Select(a => new SyllableView(a.ChineseChar.ToString(), a.Color)).ToArray();
+                var wordSyllables =
+                    syllables.Select(
+                            a => new SyllableView(a.ChineseChar.ToString(), isPronunciationMode ? Colors.Black : a.Color))
+                        .ToArray();
                 var pinYinSyllables = syllables.Select(a => new SyllableView(a.Pinyin.ToString(), a.Color)).ToArray();
 
                 var view = new FlashCardView(wordSyllables, pinYinSyllables, word.Translation, word.Usage, learnMode);

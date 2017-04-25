@@ -45,5 +45,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
 
         public User UserOwner { get; set; }
+
+        public int SyllablesCount { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public override AnswerItem Reply(MessageItem mItem)
         {
-            if (string.IsNullOrEmpty(mItem.TextOnly))
+            if (string.IsNullOrWhiteSpace(mItem.TextOnly))
             {
                 return new AnswerItem
                 {

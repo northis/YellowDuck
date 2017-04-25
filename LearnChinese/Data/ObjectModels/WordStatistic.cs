@@ -13,7 +13,7 @@ namespace YellowDuck.LearnChinese.Data.ObjectModels
                 return "0";
 
             return
-                $"写{Score.OriginalWordSuccessCount??0}({Score.OriginalWordCount??0}), 听{Score.PronunciationSuccessCount??0}({Score.PronunciationCount??0}), 翻译{Score.TranslationSuccessCount??0}({Score.TranslationCount??0}), 看{Score.ViewCount}";
+                $"🖌{Score.OriginalWordSuccessCount??0}({Score.OriginalWordCount??0}), 📢{Score.PronunciationSuccessCount??0}({Score.PronunciationCount??0}), 🇨🇳{Score.TranslationSuccessCount??0}({Score.TranslationCount??0}), 👀{Score.ViewCount}";
         }
     }
 }

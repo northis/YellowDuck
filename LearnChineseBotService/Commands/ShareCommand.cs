@@ -24,7 +24,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override AnswerItem Reply(MessageItem mItem)
         {
             int friendUser;
-            var userId = mItem.UserId;
+            var userId = mItem.ChatId;
 
             var isAdd = mItem.TextOnly.StartsWith("add=");
             var isRemove = mItem.TextOnly.StartsWith("remove=");
@@ -45,7 +45,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 {
                     if (isAdd)
                     {
-
                         _repository.AddFriendUser(userId, friendUser);
                         return new AnswerItem
                         {
@@ -67,7 +66,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 }
             }
 
-            var otherUsers = _repository.GetUsers().Where(a => a.IdUser != userId);
+            var otherUsers = _repository.GetUsers()/*.Where(a => a.IdUser != userId) TODO убрать это потом*/ ;
             var friends = _repository.GetUserFriends(userId).Select(a => a.IdUser).ToList();
 
             var offerFriends = otherUsers.Take(MaxShareUsers).ToArray();
@@ -87,7 +86,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             return new AnswerItem
             {
-                Message = "Выберите друга из списка. Внимание! Перед этим он должен добавить бота себе.",
+                Message = "Список пользователей бота. ➕ - пригласить, ➖ - отозвать приглашение",
                 Markup = new InlineKeyboardMarkup
                 {
                     InlineKeyboard = buttons.ToArray()

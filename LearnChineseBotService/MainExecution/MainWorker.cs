@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -8,6 +11,7 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using YellowDuck.LearnChinese.Interfaces;
+using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
 using User = YellowDuck.LearnChinese.Data.Ef.User;
 
@@ -18,10 +22,7 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
     {
         private readonly TelegramBotClient _client;
         private readonly IWordRepository _repository;
-
-        public const string EmojiFilterString = @"[^\u0000-\u007F]+";
-
-
+        
         public MainWorker(TelegramBotClient client, IWordRepository repository)
         {
             _client = client;
@@ -30,6 +31,8 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             _client.OnReceiveError += _client_OnReceiveError;
             _client.OnReceiveGeneralError += _client_OnReceiveGeneralError;
             _client.OnCallbackQuery += TryOnCallbackQuery;
+
+            
         }
 
         private async void TryOnCallbackQuery(object sender, CallbackQueryEventArgs e)
@@ -40,12 +43,13 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
             catch (Exception ex)
             {
-                MainFactory.Log.Write("OnOnCallbackQuery", ex, null);
+                MainFactory.Log.Write("OnCallbackQuery", ex, null);
             }
         }
 
         private async Task OnOnCallbackQuery(CallbackQueryEventArgs e)
         {
+            await CheckUser(e.CallbackQuery.From);
             await HandleArgumentCommand(e.CallbackQuery.Message, e.CallbackQuery.Data,e.CallbackQuery.From.Id);
         }
 
@@ -61,19 +65,23 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
         }
 
-        private async Task OnMessage(Message msg)
+        async Task CheckUser(Telegram.Bot.Types.User user)
+        {
+            if (!_repository.IsUserExist(user.Id))
+                _repository.AddUser(new User
+                {
+                    IdUser = user.Id,
+                    Name = $"{user.FirstName} {user.LastName} ({user.Username})"
+                });
+        }
+
+        async Task OnMessage(Message msg)
         {
             var userId = msg.From.Id;
 
-            if (msg.NewChatMember != null)
-                _repository.AddUser(new User
-                {
-                    IdUser = userId,
-                    Name = msg.NewChatMember.Username
-                });
+            await CheckUser(msg.From);
 
             var firstEntity = msg.Entities.FirstOrDefault();
-
             if (firstEntity?.Type == MessageEntityType.BotCommand)
             {
                 var commandOnly = msg.Text.Substring(firstEntity.Offset, firstEntity.Length);
@@ -165,9 +173,22 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             _client.StopReceiving();
         }
 
-        string GetNoEmojiString(string str)
+        public static string GetNoEmojiString(string str)
         {
-            return Regex.Replace(str, EmojiFilterString, "");
+            if (string.IsNullOrWhiteSpace(str))
+                return str;
+
+            var noEmojiStr = new StringBuilder();
+
+            foreach (var chr in str)
+            {
+                var cat = char.GetUnicodeCategory(chr);
+
+                if(cat != UnicodeCategory.OtherSymbol && cat != UnicodeCategory.Surrogate && cat != UnicodeCategory.NonSpacingMark)
+                    noEmojiStr.Append(chr);
+            }
+
+            return noEmojiStr.ToString();
         }
     }
 }

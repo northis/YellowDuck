@@ -151,7 +151,8 @@ namespace YellowDuck.LearnChinese.Providers
                         {
                             OriginalWord = mainWord,
                             Pronunciation = separatedSyllables,
-                            Translation = translationNative
+                            Translation = translationNative,
+                            SyllablesCount = syllables.Length
                         });
                     }
                     else if (syllables.Length > MaxSyllablesToParse)
@@ -203,7 +204,8 @@ namespace YellowDuck.LearnChinese.Providers
                                 OriginalWord = mainWord,
                                 Pronunciation =
                                     _syllablesToStringConverter.Join(importedSyllables.Select(a => a.Pinyin)),
-                                Translation = translationNative
+                                Translation = translationNative,
+                                SyllablesCount = importedSyllables.Count
                             });
                         }
                         else
@@ -218,7 +220,8 @@ namespace YellowDuck.LearnChinese.Providers
                 {
                     OriginalWord = mainWord,
                     Pronunciation = separatedSyllables,
-                    Translation = translationNative
+                    Translation = translationNative,
+                    SyllablesCount = syllables.Length
                 });
             }
 

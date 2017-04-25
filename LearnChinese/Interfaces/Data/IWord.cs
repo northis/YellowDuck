@@ -14,5 +14,7 @@ namespace YellowDuck.LearnChinese.Interfaces.Data
         byte[] CardOriginalWord { get; set; }
         byte[] CardTranslation { get; set; }
         byte[] CardPronunciation { get; set; }
+
+        int SyllablesCount { get; set; }
     }
 }

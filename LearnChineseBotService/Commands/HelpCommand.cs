@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
 
@@ -33,7 +32,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return "❓Список команд";
         }
 
-        public string GetHelpMessage()
+        public virtual string GetHelpMessage()
         {
             return string.Join(Environment.NewLine, GetAllComands().Select(a => a.GetFormattedDescription()));
         }
