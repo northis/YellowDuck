@@ -40,30 +40,30 @@ namespace YellowDuck.LearnChinese.Providers
             switch (learnMode)
             {
                 case ELearnMode.OriginalWord:
-                    wordStat.Score.OriginalWordCount++;
+                    wordStat.Score.OriginalWordCount = (wordStat.Score.OriginalWordCount ?? 0) + 1;
 
                     if (wordStat.Word.OriginalWord == possibleAnswer)
                     {
-                        wordStat.Score.OriginalWordSuccessCount++;
+                        wordStat.Score.OriginalWordSuccessCount = (wordStat.Score.OriginalWordSuccessCount ?? 0) + 1;
                         result.Success = true;
                     }
                     break;
 
                     case ELearnMode.Pronunciation:
-                    wordStat.Score.PronunciationCount++;
+                    wordStat.Score.PronunciationCount += (wordStat.Score.PronunciationCount ?? 0) + 1;
 
                     if (wordStat.Word.Pronunciation == possibleAnswer)
                     {
-                        wordStat.Score.PronunciationSuccessCount++;
+                        wordStat.Score.PronunciationSuccessCount = (wordStat.Score.PronunciationSuccessCount ?? 0) + 1;
                         result.Success = true;
                     }
                     break;
 
                 case ELearnMode.Translation:
-                    wordStat.Score.TranslationCount++;
+                    wordStat.Score.TranslationCount += (wordStat.Score.TranslationCount ?? 0) + 1;
                     if (wordStat.Word.Translation == possibleAnswer)
                     {
-                        wordStat.Score.TranslationSuccessCount++;
+                        wordStat.Score.TranslationSuccessCount = (wordStat.Score.TranslationSuccessCount ?? 0) + 1;
                         result.Success = true;
                     }
                     break;
@@ -75,7 +75,7 @@ namespace YellowDuck.LearnChinese.Providers
 
             _wordRepository.SetScore(wordStat.Score);
 
-            return null;
+            return result;
         }
 
         public LearnUnit LearnWord(long userId, ELearnMode learnMode, EGettingWordsStrategy strategy)

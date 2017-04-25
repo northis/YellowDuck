@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChineseBotService.Commands.Enums;

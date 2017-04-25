@@ -63,6 +63,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -84,6 +85,7 @@
   <ItemGroup>
     <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\AnswerItem.cs" />
+    <Compile Include="Commands\LearnViewCommand.cs" />
     <Compile Include="Commands\LearnWritingCommand.cs" />
     <Compile Include="Commands\StartCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
@@ -95,6 +97,9 @@
     <Compile Include="Commands\Enums\ECommands.cs" />
     <Compile Include="Commands\DefaultCommand.cs" />
     <Compile Include="Commands\ImportCommand.cs" />
+    <Compile Include="ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="LayoutRoot\LayoutRootConfiguration.cs" />
     <Compile Include="LayoutRoot\MainFactory.cs" />
     <Compile Include="MainExecution\MainWorker.cs" />
@@ -111,7 +116,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="install.cmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+    <None Include="uninstall.cmd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
