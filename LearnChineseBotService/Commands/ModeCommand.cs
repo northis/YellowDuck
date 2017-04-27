@@ -40,7 +40,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 return new AnswerItem
                 {
                     Message = "Режим обучения задан",
-                    Markup = new ReplyKeyboardMarkup { Keyboard = GetLearnButtons(), ResizeKeyboard = true, OneTimeKeyboard = false }
+                   // Markup = new ReplyKeyboardMarkup { Keyboard = GetLearnButtons(), ResizeKeyboard = true, OneTimeKeyboard = false }
                 };
             }
 
@@ -52,7 +52,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     Markup =
                         new ReplyKeyboardMarkup
                         {
-                            Keyboard = GetLearnButtons(),
+                          //  Keyboard = GetLearnButtons(),
                             ResizeKeyboard = true,
                             OneTimeKeyboard = false
                         }
@@ -67,7 +67,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     Markup =
                         new ReplyKeyboardMarkup
                         {
-                            Keyboard = GetDictionaryButtons(),
+                           // Keyboard = GetDictionaryButtons(),
                             ResizeKeyboard = true,
                             OneTimeKeyboard = false
                         }

@@ -12,6 +12,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
     public class LearnWritingCommand : CommandBase
     {
         private readonly IStudyProvider _studyProvider;
+        public const string NextCmd = "next";
 
         public LearnWritingCommand(IStudyProvider studyProvider)
         {
@@ -26,9 +27,9 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             try
             {
-                if (string.IsNullOrWhiteSpace(mItem.TextOnly))
+                if (string.IsNullOrWhiteSpace(mItem.TextOnly) || NextCmd == mItem.TextOnly)
                 {
-                    var newWord = _studyProvider.LearnWord(mItem.UserId, ELearnMode.OriginalWord,
+                    var newWord = _studyProvider.LearnWord(mItem.ChatId, ELearnMode.OriginalWord,
                         EGettingWordsStrategy.NewMostDifficult);
 
                     var buttons = new List<InlineKeyboardButton[]>();
@@ -36,8 +37,8 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     {
                         buttons.Add(new[]
                         {
-                        new InlineKeyboardButton(option)
-                    });
+                            new InlineKeyboardButton(option)
+                        });
                     }
 
                     answerItem.Markup = new InlineKeyboardMarkup { InlineKeyboard = buttons.ToArray() };
@@ -47,9 +48,9 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 else
                 {
                     var checkResult = _studyProvider.AnswerWord(mItem.ChatId, mItem.TextOnly);
-                    answerItem.Picture = checkResult.Picture;
-                    answerItem.Message = checkResult.Success ? "✅" : "⛔️";
-                    //TODO сделать вывод статистики здесь
+                    answerItem.Picture = checkResult.WordStatistic.Word.CardAll;
+                    answerItem.Message = (checkResult.Success ? "✅ " : "⛔️ ") + checkResult.WordStatistic;
+                    answerItem.Markup = GetLearnMarkup();
                 }
             }
             catch (Exception ex)
@@ -60,6 +61,19 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return answerItem;
         }
 
+        public virtual IReplyMarkup GetLearnMarkup()
+        {
+            var mkp = new InlineKeyboardMarkup
+            {
+                InlineKeyboard = new[]
+                {
+                    new[] {new InlineKeyboardButton("🖌Дальше", NextCmd) },
+                    new[] {new InlineKeyboardButton("", $"{CommandStartChar}{ECommands.Help}")}
+                }
+            };
+
+            return mkp;
+        }
 
         public override ECommands GetCommandType()
         {

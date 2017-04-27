@@ -8,12 +8,9 @@ namespace YellowDuck.LearnChineseBotService.Commands
     {
         public override AnswerItem Reply(MessageItem mItem)
         {
-            var buttons = GetDictionaryButtons();
-
             return new AnswerItem
             {
-                Message = "Установлена клавиатура по умолчанию",
-                Markup = new ReplyKeyboardMarkup {Keyboard = buttons, ResizeKeyboard = true, OneTimeKeyboard = false}
+                Message = "Установлен режим по умолчанию"
             };
         }
 

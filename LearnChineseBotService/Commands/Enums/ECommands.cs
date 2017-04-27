@@ -15,6 +15,7 @@
         LearnWriting,
         LearnTranslation,
         LearnPronunciation,
-        LearnView
+        LearnView,
+        About
     }
 }

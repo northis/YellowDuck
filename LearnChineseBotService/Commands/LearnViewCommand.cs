@@ -17,15 +17,12 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public override AnswerItem Reply(MessageItem mItem)
         {
-            var buttons = GetLearnButtons();
-
             var newWord = _studyProvider.LearnWord(mItem.UserId, ELearnMode.FullView,
                 EGettingWordsStrategy.NewMostDifficult);
             
             return new AnswerItem
             {
                 Message = "🎓👀",
-                Markup = new ReplyKeyboardMarkup {Keyboard = buttons, ResizeKeyboard = true, OneTimeKeyboard = false},
                 Picture = newWord.Picture
             };
         }

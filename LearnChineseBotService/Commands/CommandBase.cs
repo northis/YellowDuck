@@ -1,5 +1,6 @@
 ﻿using System;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
 
@@ -37,47 +38,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public string GetFormattedDescription()
         {
             return $"{CommandStartChar}{GetCommandType()} - {GetCommandDescription()}";
-        }
-
-        public virtual KeyboardButton[][] GetDictionaryButtons()
-        {
-            return new[]
-            {
-                new[]
-                {
-                    new KeyboardButton {Text = $"🚛{CommandStartChar}{ECommands.Import}"},
-                    new KeyboardButton {Text = $"➕{CommandStartChar}{ECommands.Add}"},
-                    new KeyboardButton {Text = $"🗑{CommandStartChar}{ECommands.Delete}"},
-                    new KeyboardButton {Text = $"👀{CommandStartChar}{ECommands.View}"}
-                },
-
-                new[]
-                {
-                    new KeyboardButton {Text = $"🤝{CommandStartChar}{ECommands.Share}"},
-                    new KeyboardButton {Text = $"⚙️{CommandStartChar}{ECommands.Mode}"},
-                    new KeyboardButton {Text = $"❓{CommandStartChar}{ECommands.Help}"}
-                }
-            };
-        }
-
-        public virtual KeyboardButton[][] GetLearnButtons()
-        {
-            return new[]
-            {
-                new[]
-                {
-                    new KeyboardButton {Text = $"🖌{CommandStartChar}{ECommands.LearnWriting}"},
-                    new KeyboardButton {Text = $"📢{CommandStartChar}{ECommands.LearnPronunciation}"},
-                    new KeyboardButton {Text = $"🇨🇳{CommandStartChar}{ECommands.LearnTranslation}"},
-                    new KeyboardButton {Text = $"🎓👀{CommandStartChar}{ECommands.LearnView}"}
-                },
-
-                new[]
-                {
-                    new KeyboardButton {Text = $"⚙️{CommandStartChar}{ECommands.Mode}"},
-                    new KeyboardButton {Text = $"❓{CommandStartChar}{ECommands.Help}"}
-                }
-            };
         }
     }
 }

@@ -83,6 +83,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AboutCommand.cs" />
     <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\AnswerItem.cs" />
     <Compile Include="Commands\LearnViewCommand.cs" />

@@ -61,9 +61,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             var answer = new AnswerItem
             {
-                Message = string.Empty,
-                Markup =
-                    new ReplyKeyboardMarkup { Keyboard = GetDictionaryButtons(), ResizeKeyboard = true, OneTimeKeyboard = false }
+                Message = "🚛"
             };
 
             if (goodWords.Any())

@@ -6,9 +6,7 @@
 
         public bool Success { get; set; }
 
-        public string RightAnswer { get; set; }
-
-        public byte[] Picture { get; set; }
+        public WordStatistic WordStatistic { get; set; }
 
         #endregion
     }

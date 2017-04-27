@@ -35,7 +35,7 @@ namespace YellowDuck.LearnChinese.Providers
 
             var learnMode = wordStat.Score.ToELearnMode();
 
-            var result = new AnswerResult {Picture = wordStat.Word.CardAll};
+            var result = new AnswerResult {WordStatistic = wordStat};
 
             switch (learnMode)
             {

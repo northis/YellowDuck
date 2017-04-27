@@ -24,6 +24,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
         public static StandardKernel NinjectKernel { get; private set; }
         public static MainWorker MainWorker { get; private set; }
         public static Dictionary<ECommands, CommandBase> CommandHandlers { get; private set; }
+        public static Dictionary<ECommands, CommandBase> VisibleCommandHandlers { get; private set; }
         public static ILogService Log => NinjectKernel.Get<ILogService>();
 
         #endregion
@@ -57,11 +58,18 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 NinjectKernel.Get<HelpCommand>(),
                 NinjectKernel.Get<StartCommand>(),
                 NinjectKernel.Get<LearnWritingCommand>(),
-                NinjectKernel.Get<LearnViewCommand>()
+                NinjectKernel.Get<LearnViewCommand>(),
+                NinjectKernel.Get<AboutCommand>()
             };
 
             CommandHandlers = handlers.OrderBy(a => a.GetCommandType().ToString())
                 .ToDictionary(a => a.GetCommandType(), a => a);
+
+            VisibleCommandHandlers =
+                CommandHandlers.Where(
+                        a =>
+                            a.Key != ECommands.Clean && a.Key != ECommands.Share && a.Key != ECommands.Mode)
+                    .ToDictionary(a => a.Key, a => a.Value);
         }
 
         #endregion

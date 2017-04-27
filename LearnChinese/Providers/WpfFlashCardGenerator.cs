@@ -71,8 +71,8 @@ namespace YellowDuck.LearnChinese.Providers
             var height = (int)control.ActualHeight+1;
             var rtb = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
             rtb.Render(dv);
-            
-            var encoder = new PngBitmapEncoder();
+
+            var encoder = new JpegBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(rtb));
 
             using (var ms = new MemoryStream())

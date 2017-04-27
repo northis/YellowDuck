@@ -21,12 +21,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public override AnswerItem Reply(MessageItem mItem)
         {
-            IReplyMarkup markup = new ReplyKeyboardMarkup
-            {
-                Keyboard = GetDictionaryButtons(),
-                ResizeKeyboard = true,
-                OneTimeKeyboard = false
-            };
+            IReplyMarkup markup = null;
 
             string message;
 

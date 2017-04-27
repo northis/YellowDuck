@@ -46,8 +46,8 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
 
         private async Task OnOnCallbackQuery(CallbackQueryEventArgs e)
         {
-            await CheckUser(e.CallbackQuery.From);
-            await HandleArgumentCommand(e.CallbackQuery.Message, e.CallbackQuery.Data,e.CallbackQuery.From.Id);
+            
+            await OnMessage(e.CallbackQuery.Message, e.CallbackQuery.Data, e.CallbackQuery.From);
         }
 
         private async void TryClientOnMessage(object sender, MessageEventArgs e)
@@ -62,21 +62,19 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
         }
 
-        async Task CheckUser(Telegram.Bot.Types.User user)
+        async Task OnMessage(Message msg)
+        {
+            await OnMessage(msg, msg.Text, msg.From);
+        }
+
+        async Task OnMessage(Message msg, string argumentCommand, Telegram.Bot.Types.User user)
         {
             if (!_repository.IsUserExist(user.Id))
                 _repository.AddUser(new User
                 {
                     IdUser = user.Id,
-                    Name = $"{user.FirstName} {user.LastName} ({user.Username})"
+                    Name = $"{user.FirstName} {user.LastName}"
                 });
-        }
-
-        async Task OnMessage(Message msg)
-        {
-            var userId = msg.From.Id;
-
-            await CheckUser(msg.From);
 
             var firstEntity = msg.Entities.FirstOrDefault();
             if (firstEntity?.Type == MessageEntityType.BotCommand)
@@ -85,21 +83,21 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
 
                 var noEmoji = GetNoEmojiString(msg.Text);
 
-                var textOnly = noEmoji.Replace(commandOnly,"");
+                var textOnly = noEmoji.Replace(commandOnly,string.Empty);
                 await HandleCommand(new MessageItem
                 {
                     Command = commandOnly,
                     ChatId = msg.Chat.Id,
-                    UserId = userId,
+                    UserId = user.Id,
                     Text = msg.Text,
                     TextOnly = textOnly
                 });
 
-                _repository.SetUserCommand(userId, commandOnly);
+                _repository.SetUserCommand(user.Id, commandOnly);
             }
             else
             {
-                await HandleArgumentCommand(msg, msg.Text,userId);
+                await HandleArgumentCommand(msg, argumentCommand, user.Id);
             }
         }
 

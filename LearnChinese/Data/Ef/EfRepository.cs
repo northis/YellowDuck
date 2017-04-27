@@ -77,7 +77,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var unscoredUserWordIds =
                 _context.Words.Where(
                         a =>
-                            !a.Scores.Any() &&
+                            a.Scores.All(b => b.IdUser != idUser) &&
                             (a.IdOwner == idUser || a.UserOwner.OwnerUserSharings.Any(b => b.IdFriend == idUser)))
                     .Select(a => a.Id);
 
