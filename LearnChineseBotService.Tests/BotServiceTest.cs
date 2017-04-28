@@ -19,7 +19,7 @@ namespace LearnChineseBotService.Tests
                 cats.Add(char.GetUnicodeCategory(inp));
             }
 
-            var output = MainWorker.GetNoEmojiString(input);
+            var output = PollWorker.GetNoEmojiString(input);
 
             Assert.IsTrue(output == "yes老师");
         }

@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Dispatcher;
 using Owin;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
 
@@ -13,11 +10,9 @@ namespace YellowDuck.LearnChineseBotService.WebHook
         {
             var configuration = new HttpConfiguration();
 
-            configuration.Routes.MapHttpRoute("DefaultApi","{controller}/{id}",
-      new { id = RouteParameter.Optional }
- );
-
-            //MapHttpRoute("WebHook", "{controller}");
+            configuration.Routes.MapHttpRoute("DefaultApi", MainFactory.TelegramBotKey + "/{controller}/{id}",
+                new {id = RouteParameter.Optional}
+            );
             
             app.UseWebApi(configuration);
             

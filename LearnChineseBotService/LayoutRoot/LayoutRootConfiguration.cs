@@ -28,14 +28,16 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<WebServer>()
                 .ToSelf()
                 .InSingletonScope()
-                .WithConstructorArgument("webhookUrl", ConfigurationManager.AppSettings["WebhookUrl"])
-                .WithConstructorArgument("webhookPublicUrl", ConfigurationManager.AppSettings["WebhookPublicUrl"]);
+                .WithConstructorArgument("webhookUrl", MainFactory.WebhookUrl)
+                .WithConstructorArgument("webhookPublicUrl", MainFactory.WebhookPublicUrl)
+                .WithConstructorArgument("telegramId", MainFactory.TelegramBotKey)
+                .WithConstructorArgument("whControllerName", MainFactory.WebhookControllerName);
 
             Bind<TelegramBotClient>()
                 .ToSelf()
                 .InSingletonScope()
-                .WithConstructorArgument(ConfigurationManager.AppSettings["TelegramBotKey"])
-                .WithPropertyValue("PollingTimeout", TimeSpan.Parse(ConfigurationManager.AppSettings["PollInterval"]));
+                .WithConstructorArgument(MainFactory.TelegramBotKey)
+                .WithPropertyValue("PollingTimeout", MainFactory.PollingTimeout);
 
             Bind<ModeCommand>()
                 .ToSelf()

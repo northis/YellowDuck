@@ -9,13 +9,17 @@ namespace YellowDuck.LearnChineseBotService.WebHook
         private readonly TelegramBotClient _client;
         private readonly string _innerurl;
         private readonly string _outerUrl;
+        private readonly string _telegramId;
+        private readonly string _whControllerName;
 
         public IDisposable WebHookWebServer { get; private set; }
 
-        public WebServer(string webhookUrl, string webhookPublicUrl, TelegramBotClient client)
+        public WebServer(string webhookUrl, string webhookPublicUrl, string telegramId, string whControllerName, TelegramBotClient client)
         {
             _innerurl = webhookUrl;
             _outerUrl = webhookPublicUrl;
+            _telegramId = telegramId;
+            _whControllerName = whControllerName;
             _client = client;
         }
 
@@ -25,7 +29,7 @@ namespace YellowDuck.LearnChineseBotService.WebHook
                 return;
             
             WebHookWebServer = WebApp.Start<Startup>(_innerurl);
-            _client.SetWebhook(_outerUrl).Wait();
+            _client.SetWebhook(_outerUrl + $"/{_telegramId}/{_whControllerName}").Wait();
         }
 
         public void Stop()

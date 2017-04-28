@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using Ninject;
@@ -24,14 +25,18 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
         #region Properties
 
         public static StandardKernel NinjectKernel { get; private set; }
-        public static MainWorker MainWorker { get; private set; }
+        public static PollWorker PollWorker { get; private set; }
         public static WebServer WebServer { get; private set; }
         public static bool UseWebhooks { get; private set; }
         public static Dictionary<ECommands, CommandBase> CommandHandlers { get; private set; }
         public static Dictionary<ECommands, CommandBase> VisibleCommandHandlers { get; private set; }
         public static ILogService Log => NinjectKernel.Get<ILogService>();
 
-
+        public static string TelegramBotKey = ConfigurationManager.AppSettings["TelegramBotKey"];
+        public static TimeSpan PollingTimeout = TimeSpan.Parse(ConfigurationManager.AppSettings["PollingTimeout"]);
+        public static string WebhookUrl = ConfigurationManager.AppSettings["WebhookUrl"];
+        public static string WebhookPublicUrl = ConfigurationManager.AppSettings["WebhookPublicUrl"];
+        public static string WebhookControllerName = "Webhook";
         #endregion
 
         #region Methods
@@ -47,8 +52,8 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             if (NinjectKernel == null)
                 NinjectKernel = new StandardKernel(new LayoutRootConfiguration());
 
-            if (MainWorker == null)
-                MainWorker = NinjectKernel.Get<MainWorker>();
+            if (PollWorker == null)
+                PollWorker = NinjectKernel.Get<PollWorker>();
 
             if (WebServer == null)
                 WebServer = NinjectKernel.Get<WebServer>();

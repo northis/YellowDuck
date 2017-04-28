@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Args;
+using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using YellowDuck.LearnChinese.Interfaces;
@@ -15,34 +15,28 @@ using User = YellowDuck.LearnChinese.Data.Ef.User;
 namespace YellowDuck.LearnChineseBotService.MainExecution
 {
 
-    public class MainWorker
+    public class QueryHandler
     {
         private readonly TelegramBotClient _client;
         private readonly IWordRepository _repository;
 
-        public MainWorker(TelegramBotClient client, IWordRepository repository)
+        public QueryHandler(TelegramBotClient client, IWordRepository repository)
         {
             _client = client;
             _repository = repository;
-
-            _client.OnMessage += TryClientOnMessage;
-            _client.OnReceiveError += _client_OnReceiveError;
-            _client.OnReceiveGeneralError += _client_OnReceiveGeneralError;
-            _client.OnCallbackQuery += TryOnCallbackQuery;
-            _client.OnInlineQuery += _client_OnInlineQuery;
             
         }
 
-        private void _client_OnInlineQuery(object sender, InlineQueryEventArgs e)
+        public async Task InlineQuery(InlineQuery inlineQuery)
         {
 
         }
 
-        private async void TryOnCallbackQuery(object sender, CallbackQueryEventArgs e)
+        public async void CallbackQuery(CallbackQuery callbackQuery)
         {
             try
             {
-                await OnOnCallbackQuery(e);
+                await OnMessage(callbackQuery.Message, callbackQuery.Data, callbackQuery.From);
             }
             catch (Exception ex)
             {
@@ -50,17 +44,11 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
         }
 
-        private async Task OnOnCallbackQuery(CallbackQueryEventArgs e)
-        {
-            
-            await OnMessage(e.CallbackQuery.Message, e.CallbackQuery.Data, e.CallbackQuery.From);
-        }
-
-        private async void TryClientOnMessage(object sender, MessageEventArgs e)
+        public async void OnMessage(Message msg)
         {
             try
             {
-                 await OnMessage(e.Message);
+                await OnMessage(msg, msg.Text, msg.From);
             }
             catch (Exception ex)
             {
@@ -68,10 +56,16 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
         }
 
-        async Task OnMessage(Message msg)
+        public void OnReceiveGeneralError(Exception e)
         {
-            await OnMessage(msg, msg.Text, msg.From);
+            MainFactory.Log.Write(nameof(OnReceiveGeneralError), e, null);
         }
+
+        public void OnReceiveError(ApiRequestException e)
+        {
+            MainFactory.Log.Write(nameof(OnReceiveError), e, null);
+        }
+        
 
         async Task OnMessage(Message msg, string argumentCommand, Telegram.Bot.Types.User user)
         {
@@ -152,32 +146,6 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                 }
 
             }
-        }
-
-        private void _client_OnReceiveGeneralError(object sender, ReceiveGeneralErrorEventArgs e)
-        {
-            MainFactory.Log.Write(nameof(_client_OnReceiveGeneralError), e.Exception, null);
-        }
-
-        private void _client_OnReceiveError(object sender, ReceiveErrorEventArgs e)
-        {
-            MainFactory.Log.Write(nameof(_client_OnReceiveError), e.ApiRequestException, null);
-        }
-
-        public void Start()
-        {
-            if (MainFactory.UseWebhooks)
-                MainFactory.WebServer.Start();
-            else
-                _client.StartReceiving();
-        }
-
-        public void Stop()
-        {
-            if (MainFactory.UseWebhooks)
-                MainFactory.WebServer.Stop();
-            else
-                _client.StopReceiving();
         }
 
         public static string GetNoEmojiString(string str)

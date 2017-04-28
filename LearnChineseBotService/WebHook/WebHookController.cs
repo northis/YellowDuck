@@ -18,11 +18,6 @@ namespace YellowDuck.LearnChineseBotService.WebHook
         {
             _client = MainFactory.NinjectKernel.Get<TelegramBotClient>();
         }
-
-        public IHttpActionResult Get()
-        {
-            return Ok();
-        }
         
         public async Task<IHttpActionResult> Post(Update update)
         {

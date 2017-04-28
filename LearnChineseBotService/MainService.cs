@@ -14,12 +14,18 @@ namespace YellowDuck.LearnChineseBotService
 
         protected override void OnStart(string[] args)
         {
-            MainFactory.MainWorker.Start();
+            if (MainFactory.UseWebhooks)
+                MainFactory.WebServer.Start();
+            else
+                MainFactory.PollWorker.Start();
         }
 
         protected override void OnStop()
         {
-            MainFactory.MainWorker.Stop();
+            if (MainFactory.UseWebhooks)
+                MainFactory.WebServer.Stop();
+            else
+                MainFactory.PollWorker.Stop();
         }
 
         public void StartUserInteractive()
