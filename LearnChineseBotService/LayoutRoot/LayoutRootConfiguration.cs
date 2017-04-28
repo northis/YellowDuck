@@ -8,6 +8,7 @@ using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Providers;
 using YellowDuck.LearnChineseBotService.Commands;
+using YellowDuck.LearnChineseBotService.WebHook;
 
 namespace YellowDuck.LearnChineseBotService.LayoutRoot
 {
@@ -23,8 +24,16 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<IChinesePinyinConverter>().To<Pinyin4NetConverter>();
             Bind<IFlashCardGenerator>().To<WpfFlashCardGenerator>();
             Bind<ILogService>().To<Log4NetService>().InSingletonScope();
+
+            Bind<WebServer>()
+                .ToSelf()
+                .InSingletonScope()
+                .WithConstructorArgument("webhookUrl", ConfigurationManager.AppSettings["WebhookUrl"])
+                .WithConstructorArgument("webhookPublicUrl", ConfigurationManager.AppSettings["WebhookPublicUrl"]);
+
             Bind<TelegramBotClient>()
                 .ToSelf()
+                .InSingletonScope()
                 .WithConstructorArgument(ConfigurationManager.AppSettings["TelegramBotKey"])
                 .WithPropertyValue("PollingTimeout", TimeSpan.Parse(ConfigurationManager.AppSettings["PollInterval"]));
 

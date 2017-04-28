@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Ninject;
 using YellowDuck.Common.Logging;
 using YellowDuck.LearnChineseBotService.Commands;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
+using YellowDuck.LearnChineseBotService.WebHook;
 
 namespace YellowDuck.LearnChineseBotService.LayoutRoot
 {
@@ -23,9 +25,12 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
 
         public static StandardKernel NinjectKernel { get; private set; }
         public static MainWorker MainWorker { get; private set; }
+        public static WebServer WebServer { get; private set; }
+        public static bool UseWebhooks { get; private set; }
         public static Dictionary<ECommands, CommandBase> CommandHandlers { get; private set; }
         public static Dictionary<ECommands, CommandBase> VisibleCommandHandlers { get; private set; }
         public static ILogService Log => NinjectKernel.Get<ILogService>();
+
 
         #endregion
 
@@ -45,6 +50,11 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             if (MainWorker == null)
                 MainWorker = NinjectKernel.Get<MainWorker>();
 
+            if (WebServer == null)
+                WebServer = NinjectKernel.Get<WebServer>();
+
+            UseWebhooks = bool.Parse(ConfigurationManager.AppSettings["UseWebhooks"]);
+
             var handlers = new CommandBase[]
             {
                 NinjectKernel.Get<DefaultCommand>(),
@@ -60,9 +70,9 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 NinjectKernel.Get<LearnWritingCommand>(),
                 NinjectKernel.Get<LearnViewCommand>(),
                 NinjectKernel.Get<AboutCommand>()
-            };
+            }; 
 
-            CommandHandlers = handlers.OrderBy(a => a.GetCommandType().ToString())
+              CommandHandlers = handlers.OrderBy(a => a.GetCommandType().ToString())
                 .ToDictionary(a => a.GetCommandType(), a => a);
 
             VisibleCommandHandlers =
@@ -70,6 +80,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                         a =>
                             a.Key != ECommands.Clean && a.Key != ECommands.Share && a.Key != ECommands.Mode)
                     .ToDictionary(a => a.Key, a => a.Value);
+
         }
 
         #endregion

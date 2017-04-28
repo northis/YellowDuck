@@ -19,17 +19,23 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
     {
         private readonly TelegramBotClient _client;
         private readonly IWordRepository _repository;
-        
+
         public MainWorker(TelegramBotClient client, IWordRepository repository)
         {
             _client = client;
             _repository = repository;
+
             _client.OnMessage += TryClientOnMessage;
             _client.OnReceiveError += _client_OnReceiveError;
             _client.OnReceiveGeneralError += _client_OnReceiveGeneralError;
             _client.OnCallbackQuery += TryOnCallbackQuery;
-
+            _client.OnInlineQuery += _client_OnInlineQuery;
             
+        }
+
+        private void _client_OnInlineQuery(object sender, InlineQueryEventArgs e)
+        {
+
         }
 
         private async void TryOnCallbackQuery(object sender, CallbackQueryEventArgs e)
@@ -160,12 +166,18 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
 
         public void Start()
         {
-            _client.StartReceiving();
+            if (MainFactory.UseWebhooks)
+                MainFactory.WebServer.Start();
+            else
+                _client.StartReceiving();
         }
 
         public void Stop()
         {
-            _client.StopReceiving();
+            if (MainFactory.UseWebhooks)
+                MainFactory.WebServer.Stop();
+            else
+                _client.StopReceiving();
         }
 
         public static string GetNoEmojiString(string str)
@@ -186,4 +198,5 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             return noEmojiStr.ToString();
         }
     }
+
 }
