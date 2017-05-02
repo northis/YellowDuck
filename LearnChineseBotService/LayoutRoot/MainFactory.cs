@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Web.Http;
 using Ninject;
 using YellowDuck.Common.Logging;
 using YellowDuck.LearnChineseBotService.Commands;
@@ -51,6 +52,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
         {
             if (NinjectKernel == null)
                 NinjectKernel = new StandardKernel(new LayoutRootConfiguration());
+           
 
             if (PollWorker == null)
                 PollWorker = NinjectKernel.Get<PollWorker>();

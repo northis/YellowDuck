@@ -58,6 +58,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Ef\WordFileT.cs" />
+    <Compile Include="Data\Ef\WordFileP.cs" />
+    <Compile Include="Data\Ef\WordFileO.cs" />
+    <Compile Include="Data\Ef\WordFileA.cs" />
+    <Compile Include="Data\Ef\WordFile.cs" />
     <Compile Include="Data\ObjectModels\AnswerResult.cs" />
     <Compile Include="Data\Ef\EfRepository.cs" />
     <Compile Include="Data\ObjectModels\WordSettings.cs" />

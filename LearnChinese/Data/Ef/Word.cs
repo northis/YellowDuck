@@ -31,13 +31,33 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
         public string Usage { get; set; }
 
-        public byte[] CardAll { get; set; }
+        [NotMapped]
+        public byte[] CardAll
+        {
+            get { return WordFileA?.Bytes; }
+            set { WordFileA = new WordFileA {Bytes = value}; }
+        }
 
-        public byte[] CardOriginalWord { get; set; }
+        [NotMapped]
+        public byte[] CardOriginalWord
+        {
+            get { return WordFileO?.Bytes; }
+            set { WordFileO = new WordFileO { Bytes = value }; }
+        }
 
-        public byte[] CardTranslation { get; set; }
+        [NotMapped]
+        public byte[] CardTranslation
+        {
+            get { return WordFileP?.Bytes; }
+            set { WordFileT = new WordFileT { Bytes = value }; }
+        }
 
-        public byte[] CardPronunciation { get; set; }
+        [NotMapped]
+        public byte[] CardPronunciation
+        {
+            get { return WordFileT?.Bytes; }
+            set { WordFileP = new WordFileP { Bytes = value }; }
+        }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Score> Scores { get; set; }
@@ -47,5 +67,13 @@ namespace YellowDuck.LearnChinese.Data.Ef
         public User UserOwner { get; set; }
 
         public int SyllablesCount { get; set; }
+
+        public virtual WordFileA WordFileA { get; set; }
+
+        public virtual WordFileO WordFileO { get; set; }
+
+        public virtual WordFileP WordFileP { get; set; }
+
+        public virtual WordFileT WordFileT { get; set; }
     }
 }

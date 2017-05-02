@@ -20,6 +20,11 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
             using (var cn = GetDbContext())
             {
+                cn.WordFileAs.RemoveRange(cn.WordFileAs);
+                cn.WordFileOs.RemoveRange(cn.WordFileOs);
+                cn.WordFilePs.RemoveRange(cn.WordFilePs);
+                cn.WordFileTs.RemoveRange(cn.WordFileTs);
+
                 cn.Scores.RemoveRange(cn.Scores);
                 cn.Words.RemoveRange(cn.Words);
                 cn.Users.RemoveRange(cn.Users);
@@ -51,7 +56,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 LastModified = iCntxt.GetRepositoryTime(),
                 Pronunciation = "tǐ|yù|guǎn",
                 Translation = "Спортзал",
-                CardAll = new byte[] {0x1, 0x2},
+                WordFileA = new WordFileA{Bytes = new byte[] { 0x1, 0x2 } },
                 IdOwner = IdTestUser
             }, IdTestUser);
 
@@ -130,10 +135,11 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 word.Translation = "Спортзал";
                 word.Pronunciation = "tǐ|yù|guǎn";
 
-                word.CardAll = grn.Generate(word, ELearnMode.FullView);
-                word.CardOriginalWord = grn.Generate(word, ELearnMode.OriginalWord);
-                word.CardPronunciation = grn.Generate(word, ELearnMode.Pronunciation);
-                word.CardTranslation = grn.Generate(word, ELearnMode.Translation);
+                word.WordFileA = new WordFileA {Bytes = grn.Generate(word, ELearnMode.FullView)};
+                word.WordFileO = new WordFileO {Bytes = grn.Generate(word, ELearnMode.OriginalWord)};
+                word.WordFileP = new WordFileP {Bytes = grn.Generate(word, ELearnMode.Pronunciation)};
+                word.WordFileT = new WordFileT {Bytes = grn.Generate(word, ELearnMode.Translation)};
+                word.SyllablesCount = 3;
 
                 iCntxt.EditWord(word);
 

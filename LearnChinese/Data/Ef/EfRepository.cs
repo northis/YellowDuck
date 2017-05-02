@@ -241,6 +241,22 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             originalWord.Pronunciation = word.Pronunciation;
             originalWord.Translation = word.Translation;
+            originalWord.OriginalWord = word.OriginalWord;
+            originalWord.LastModified = GetRepositoryTime();
+            originalWord.Translation = word.Translation;
+            originalWord.Usage = word.Usage;
+
+            if (word.CardAll != null)
+                originalWord.WordFileA = new WordFileA {Bytes = word.CardAll};
+
+            if (word.CardOriginalWord != null)
+                originalWord.WordFileO = new WordFileO { Bytes = word.CardOriginalWord };
+            
+            if (word.CardPronunciation != null)
+                originalWord.WordFileT = new WordFileT { Bytes = word.CardPronunciation };
+
+            if (word.CardTranslation != null)
+                originalWord.WordFileP = new WordFileP { Bytes = word.CardTranslation };
 
             _context.SaveChanges();
         }
@@ -253,6 +269,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 throw new Exception(
                     $"Удаление невозможно, такого слова в хранилище нет. Id={wordId}");
 
+            
             _context.Scores.RemoveRange(_context.Scores.Where(a => a.IdWord == wordId));
             _context.Words.Remove(originalWord);
             _context.SaveChanges();
@@ -266,20 +283,22 @@ namespace YellowDuck.LearnChinese.Data.Ef
             if (originalWord != null)
                 throw new Exception($"Слово {chineseWord} уже есть в хранилище.");
 
-            _context.Words.Add(new Word
+            var wrdNew = new Word
             {
-                CardAll = word.CardAll,
-                CardOriginalWord = word.CardOriginalWord,
-                CardPronunciation = word.CardPronunciation,
-                CardTranslation = word.CardTranslation,
                 LastModified = GetRepositoryTime(),
                 OriginalWord = word.OriginalWord,
                 Pronunciation = word.Pronunciation,
                 Translation = word.Translation,
                 Usage = word.Usage,
                 Id = word.Id,
-                IdOwner = idUser
-            });
+                IdOwner = idUser,
+                WordFileA = word.CardAll != null ? new WordFileA {Bytes = word.CardAll} : null,
+                WordFileO = word.CardOriginalWord != null ? new WordFileO {Bytes = word.CardOriginalWord} : null,
+                WordFileT = word.CardPronunciation != null ? new WordFileT {Bytes = word.CardPronunciation} : null,
+                WordFileP = word.CardTranslation != null ? new WordFileP {Bytes = word.CardTranslation} : null
+            };
+
+            _context.Words.Add(wrdNew);
             _context.SaveChanges();
         }
         
@@ -460,6 +479,11 @@ namespace YellowDuck.LearnChinese.Data.Ef
         public IQueryable<IUser> GetUserFriends(long userId)
         {
             return _context.UserSharings.Where(a => a.IdOwner == userId).Select(a => a.UserFriend);
+        }
+
+        public IQueryable<IWord> GetTopWords(string searchPattern, long userId)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

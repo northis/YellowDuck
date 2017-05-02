@@ -1,4 +1,5 @@
 using System.Web.Http;
+using Ninject.WebApi.DependencyResolver;
 using Owin;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
 
@@ -13,7 +14,7 @@ namespace YellowDuck.LearnChineseBotService.WebHook
             configuration.Routes.MapHttpRoute("DefaultApi", MainFactory.TelegramBotKey + "/{controller}/{id}",
                 new {id = RouteParameter.Optional}
             );
-            
+            configuration.DependencyResolver = new NinjectDependencyResolver(MainFactory.NinjectKernel);
             app.UseWebApi(configuration);
             
         }

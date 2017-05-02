@@ -1,16 +1,258 @@
-﻿USE master
+﻿
 
-CREATE DATABASE [LearnChinese]
+CREATE DATABASE [LearnChineseNofs]
 GO
 
-USE [LearnChinese]
+ALTER DATABASE [LearnChineseNofs] SET COMPATIBILITY_LEVEL = 130
 GO
-/****** Object:  Table [dbo].[Score]    Script Date: 25.04.2017 19:02:01 ******/
+
+ALTER DATABASE [LearnChineseNofs] SET ANSI_NULL_DEFAULT OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET ANSI_NULLS OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET ANSI_PADDING OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET ANSI_WARNINGS OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET ARITHABORT OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET AUTO_CLOSE ON 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET AUTO_SHRINK OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET AUTO_UPDATE_STATISTICS ON 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET CURSOR_DEFAULT  GLOBAL 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET NUMERIC_ROUNDABORT OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET QUOTED_IDENTIFIER OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET RECURSIVE_TRIGGERS OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET  DISABLE_BROKER 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET TRUSTWORTHY OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET PARAMETERIZATION SIMPLE 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET HONOR_BROKER_PRIORITY OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET RECOVERY SIMPLE 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET  MULTI_USER 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET PAGE_VERIFY CHECKSUM  
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET DB_CHAINING OFF 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET TARGET_RECOVERY_TIME = 0 SECONDS 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET DELAYED_DURABILITY = DISABLED 
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET QUERY_STORE = OFF
+GO
+
+USE [LearnChineseNofs]
+GO
+
+ALTER DATABASE SCOPED CONFIGURATION SET LEGACY_CARDINALITY_ESTIMATION = OFF;
+GO
+
+ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET LEGACY_CARDINALITY_ESTIMATION = PRIMARY;
+GO
+
+ALTER DATABASE SCOPED CONFIGURATION SET MAXDOP = 0;
+GO
+
+ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET MAXDOP = PRIMARY;
+GO
+
+ALTER DATABASE SCOPED CONFIGURATION SET PARAMETER_SNIFFING = ON;
+GO
+
+ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET PARAMETER_SNIFFING = PRIMARY;
+GO
+
+ALTER DATABASE SCOPED CONFIGURATION SET QUERY_OPTIMIZER_HOTFIXES = OFF;
+GO
+
+ALTER DATABASE SCOPED CONFIGURATION FOR SECONDARY SET QUERY_OPTIMIZER_HOTFIXES = PRIMARY;
+GO
+
+ALTER DATABASE [LearnChineseNofs] SET  READ_WRITE 
+GO
+
+
+
+
+
+USE [LearnChineseNofs]
+GO
+/****** Object:  FullTextCatalog [word_catalog]    Script Date: 02.05.2017 0:30:29 ******/
+CREATE FULLTEXT CATALOG [word_catalog]WITH ACCENT_SENSITIVITY = ON
+GO
+/****** Object:  Table [dbo].[WordMain]    Script Date: 02.05.2017 0:30:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-SET ANSI_PADDING ON
+CREATE TABLE [dbo].[WordMain](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[OriginalWord] [nvarchar](100) NOT NULL,
+	[Pronunciation] [nvarchar](100) NULL,
+	[LastModified] [datetime] NOT NULL,
+	[Translation] [nvarchar](250) NOT NULL,
+	[Usage] [nvarchar](max) NULL,
+	[IdOwner] [bigint] NOT NULL,
+	[SyllablesCount] [int] NOT NULL
+ CONSTRAINT [PK_Word] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[WordFileA]    Script Date: 02.05.2017 0:30:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[WordFileA](
+	[IdWord] [bigint] NOT NULL,
+	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[Bytes] [varbinary](max)  NOT NULL,
+ CONSTRAINT [PK_WordFileA] PRIMARY KEY CLUSTERED 
+(
+	[IdWord] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+ CONSTRAINT [UQ__WordFile__3214EC066B2DF97D] UNIQUE NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[WordFileO]    Script Date: 02.05.2017 0:30:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[WordFileO](
+	[IdWord] [bigint] NOT NULL,
+	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[Bytes] [varbinary](max)  NOT NULL,
+ CONSTRAINT [PK_WordFileO] PRIMARY KEY CLUSTERED 
+(
+	[IdWord] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ,
+ CONSTRAINT [UQ__WordFile__3214EC06FC545398] UNIQUE NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[WordFileP]    Script Date: 02.05.2017 0:30:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[WordFileP](
+	[IdWord] [bigint] NOT NULL,
+	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[Bytes] [varbinary](max)   NOT NULL,
+ CONSTRAINT [PK_WordFileP] PRIMARY KEY CLUSTERED 
+(
+	[IdWord] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ,
+ CONSTRAINT [UQ__WordFile__3214EC06B7564817] UNIQUE NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+/****** Object:  Table [dbo].[WordFileT]    Script Date: 02.05.2017 0:30:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[WordFileT](
+	[IdWord] [bigint] NOT NULL,
+	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[Bytes] [varbinary](max)  NOT NULL,
+ CONSTRAINT [PK_WordFileT] PRIMARY KEY CLUSTERED 
+(
+	[IdWord] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY] ,
+ CONSTRAINT [UQ__WordFile__3214EC064594EC3E] UNIQUE NONCLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] 
+GO
+/****** Object:  View [dbo].[Word]    Script Date: 02.05.2017 0:30:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE VIEW [dbo].[Word]
+AS
+SELECT        dbo.WordMain.Id, dbo.WordMain.OriginalWord, dbo.WordMain.Pronunciation, dbo.WordMain.LastModified, dbo.WordMain.Translation, dbo.WordMain.Usage, dbo.WordMain.IdOwner, 
+                         dbo.WordMain.SyllablesCount, dbo.WordFileA.Bytes AS CardAll, dbo.WordFileO.Bytes AS CardOriginalWord, dbo.WordFileP.Bytes AS CardPronunciation, dbo.WordFileT.Bytes AS CardTranslation
+FROM            dbo.WordMain LEFT JOIN
+                         dbo.WordFileA ON dbo.WordMain.Id = dbo.WordFileA.IdWord LEFT JOIN
+                         dbo.WordFileO ON dbo.WordMain.Id = dbo.WordFileO.IdWord LEFT JOIN
+                         dbo.WordFileP ON dbo.WordMain.Id = dbo.WordFileP.IdWord LEFT JOIN
+                         dbo.WordFileT ON dbo.WordMain.Id = dbo.WordFileT.IdWord
+GO
+/****** Object:  Table [dbo].[Score]    Script Date: 02.05.2017 0:30:29 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Score](
 	[Id] [bigint] IDENTITY(1,1) NOT NULL,
@@ -33,11 +275,8 @@ CREATE TABLE [dbo].[Score](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-SET ANSI_PADDING OFF
-GO
-/****** Object:  Table [dbo].[User]    Script Date: 25.04.2017 19:02:01 ******/
+/****** Object:  Table [dbo].[User]    Script Date: 02.05.2017 0:30:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -52,9 +291,8 @@ CREATE TABLE [dbo].[User](
 	[IdUser] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
 GO
-/****** Object:  Table [dbo].[UserSharing]    Script Date: 25.04.2017 19:02:01 ******/
+/****** Object:  Table [dbo].[UserSharing]    Script Date: 02.05.2017 0:30:29 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -68,50 +306,28 @@ CREATE TABLE [dbo].[UserSharing](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-
-GO
-/****** Object:  Table [dbo].[Word]    Script Date: 25.04.2017 19:02:01 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-SET ANSI_PADDING ON
-GO
-CREATE TABLE [dbo].[Word](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[OriginalWord] [nvarchar](100) NOT NULL,
-	[Pronunciation] [nvarchar](100) NULL,
-	[LastModified] [datetime] NOT NULL,
-	[Translation] [nvarchar](250) NOT NULL,
-	[Usage] [nvarchar](max) NULL,
-	[CardAll] [varbinary](max) NULL,
-	[CardOriginalWord] [varbinary](max) NULL,
-	[CardTranslation] [varbinary](max) NULL,
-	[CardPronunciation] [varbinary](max) NULL,
-	[IdOwner] [bigint] NOT NULL,
-	[SyllablesCount] [int] NOT NULL,
- CONSTRAINT [PK_Word] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-
-GO
-
-CREATE NONCLUSTERED INDEX [IX_Word_SyllablesCount] ON [dbo].[Word]
-(
-	SyllablesCount ASC
-)
-WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
-GO
-
-SET ANSI_PADDING OFF
 GO
 ALTER TABLE [dbo].[Score] ADD  CONSTRAINT [DF_Score_IsInLearnMode]  DEFAULT ((0)) FOR [IsInLearnMode]
 GO
 ALTER TABLE [dbo].[User] ADD  CONSTRAINT [DF_User_JoinDate]  DEFAULT (getdate()) FOR [JoinDate]
 GO
-ALTER TABLE [dbo].[Word] ADD  CONSTRAINT [DF_Word_SyllablesCount]  DEFAULT ((1)) FOR [SyllablesCount]
+ALTER TABLE [dbo].[WordFileA] ADD  CONSTRAINT [DF_WordFileA_Id]  DEFAULT (newid()) FOR [Id]
+GO
+ALTER TABLE [dbo].[WordFileA] ADD  CONSTRAINT [DF_WordFileA_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
+GO
+ALTER TABLE [dbo].[WordFileO] ADD  CONSTRAINT [DF_WordFileO_Id]  DEFAULT (newid()) FOR [Id]
+GO
+ALTER TABLE [dbo].[WordFileO] ADD  CONSTRAINT [DF_WordFileO_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
+GO
+ALTER TABLE [dbo].[WordFileP] ADD  CONSTRAINT [DF_WordFileP_Id]  DEFAULT (newid()) FOR [Id]
+GO
+ALTER TABLE [dbo].[WordFileP] ADD  CONSTRAINT [DF_WordFileP_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
+GO
+ALTER TABLE [dbo].[WordFileT] ADD  CONSTRAINT [DF_WordFileT_Id]  DEFAULT (newid()) FOR [Id]
+GO
+ALTER TABLE [dbo].[WordFileT] ADD  CONSTRAINT [DF_WordFileT_CreateDate]  DEFAULT (getdate()) FOR [CreateDate]
+GO
+ALTER TABLE [dbo].[WordMain] ADD  CONSTRAINT [DF_Word_SyllablesCount]  DEFAULT ((1)) FOR [SyllablesCount]
 GO
 ALTER TABLE [dbo].[Score]  WITH CHECK ADD  CONSTRAINT [FK_Score_User] FOREIGN KEY([IdUser])
 REFERENCES [dbo].[User] ([IdUser])
@@ -132,10 +348,38 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[UserSharing] CHECK CONSTRAINT [FK_UserSharing_UserOwner]
 GO
-ALTER TABLE [dbo].[Word]  WITH CHECK ADD  CONSTRAINT [FK_Word_User] FOREIGN KEY([IdOwner])
+ALTER TABLE [dbo].[WordFileA]  WITH CHECK ADD  CONSTRAINT [FK_WordFileA_WordMain] FOREIGN KEY([IdWord])
+REFERENCES [dbo].[WordMain] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[WordFileA] CHECK CONSTRAINT [FK_WordFileA_WordMain]
+GO
+ALTER TABLE [dbo].[WordFileO]  WITH CHECK ADD  CONSTRAINT [FK_WordFileO_WordMain] FOREIGN KEY([IdWord])
+REFERENCES [dbo].[WordMain] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[WordFileO] CHECK CONSTRAINT [FK_WordFileO_WordMain]
+GO
+ALTER TABLE [dbo].[WordFileP]  WITH CHECK ADD  CONSTRAINT [FK_WordFileP_WordMain] FOREIGN KEY([IdWord])
+REFERENCES [dbo].[WordMain] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[WordFileP] CHECK CONSTRAINT [FK_WordFileP_WordMain]
+GO
+ALTER TABLE [dbo].[WordFileT]  WITH CHECK ADD  CONSTRAINT [FK_WordFileT_WordMain] FOREIGN KEY([IdWord])
+REFERENCES [dbo].[WordMain] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[WordFileT] CHECK CONSTRAINT [FK_WordFileT_WordMain]
+GO
+ALTER TABLE [dbo].[WordMain]  WITH CHECK ADD  CONSTRAINT [FK_Word_User] FOREIGN KEY([IdOwner])
 REFERENCES [dbo].[User] ([IdUser])
 ON UPDATE CASCADE
 ON DELETE CASCADE
 GO
-ALTER TABLE [dbo].[Word] CHECK CONSTRAINT [FK_Word_User]
+ALTER TABLE [dbo].[WordMain] CHECK CONSTRAINT [FK_Word_User]
 GO

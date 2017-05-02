@@ -1,4 +1,5 @@
 using System;
+using YellowDuck.LearnChinese.Data.Ef;
 
 namespace YellowDuck.LearnChinese.Interfaces.Data
 {

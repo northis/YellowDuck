@@ -28,6 +28,7 @@ namespace YellowDuck.LearnChinese.Interfaces
         IQueryable<IUser> GetUserFriends(long userId);
 
         IWord GetWord(string wordOriginal);
+        IQueryable<IWord> GetTopWords(string searchPattern, long userId);
 
         bool IsUserExist(long userId);
 

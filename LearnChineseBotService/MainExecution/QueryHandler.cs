@@ -14,7 +14,6 @@ using User = YellowDuck.LearnChinese.Data.Ef.User;
 
 namespace YellowDuck.LearnChineseBotService.MainExecution
 {
-
     public class QueryHandler
     {
         private readonly TelegramBotClient _client;
@@ -32,7 +31,12 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
 
         }
 
-        public async void CallbackQuery(CallbackQuery callbackQuery)
+        public async Task InlineResultChosen(ChosenInlineResult chosenInlineResult)
+        {
+
+        }
+
+        public async Task CallbackQuery(CallbackQuery callbackQuery)
         {
             try
             {
@@ -40,11 +44,11 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
             catch (Exception ex)
             {
-                MainFactory.Log.Write("OnCallbackQuery", ex, null);
+                MainFactory.Log.Write("CallbackQuery", ex, null);
             }
         }
 
-        public async void OnMessage(Message msg)
+        public async Task OnMessage(Message msg)
         {
             try
             {
@@ -52,7 +56,7 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
             catch (Exception ex)
             {
-                MainFactory.Log.Write("OnMessage", ex, null);
+                MainFactory.Log.Write("Message", ex, null);
             }
         }
 
@@ -65,7 +69,6 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         {
             MainFactory.Log.Write(nameof(OnReceiveError), e, null);
         }
-        
 
         async Task OnMessage(Message msg, string argumentCommand, Telegram.Bot.Types.User user)
         {

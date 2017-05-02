@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 
 namespace YellowDuck.LearnChinese.Data.Ef
@@ -17,14 +18,21 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
         public virtual DbSet<Score> Scores { get; set; }
         public virtual DbSet<User> Users { get; set; }
+
         public virtual DbSet<Word> Words { get; set; }
+
+        public virtual DbSet<WordFileA> WordFileAs { get; set; }
+        public virtual DbSet<WordFileO> WordFileOs { get; set; }
+        public virtual DbSet<WordFileP> WordFilePs { get; set; }
+        public virtual DbSet<WordFileT> WordFileTs { get; set; }
+
         public virtual DbSet<UserSharing> UserSharings { get; set; }
 
         #endregion
 
         #region Methods
 
-
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Word>()
@@ -49,6 +57,46 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 .HasForeignKey(e => e.IdWord)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<Word>()
+                .Property(e => e.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+
+            modelBuilder.Entity<WordFileA>()
+                .Property(a => a.CreateDate)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
+            modelBuilder.Entity<WordFileO>()
+                .Property(a => a.CreateDate)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
+            modelBuilder.Entity<WordFileP>()
+                .Property(a => a.CreateDate)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
+            modelBuilder.Entity<WordFileT>()
+                .Property(a => a.CreateDate)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+
+            modelBuilder.Entity<WordFileA>()
+                .HasRequired(a => a.Word)
+                .WithRequiredDependent(a => a.WordFileA)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<WordFileO>()
+                .HasRequired(a => a.Word)
+                .WithRequiredDependent(a => a.WordFileO)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<WordFileP>()
+                .HasRequired(a => a.Word)
+                .WithRequiredDependent(a => a.WordFileP)
+                .WillCascadeOnDelete();
+
+            modelBuilder.Entity<WordFileT>()
+                .HasRequired(a => a.Word)
+                .WithRequiredDependent(a => a.WordFileT)
+                .WillCascadeOnDelete();
 
             modelBuilder.Entity<User>()
                 .HasMany(e => e.Words)
@@ -68,6 +116,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 .WithRequired(e => e.UserOwner)
                 .HasForeignKey(e => e.IdOwner)
                 .WillCascadeOnDelete(true);
+            
+
         }
 
         #endregion

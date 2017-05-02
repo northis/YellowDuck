@@ -54,6 +54,10 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -89,16 +93,19 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Db\dbCreate.filestream.sql">
+      <SubType>Component</SubType>
+    </Content>
     <Content Include="Db\dbCreate.sql">
       <SubType>Component</SubType>
     </Content>
-    <Content Include="Db\LearnChinese.mdf">
+    <Content Include="Db\LearnChineseNofs.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Db\LearnChinese_log.ldf">
+    <Content Include="Db\LearnChineseNofs_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>LearnChinese.mdf</DependentUpon>
     </Content>
+    <Content Include="Db\triggerOnView.sql" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

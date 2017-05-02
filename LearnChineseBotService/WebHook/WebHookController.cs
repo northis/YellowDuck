@@ -1,35 +1,29 @@
-using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Ninject;
-using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using YellowDuck.LearnChineseBotService.LayoutRoot;
+using YellowDuck.LearnChineseBotService.MainExecution;
 
 namespace YellowDuck.LearnChineseBotService.WebHook
 {
     public class WebHookController : ApiController
     {
-        private readonly TelegramBotClient _client;
+        private readonly QueryHandler _queryHandler;
 
-        public WebHookController()
+        public WebHookController( QueryHandler queryHandler)
         {
-            _client = MainFactory.NinjectKernel.Get<TelegramBotClient>();
+            _queryHandler = queryHandler;
         }
         
         public async Task<IHttpActionResult> Post(Update update)
         {
-            var message = update.Message;
+            if(update.Message !=null)
+                await _queryHandler.OnMessage(update.Message);
 
-            Console.WriteLine("Received Message from {0}", message.Chat.Id);
+            if (update.CallbackQuery != null)
+                await _queryHandler.CallbackQuery(update.CallbackQuery);
 
-            if (message.Type == MessageType.TextMessage)
-            {
-                // Echo each Message
-                await _client.SendTextMessage(message.Chat.Id, message.Text);
-            }
+            if (update.InlineQuery != null)
+                await _queryHandler.InlineQuery(update.InlineQuery);
 
             return Ok();
         }
