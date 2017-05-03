@@ -150,7 +150,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var word = userWords.FirstOrDefault();
 
             if (word == null)
-                throw new Exception($"Нет подходящих слов для изучения. userId={userId}");
+                throw new Exception($"No suitable words to learn. userId={userId}");
 
             var wordId = word.Id;
             var score = GetScore(userId, wordId);
@@ -237,7 +237,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (originalWord == null)
                 throw new Exception(
-                    $"Правка невозможна, такого слова в хранилище нет. Id={idWord}, ChineseWord={chineseWord}");
+                    $"Editing is not possible, there is no such word in the dictionary. Id={idWord}, ChineseWord={chineseWord}");
 
             originalWord.Pronunciation = word.Pronunciation;
             originalWord.Translation = word.Translation;
@@ -267,7 +267,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (originalWord == null)
                 throw new Exception(
-                    $"Удаление невозможно, такого слова в хранилище нет. Id={wordId}");
+                    $"Removing is not possible, there is no such word in the dictionary. Id={wordId}");
 
             
             _context.Scores.RemoveRange(_context.Scores.Where(a => a.IdWord == wordId));
@@ -282,7 +282,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (originalWord != null)
                 throw new Exception($"Слово {chineseWord} уже есть в хранилище.");
-
+            
             var wrdNew = new Word
             {
                 LastModified = GetRepositoryTime(),
@@ -292,6 +292,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 Usage = word.Usage,
                 Id = word.Id,
                 IdOwner = idUser,
+                SyllablesCount = word.SyllablesCount,
                 WordFileA = word.CardAll != null ? new WordFileA {Bytes = word.CardAll} : null,
                 WordFileO = word.CardOriginalWord != null ? new WordFileO {Bytes = word.CardOriginalWord} : null,
                 WordFileT = word.CardPronunciation != null ? new WordFileT {Bytes = word.CardPronunciation} : null,
@@ -310,7 +311,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (originalUser != null)
                 throw new Exception(
-                    $"Добавление невозможно, такой пользователь уже существует. idUser={idUser}");
+                    $"Can't add this user, because he already exists. idUser={idUser}");
 
             _context.Users.Add(new User { IdUser = user.IdUser, Name = user.Name, JoinDate = GetRepositoryTime() });
             _context.SaveChanges();
@@ -322,7 +323,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (originalUser == null)
                 throw new Exception(
-                    $"Удаление невозможно, такого пользователя и так не существует. userId={userId}");
+                    $"Can't delete this user, there is no such user. userId={userId}");
 
             _context.Users.Remove(originalUser);
             _context.SaveChanges();
@@ -334,13 +335,13 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (ownerUser == null)
                 throw new Exception(
-                    $"Поделиться списком слов невозможно. ownerUserId={ownerUserId}");
+                    $"Can't share current word list. ownerUserId={ownerUserId}");
 
 
             var friendUser = _context.Users.FirstOrDefault(a => a.IdUser == friendUserId);
             if (friendUser == null)
                 throw new Exception(
-                    $"Поделиться списком слов невозможно. friendUserId={friendUserId}");
+                    $"Can't share current word list. friendUserId={friendUserId}");
 
             ownerUser.OwnerUserSharings.Add(new UserSharing { UserFriend = friendUser });
             _context.SaveChanges();
@@ -352,12 +353,12 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (ownerUser == null)
                 throw new Exception(
-                    $"Забрать доступ к своему словарю невозможно. ownerUserId={ownerUserId}");
+                    $"Can't remove user from the share list. ownerUserId={ownerUserId}");
 
             var friendUser = _context.Users.FirstOrDefault(a => a.IdUser == friendUserId);
             if (friendUser == null)
                 throw new Exception(
-                    $"Забрать доступ к своему словарю невозможно. friendUserId={friendUserId}");
+                    $"Can't remove user from the share list. friendUserId={friendUserId}");
 
             _context.UserSharings.RemoveRange(
                 ownerUser.OwnerUserSharings.Where(a => a.IdOwner == ownerUserId && a.IdFriend == friendUserId));
@@ -446,7 +447,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var user = _context.Users.FirstOrDefault(a => a.IdUser == userId);
 
             if (user == null)
-                throw new Exception($"Пользователь с Id={userId} не найден");
+                throw new Exception($"User with Id={userId} is not found");
 
             user.LastCommand = command;
             _context.SaveChanges();
@@ -457,7 +458,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var user = _context.Users.FirstOrDefault(a => a.IdUser == userId);
 
             if (user == null)
-                throw new Exception($"Пользователь с Id={userId} не найден");
+                throw new Exception($"User with Id={userId} is not found");
 
             return user.LastCommand;
         }
@@ -467,7 +468,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var word = _context.Words.FirstOrDefault(a => a.OriginalWord == wordOriginal);
 
             if (word == null)
-                throw new Exception($"Слова/фразы '{wordOriginal}' нет в хранилище");
+                throw new Exception($"No such word as '{wordOriginal}' in the dictionary");
 
             return word;
         }

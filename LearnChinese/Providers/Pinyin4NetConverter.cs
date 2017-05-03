@@ -103,7 +103,7 @@ namespace YellowDuck.LearnChinese.Providers
                 var lettersOnlyLength = lettersOnly.Length;
 
                 if (lettersOnlyLength < TonesTotalCount)
-                    throw new Exception($"Число букв в паттерне [{patternLetter}] меньше заданного количества тонов ({TonesTotalCount})");
+                    throw new Exception($"Letters count in the pattern [{patternLetter}] less than ({TonesTotalCount})");
 
                 for (var i = 0; i < lettersOnlyLength; i++)
                 {

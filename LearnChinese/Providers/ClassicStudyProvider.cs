@@ -31,7 +31,7 @@ namespace YellowDuck.LearnChinese.Providers
             var wordStat = _wordRepository.GetCurrentUserWordStatistic(userId);
 
             if (wordStat == null)
-                throw new Exception($"Слов, требующих ответа, для данного пользователя нет. userId={userId}");
+                throw new Exception($"There no  words for this user which must be answered. userId={userId}");
 
             var learnMode = wordStat.Score.ToELearnMode();
 

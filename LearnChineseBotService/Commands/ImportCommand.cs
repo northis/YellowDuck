@@ -65,11 +65,11 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             if (goodWords.Any())
                 answer.Message +=
-                    $"Добавлено ({goodWords.Count}): {Environment.NewLine} {string.Join(Environment.NewLine, goodWords.Select(a => a.OriginalWord))}{Environment.NewLine}";
+                    $"These words have been added ({goodWords.Count}): {Environment.NewLine} {string.Join(Environment.NewLine, goodWords.Select(a => a.OriginalWord))}{Environment.NewLine}";
 
             if (badWords.Any())
                 answer.Message +=
-                    $"Есть проблемы ({badWords.Count}): {Environment.NewLine} {string.Join(Environment.NewLine, badWords)}";
+                    $"These words have some parse troubles ({badWords.Count}): {Environment.NewLine} {string.Join(Environment.NewLine, badWords)}";
 
             return answer;
         }
@@ -77,7 +77,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override AnswerItem Reply(MessageItem mItem)
         {
             var loadFileMessage =
-                $"Загрузите список слов в виде файла .csv в формате <слово/фраза иероглифами>{SeparatorChar}<перевод>";
+                $"Please give me a .csv file in '<word>{SeparatorChar}<translation>' format";
 
             var fileStream = mItem.FileStream;
 
@@ -93,7 +93,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 return new AnswerItem
                 {
                     Message =
-                        $"Файл не должен быть больше {MaxImportFileSize} байт.{Environment.NewLine}{loadFileMessage}"
+                        $"File couldn't be larger than {MaxImportFileSize} bytes.{Environment.NewLine}{loadFileMessage}"
                 };
             }
 
@@ -104,7 +104,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             if (result == null)
                 return new AnswerItem
                 {
-                    Message = $"Файл плохой.{Environment.NewLine}{loadFileMessage}"
+                    Message = $"Bad file.{Environment.NewLine}{loadFileMessage}"
                 };
 
             return result;
@@ -115,7 +115,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return ECommands.Import;
         }
 
-        IEnumerable<string> ReadLines(Stream streamProvider,Encoding encoding)
+        IEnumerable<string> ReadLines(Stream streamProvider, Encoding encoding)
         {
             using (var stream = streamProvider)
             using (var reader = new StreamReader(stream, encoding))
@@ -127,9 +127,15 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 }
             }
         }
-        public override string GetCommandDescription()
+
+        public override string GetCommandIconUnicode()
         {
-            return "🚛Выполнить импорт слов из файла";
+            return "🚛";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Import words from a file";
         }
     }
 }

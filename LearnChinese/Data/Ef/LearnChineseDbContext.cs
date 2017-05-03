@@ -65,18 +65,30 @@ namespace YellowDuck.LearnChinese.Data.Ef
             modelBuilder.Entity<WordFileA>()
                 .Property(a => a.CreateDate)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            modelBuilder.Entity<WordFileA>()
+                .Property(a => a.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             modelBuilder.Entity<WordFileO>()
                 .Property(a => a.CreateDate)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            modelBuilder.Entity<WordFileO>()
+                .Property(a => a.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             modelBuilder.Entity<WordFileP>()
                 .Property(a => a.CreateDate)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            modelBuilder.Entity<WordFileP>()
+                .Property(a => a.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             modelBuilder.Entity<WordFileT>()
                 .Property(a => a.CreateDate)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            modelBuilder.Entity<WordFileT>()
+                .Property(a => a.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             modelBuilder.Entity<WordFileA>()
                 .HasRequired(a => a.Word)

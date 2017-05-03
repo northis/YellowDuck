@@ -9,7 +9,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             return new AnswerItem
             {
-                Message = "Установлен режим по умолчанию"
+                Message = "Defaut mode has been set"
             };
         }
 
@@ -18,9 +18,15 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             return ECommands.Default;
         }
-        public override string GetCommandDescription()
+
+        public override string GetCommandIconUnicode()
         {
-            return "👌Установить умолчания";
+            return "👌";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Set default mode";
         }
     }
 }

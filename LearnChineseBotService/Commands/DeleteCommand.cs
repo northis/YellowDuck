@@ -27,11 +27,11 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             if (string.IsNullOrEmpty(mItem.TextOnly))
             {
-                message = "Введите слово или фразу из словаря для удаления. Будет стёрта также и статистика изучения!";
+                message = "Type a chinese word to remove it from the dictionary. All word's score information will be removed too!";
             }
             else if (NoAnswer == mItem.TextOnly.ToLowerInvariant())
             {
-                message = "Удаление отменено";
+                message = "Delete has been cancelled";
             }
             else if(mItem.TextOnly.ToLowerInvariant().StartsWith(YesAnswer))
             {
@@ -40,7 +40,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     var word = _repository.GetWord(mItem.TextOnly.Replace(YesAnswer, string.Empty));
                     _repository.DeleteWord(word.Id);
 
-                    message = $"Слово {word.OriginalWord} удалено";
+                    message = $"Word {word.OriginalWord} has been removed";
                 }
                 catch (Exception e)
                 {
@@ -49,10 +49,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
             }
             else
             {
-                message = $"Вы действительно хотите удалить слово '{mItem.TextOnly}'?";
+                message = $"Do you really want to remove '{mItem.TextOnly}'?";
                 markup = new InlineKeyboardMarkup
                 {
-                    InlineKeyboard = new[] { new[] { new InlineKeyboardButton("✅Да", $"yes{mItem.TextOnly}"), new InlineKeyboardButton("❌Нет", "no") } }
+                    InlineKeyboard = new[] { new[] { new InlineKeyboardButton("✅Yes", $"yes{mItem.TextOnly}"), new InlineKeyboardButton("❌No", "no") } }
                 };
             }
 
@@ -70,9 +70,15 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             return ECommands.Delete;
         }
-        public override string GetCommandDescription()
+
+        public override string GetCommandIconUnicode()
         {
-            return "🗑Удалить слово из словаря";
+            return "🗑";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Remove a word from the dictionary";
         }
     }
 }

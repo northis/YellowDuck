@@ -16,13 +16,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public override AnswerItem Reply(MessageItem mItem)
         {
-            var newWord = _studyProvider.LearnWord(mItem.UserId, ELearnMode.FullView,
-                EGettingWordsStrategy.NewMostDifficult);
-            
+            var newWord = _studyProvider.LearnWord(mItem.ChatId, ELearnMode.FullView,
+                EGettingWordsStrategy.OldMostDifficult);
+            //TODO Вывести еще статистику сюда
             return new AnswerItem
             {
-                Message = "🎓👀",
-                Picture = newWord.Picture
+                Message = GetCommandIconUnicode(),
+                Picture = newWord.Picture,
+                Markup = GetLearnMarkup()
             };
         }
 
@@ -31,9 +32,15 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             return ECommands.LearnView;
         }
-        public override string GetCommandDescription()
+
+        public override string GetCommandIconUnicode()
         {
-            return "🎓👀Просматривать слова";
+            return "🎓👀";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Just view some words";
         }
     }
 }

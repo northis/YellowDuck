@@ -8,7 +8,6 @@
         Clean,
         View,
         Delete,
-        Mode,
         Share,
         Help,
         Start,

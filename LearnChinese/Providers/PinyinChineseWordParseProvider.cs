@@ -158,7 +158,7 @@ namespace YellowDuck.LearnChinese.Providers
                     else if (syllables.Length > MaxSyllablesToParse)
                     {
                         badWords.Add(word +
-                                     $" (Слишком длинная строка. Максимальное количество слогов - {MaxSyllablesToParse}.)");
+                                     $" (String is too long. Max syllables count is {MaxSyllablesToParse}.)");
                     }
                     else
                     {
@@ -210,7 +210,7 @@ namespace YellowDuck.LearnChinese.Providers
                         }
                         else
                         {
-                            badWords.Add(word + " (Пиньинь не полностью соответствует иероглифам.)");
+                            badWords.Add(word + " (the pinyin is not quite suit for these chinese characters.)");
                         }
                     }
                     continue;

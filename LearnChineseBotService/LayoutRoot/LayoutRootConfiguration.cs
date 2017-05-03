@@ -38,10 +38,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .InSingletonScope()
                 .WithConstructorArgument(MainFactory.TelegramBotKey)
                 .WithPropertyValue("PollingTimeout", MainFactory.PollingTimeout);
-
-            Bind<ModeCommand>()
-                .ToSelf()
-                .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values.ToArray());
+            
             Bind<HelpCommand>()
                 .ToSelf()
                 .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values.ToArray());

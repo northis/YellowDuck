@@ -67,10 +67,8 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 NinjectKernel.Get<DefaultCommand>(),
                 NinjectKernel.Get<ImportCommand>(),
                 NinjectKernel.Get<AddCommand>(),
-                NinjectKernel.Get<CleanCommand>(),
                 NinjectKernel.Get<ViewCommand>(),
                 NinjectKernel.Get<DeleteCommand>(),
-                NinjectKernel.Get<ModeCommand>(),
                 NinjectKernel.Get<ShareCommand>(),
                 NinjectKernel.Get<HelpCommand>(),
                 NinjectKernel.Get<StartCommand>(),
@@ -84,8 +82,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
 
             VisibleCommandHandlers =
                 CommandHandlers.Where(
-                        a =>
-                            a.Key != ECommands.Clean && a.Key != ECommands.Share && a.Key != ECommands.Mode)
+                        a => a.Key != ECommands.Share)
                     .ToDictionary(a => a.Key, a => a.Value);
 
         }

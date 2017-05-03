@@ -33,9 +33,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return ECommands.About;
         }
 
-        public override string GetCommandDescription()
+        public override string GetCommandIconUnicode()
         {
-            return "🈴Об этом боте";
+            return "🈴";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "About this bot";
         }
     }
 }

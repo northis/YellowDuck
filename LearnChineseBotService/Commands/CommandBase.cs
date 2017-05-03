@@ -1,4 +1,6 @@
 ﻿using System;
+using Telegram.Bot.Types;
+using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
 
@@ -10,28 +12,45 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public abstract ECommands GetCommandType();
 
         public const string CommandStartChar = "/";
+        public const string NextCmd = "next";
 
         public static ECommands GetCommandType(string command)
         {
             if (string.IsNullOrWhiteSpace(command))
-                throw new ArgumentNullException(nameof(command), "Команда не может быть пустой");
+                throw new ArgumentNullException(nameof(command), "A command cannot be empty");
 
             if (!command.StartsWith(CommandStartChar))
-                throw new ArgumentException($"Команда должна начинаться с символа '{CommandStartChar}'", nameof(command));
+                throw new ArgumentException($"A command must starts with '{CommandStartChar}'", nameof(command));
 
             var cleanedCommand = command.Substring(1, command.Length - 1);
 
             if (!Enum.TryParse(cleanedCommand, true, out ECommands commandEnum))
-                throw new NotSupportedException($"Команда '{ nameof(command)}' не поддерживается");
+                throw new NotSupportedException($"Command '{ nameof(command)}' is not supported");
 
             return commandEnum;
         }
 
 
-        public virtual string GetCommandDescription()
+        public virtual IReplyMarkup GetLearnMarkup()
         {
-            return GetCommandType().ToString();
+            var mkp = new InlineKeyboardMarkup
+            {
+                InlineKeyboard = new[]
+                {
+                    new[] {new InlineKeyboardButton("Next word", NextCmd) }
+                }
+            };
+
+            return mkp;
         }
+
+        public string GetCommandDescription()
+        {
+            return GetCommandIconUnicode()+ GetCommandTextDescription();
+        }
+
+        public abstract string GetCommandIconUnicode();
+        public abstract string GetCommandTextDescription();
 
         public string GetFormattedDescription()
         {

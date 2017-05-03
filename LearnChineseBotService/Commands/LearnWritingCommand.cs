@@ -12,7 +12,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
     public class LearnWritingCommand : CommandBase
     {
         private readonly IStudyProvider _studyProvider;
-        public const string NextCmd = "next";
 
         public LearnWritingCommand(IStudyProvider studyProvider)
         {
@@ -61,27 +60,20 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return answerItem;
         }
 
-        public virtual IReplyMarkup GetLearnMarkup()
-        {
-            var mkp = new InlineKeyboardMarkup
-            {
-                InlineKeyboard = new[]
-                {
-                    new[] {new InlineKeyboardButton("🖌Дальше", NextCmd) },
-                    new[] {new InlineKeyboardButton("", $"{CommandStartChar}{ECommands.Help}")}
-                }
-            };
-
-            return mkp;
-        }
 
         public override ECommands GetCommandType()
         {
             return ECommands.LearnWriting;
         }
-        public override string GetCommandDescription()
+
+        public override string GetCommandIconUnicode()
         {
-            return "🖌Учить написание";
+            return "🖌";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Learn how to write words";
         }
     }
 }

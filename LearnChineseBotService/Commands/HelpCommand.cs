@@ -27,14 +27,19 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return ECommands.Help;
         }
 
-        public override string GetCommandDescription()
-        {
-            return "❓Список команд";
-        }
-
         public virtual string GetHelpMessage()
         {
             return string.Join(Environment.NewLine, GetAllComands().Select(a => a.GetFormattedDescription()));
+        }
+
+        public override string GetCommandIconUnicode()
+        {
+            return "❓";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "List of available commands";
         }
     }
 }

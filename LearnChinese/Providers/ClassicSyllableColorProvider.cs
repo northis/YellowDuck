@@ -16,7 +16,7 @@ namespace YellowDuck.LearnChinese.Providers
             short syllableNumber;
 
             if (!numberOnly.Success || !short.TryParse(numberOnly.Value, out syllableNumber))
-                throw new Exception("Неверно задан тон, давайте еще раз");
+                throw new Exception("The tone is wrong, try again");
 
             return syllableNumber;
         }

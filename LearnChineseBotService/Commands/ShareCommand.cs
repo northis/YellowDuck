@@ -37,7 +37,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 {
                     return new AnswerItem
                     {
-                        Message = "Команда не поддерживается."
+                        Message = "Command is not supported."
                     };
                 }
 
@@ -48,14 +48,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
                         _repository.AddFriendUser(userId, friendUser);
                         return new AnswerItem
                         {
-                            Message = "Список успешно расшарен другу."
+                            Message = "The list has been shared successfully"
                         };
                     }
 
                     _repository.RemoveFriendUser(userId, friendUser);
                     return new AnswerItem
                     {
-                        Message = "Друг удален из списка видящих."
+                        Message = "The friend has been removed from your sharing list"
                     };
 
                 }
@@ -66,7 +66,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 }
             }
 
-            var otherUsers = _repository.GetUsers()/*.Where(a => a.IdUser != userId) TODO убрать это потом*/ ;
+            var otherUsers = _repository.GetUsers().Where(a => a.IdUser != userId) ;
             var friends = _repository.GetUserFriends(userId).Select(a => a.IdUser).ToList();
 
             var offerFriends = otherUsers.Take(MaxShareUsers).ToArray();
@@ -86,7 +86,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             return new AnswerItem
             {
-                Message = "Список пользователей бота. ➕ - пригласить, ➖ - отозвать приглашение",
+                Message = "List of persons who use this bot. ➕ - to invite and add to your sharing list, ➖ - to remove from your sharing list",
                 Markup = new InlineKeyboardMarkup
                 {
                     InlineKeyboard = buttons.ToArray()
@@ -99,9 +99,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return ECommands.Share;
         }
 
-        public override string GetCommandDescription()
+        public override string GetCommandIconUnicode()
         {
-            return "🤝Поделиться своим списком слов с другом";
+            return "🤝";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Share your word list with a friend";
         }
     }
 }

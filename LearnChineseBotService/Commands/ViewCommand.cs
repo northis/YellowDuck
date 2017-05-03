@@ -24,7 +24,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             if (string.IsNullOrEmpty(mItem.TextOnly))
             {
-                answer.Message = "Введите слово или фразу из словаря для просмотра карточки";
+                answer.Message = "Type a chinese word to view it's flash card. Use chinese characters only! Pinyin and translation are not supported!";
             }
             else
             {
@@ -55,9 +55,15 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             return ECommands.View;
         }
-        public override string GetCommandDescription()
+
+        public override string GetCommandIconUnicode()
         {
-            return "👀Просмотр карточки слова";
+            return "👀";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "View a word's flash card";
         }
     }
 }

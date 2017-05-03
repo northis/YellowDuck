@@ -16,7 +16,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override AnswerItem Reply(MessageItem mItem)
         {
             var addMessage =
-                $"Напишите слово в формате <слово/фраза иероглифами>{SeparatorChar}<перевод>";
+                $"Type a chinese word in '<word>{SeparatorChar}<translation>' format";
 
             if (string.IsNullOrEmpty(mItem.TextOnly))
             {
@@ -30,7 +30,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 if (result == null)
                     return new AnswerItem
                     {
-                        Message = $"Строка плохого формата.{Environment.NewLine}{addMessage}"
+                        Message = $"Bad string format.{Environment.NewLine}{addMessage}"
                     };
 
                 return result;
@@ -39,7 +39,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             catch (Exception ex)
             {
                 Trace.WriteLine(ex);
-                return new AnswerItem { Message = $"Формат неверный.{Environment.NewLine}{addMessage}" };
+                return new AnswerItem { Message = $"Wrong format.{Environment.NewLine}{addMessage}" };
             }
         }
 
@@ -48,9 +48,16 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return ECommands.Add;
         }
 
-        public override string GetCommandDescription()
+
+
+        public override string GetCommandIconUnicode()
         {
-            return "➕Добавить новое слово/фразу";
+            return "➕";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Add a new chinese word";
         }
     }
 }

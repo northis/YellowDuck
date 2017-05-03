@@ -19,7 +19,7 @@
 
         <drawing:FlashCardView  x:Key="Dc" 
                                 Usage="她是我的爱人" 
-                                TranslationNative="Супруг" 
+                                TranslationNative="Spouse" 
                                 Pinyin="{StaticResource ResourceKey=Pinyin}" 
                                 OriginalWord="{StaticResource ResourceKey=OriginalWord}"
                                 Mode="FullView"/>

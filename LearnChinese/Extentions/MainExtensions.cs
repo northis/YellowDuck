@@ -11,7 +11,7 @@ namespace YellowDuck.LearnChinese.Extentions
             ELearnMode learnMode;
 
             if (!Enum.TryParse(score.LastLearnMode, out learnMode))
-                throw new Exception($"Задан неверный режим обучения. userId={score.IdUser}, learnMode={score.LastLearnMode}");
+                throw new Exception($"Wrong learn mode has been set. userId={score.IdUser}, learnMode={score.LastLearnMode}");
 
             return learnMode;
         }

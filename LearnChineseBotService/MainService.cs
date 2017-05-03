@@ -30,11 +30,12 @@ namespace YellowDuck.LearnChineseBotService
 
         public void StartUserInteractive()
         {
-            Console.WriteLine("Press Enter to exit");
+            Console.WriteLine("Press any key to quit");
+
             OnStart(null);
-            Console.ReadLine();
+            Console.ReadKey();
             OnStop();
         }
     }
-    
+
 }
