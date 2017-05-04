@@ -16,7 +16,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
         private EfRepository GetCleanDb()
         {
-            var cntxt = new EfRepository(new LearnChineseDbContext());
+            var cntxt = new EfRepository(new LearnChineseDbContext(), false);
 
             using (var cn = GetDbContext())
             {
@@ -280,32 +280,34 @@ namespace YellowDuck.LearnChineseBotService.Tests
                     cn.Words.Add(word);
                     cn.SaveChanges();
                 }
- 
-                var score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
-                    EGettingWordsStrategy.NewFirst);
+
+                iCntxt.SetLearnMode(idUser, EGettingWordsStrategy.NewFirst);
+                var score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord);
+
                 Assert.IsNotNull(score);
                 Assert.IsTrue(score.Options.Contains(newWord1.OriginalWord));
 
 
-                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
-                    EGettingWordsStrategy.NewMostDifficult);
+                iCntxt.SetLearnMode(idUser, EGettingWordsStrategy.NewMostDifficult);
+                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord);
+
                 Assert.IsNotNull(score);
                 Assert.IsTrue(score.Options.Contains(newWord2.OriginalWord));
 
 
-                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
-                    EGettingWordsStrategy.Random);
+                iCntxt.SetLearnMode(idUser, EGettingWordsStrategy.Random);
+                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord);
                 Assert.IsNotNull(score);
-                
 
-                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
-                    EGettingWordsStrategy.OldFirst);
+
+                iCntxt.SetLearnMode(idUser, EGettingWordsStrategy.OldFirst);
+                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord);
                 Assert.IsNotNull(score);
                 Assert.IsTrue(score.Options.Contains(oldWord1.OriginalWord));
 
 
-                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord,
-                    EGettingWordsStrategy.OldMostDifficult);
+                iCntxt.SetLearnMode(idUser, EGettingWordsStrategy.OldMostDifficult);
+                score = iStudyProvider.LearnWord(idUser, ELearnMode.OriginalWord);
                 Assert.IsNotNull(score);
                 Assert.IsTrue(score.Options.Contains(oldWord2.OriginalWord));
             }

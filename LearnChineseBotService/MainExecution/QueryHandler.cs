@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,8 @@ using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.InlineQueryResults;
+using Telegram.Bot.Types.InputMessageContents;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
 using User = YellowDuck.LearnChinese.Data.Ef.User;
@@ -18,21 +21,63 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
     {
         private readonly TelegramBotClient _client;
         private readonly IWordRepository _repository;
+        private readonly string _flashCardUrl;
 
-        public QueryHandler(TelegramBotClient client, IWordRepository repository)
+        public QueryHandler(TelegramBotClient client, IWordRepository repository, string flashCardUrl)
         {
             _client = client;
             _repository = repository;
-            
+            _flashCardUrl = flashCardUrl;
         }
 
         public async Task InlineQuery(InlineQuery inlineQuery)
         {
+            var userId = inlineQuery.From.Id;
+            var q = inlineQuery.Query;
 
-        }
+            var results =_repository.FindFlashCard(q, userId).ToArray();
 
-        public async Task InlineResultChosen(ChosenInlineResult chosenInlineResult)
-        {
+            if (!results.Any())
+            {
+                return;
+            }
+
+            IEnumerable<InlineQueryResult> inlineQueryResults;
+
+            if (MainFactory.UseWebhooks)
+            {
+                inlineQueryResults = results.Select(
+                    a =>
+                        new InlineQueryResultPhoto
+                        {
+                            Title = $"{a.OriginalWord}-{a.Pronunciation}-{a.Translation}",
+                            Url = _flashCardUrl + a.FileId.ToString(),
+                            ThumbUrl = _flashCardUrl + a.FileId.ToString(),Height = 200,Width = 200,
+                            Id = inlineQuery.Id,
+                        });
+            }
+            else
+            {
+                inlineQueryResults = results.Select(
+                    a =>
+                        new InlineQueryResultArticle
+                        {
+                            Title = $"{a.OriginalWord}-{a.Pronunciation}",
+                            Id = inlineQuery.Id,
+                            InputMessageContent =
+                                new InputTextMessageContent
+                                {
+                                    DisableWebPagePreview = true,
+                                    MessageText =
+                                        $"<b>{a.OriginalWord}</>{Environment.NewLine}<i>{a.Pronunciation}</i>{Environment.NewLine}{a.Translation}",
+                                    ParseMode = ParseMode.Html
+
+                                },
+                            Url = MainFactory.UseWebhooks ? _flashCardUrl + a.FileId.ToString() : null
+                        });
+            }
+
+            await _client.AnswerInlineQueryAsync(inlineQuery.Id, inlineQueryResults.ToArray());
 
         }
 

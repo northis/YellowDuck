@@ -140,6 +140,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\DeleteCommand.cs" />
+    <Compile Include="WebHook\FlashCardController.cs" />
     <Compile Include="WebHook\WebServer.cs" />
     <Compile Include="WebHook\Startup.cs" />
     <Compile Include="WebHook\WebHookController.cs" />

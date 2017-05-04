@@ -19,14 +19,8 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             _client.OnReceiveGeneralError += _client_OnReceiveGeneralError;
             _client.OnCallbackQuery += _client_OnCallbackQuery;
             _client.OnInlineQuery += _client_OnInlineQuery;
-            _client.OnInlineResultChosen += _client_OnInlineResultChosen;
 
 
-        }
-
-        private void _client_OnInlineResultChosen(object sender, ChosenInlineResultEventArgs e)
-        {
-            _queryHandler.InlineResultChosen(e.ChosenInlineResult);
         }
 
         private void _client_OnInlineQuery(object sender, InlineQueryEventArgs e)

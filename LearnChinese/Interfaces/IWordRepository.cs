@@ -11,7 +11,7 @@ namespace YellowDuck.LearnChinese.Interfaces
         WordStatistic GetCurrentUserWordStatistic(long userId);
         WordStatistic GetUserWordStatistic(long userId, long wordId);
 
-        LearnUnit GetNextWord(WordSettings settings);
+        IQueryable<WordSearchResultItem> FindFlashCard(string searchString, long userId);
 
         DateTime GetRepositoryTime();
 
@@ -29,7 +29,6 @@ namespace YellowDuck.LearnChinese.Interfaces
         IQueryable<IUser> GetUserFriends(long userId);
 
         IWord GetWord(string wordOriginal);
-        IQueryable<IWord> GetTopWords(string searchPattern, long userId);
 
         bool IsUserExist(long userId);
 
@@ -45,5 +44,10 @@ namespace YellowDuck.LearnChinese.Interfaces
         void SetLearnMode(long userId, EGettingWordsStrategy mode);
 
         EGettingWordsStrategy GetLearnMode(long userId);
+
+        LearnUnit GetNextWord(WordSettings settings);
+
+        byte[] GetWordFlashCard(string fileId);
+
     }
 }

@@ -8,6 +8,7 @@ using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Providers;
 using YellowDuck.LearnChineseBotService.Commands;
 using YellowDuck.LearnChineseBotService.Commands.Common;
+using YellowDuck.LearnChineseBotService.MainExecution;
 using YellowDuck.LearnChineseBotService.WebHook;
 
 namespace YellowDuck.LearnChineseBotService.LayoutRoot
@@ -20,10 +21,15 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<IChineseWordParseProvider>().To<PinyinChineseWordParseProvider>();
             Bind<IStudyProvider>().To<ClassicStudyProvider>();
             Bind<ISyllablesToStringConverter>().To<ClassicSyllablesToStringConverter>();
-            Bind<IWordRepository>().To<EfRepository>();
+            Bind<IWordRepository>().To<EfRepository>()
+                .WithConstructorArgument("useFullText", true);
             Bind<IChinesePinyinConverter>().To<Pinyin4NetConverter>();
             Bind<IFlashCardGenerator>().To<WpfFlashCardGenerator>();
             Bind<ILogService>().To<Log4NetService>().InSingletonScope();
+
+            Bind<QueryHandler>()
+                .ToSelf()
+                .WithConstructorArgument("flashCardUrl", MainFactory.WebhookPublicUrl + "/FlashCard/");
 
             Bind<WebServer>()
                 .ToSelf()

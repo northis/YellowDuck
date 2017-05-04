@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using YellowDuck.LearnChinese.Data.ObjectModels;
@@ -14,14 +17,16 @@ namespace YellowDuck.LearnChinese.Data.Ef
         #region Fields
 
         private readonly LearnChineseDbContext _context;
-
+        private readonly bool _useFullText;
+        public const int MaxSearchResults = 5;
         #endregion
 
         #region Constructors
 
-        public EfRepository(LearnChineseDbContext context)
+        public EfRepository(LearnChineseDbContext context, bool useFullText)
         {
             _context = context;
+            _useFullText = useFullText;
         }
 
         #endregion
@@ -45,27 +50,27 @@ namespace YellowDuck.LearnChinese.Data.Ef
             {
                 case ELearnMode.OriginalWord:
                     return
-                        scores.OrderByDescending(
+                        scores.OrderBy(
                             a =>
                                 a.OriginalWordCount > 0 && a.OriginalWordCount > 0
                                     ? a.OriginalWordSuccessCount / a.OriginalWordCount
-                                    : int.MaxValue);
+                                    : 0);
 
                 case ELearnMode.Pronunciation:
                     return
-                        scores.OrderByDescending(
+                        scores.OrderBy(
                             a =>
                                 a.PronunciationCount > 0 && a.PronunciationCount > 0
                                     ? a.PronunciationSuccessCount / a.PronunciationCount
-                                    : int.MaxValue);
+                                    : 0);
 
                 case ELearnMode.Translation:
                     return
-                        scores.OrderByDescending(
+                        scores.OrderBy(
                             a =>
                                 a.TranslationCount > 0 && a.TranslationCount > 0
                                     ? a.TranslationSuccessCount / a.TranslationCount
-                                    : int.MaxValue);
+                                    : 0);
             }
 
             return scores.OrderBy(a => 0);
@@ -515,9 +520,37 @@ namespace YellowDuck.LearnChinese.Data.Ef
             return _context.UserSharings.Where(a => a.IdOwner == userId).Select(a => a.UserFriend);
         }
 
-        public IQueryable<IWord> GetTopWords(string searchPattern, long userId)
+        public IQueryable<WordSearchResultItem> FindFlashCard(string searchString, long userId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(searchString))
+                return new WordSearchResultItem[] {}.AsQueryable();
+
+            if (_useFullText)
+            {
+                return
+                    _context.Database.SqlQuery<WordSearchResultItem>(
+                            $"SELECT top ({MaxSearchResults}) f.Id as FileId, w.OriginalWord, w.Pronunciation, w.Translation   FROM [LearnChinese].[dbo].[Word] w join [LearnChinese].[dbo].[WordFileA] f on (f.IdWord = w.Id and w.IdOwner={userId})  where  CONTAINS(w.OriginalWord, '{searchString}')")
+                        .AsQueryable();
+            }
+
+            return _context.Words.Where(a => a.IdOwner == userId && a.OriginalWord.Contains(searchString))
+                .Take(MaxSearchResults)
+                .Select(
+                    a =>
+                        new WordSearchResultItem
+                        {
+                            FileId = a.WordFileA.Id,
+                            OriginalWord = a.OriginalWord,
+                            Pronunciation = a.Pronunciation,
+                            Translation = a.Translation
+                        });
+        }
+
+        public byte[] GetWordFlashCard(string fileId)
+        {
+            var guid = new Guid(fileId);
+
+            return _context.WordFileAs.Where(a => a.Id == guid).Select(a => a.Bytes).FirstOrDefault();
         }
 
         #endregion
