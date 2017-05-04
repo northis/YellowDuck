@@ -109,13 +109,16 @@
   <ItemGroup>
     <Compile Include="Commands\AboutCommand.cs" />
     <Compile Include="Commands\AddCommand.cs" />
-    <Compile Include="Commands\AnswerItem.cs" />
+    <Compile Include="Commands\Common\AnswerItem.cs" />
+    <Compile Include="Commands\Common\LearnCommand.cs" />
     <Compile Include="Commands\LearnViewCommand.cs" />
+    <Compile Include="Commands\Common\NextCommand.cs" />
     <Compile Include="Commands\LearnWritingCommand.cs" />
+    <Compile Include="Commands\ModeCommand.cs" />
     <Compile Include="Commands\StartCommand.cs" />
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\ShareCommand.cs" />
-    <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\Common\CommandBase.cs" />
     <Compile Include="Commands\ViewCommand.cs" />
     <Compile Include="Commands\Enums\ECommands.cs" />
     <Compile Include="Commands\DefaultCommand.cs" />

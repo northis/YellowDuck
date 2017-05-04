@@ -49,7 +49,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                             a =>
                                 a.OriginalWordCount > 0 && a.OriginalWordCount > 0
                                     ? a.OriginalWordSuccessCount / a.OriginalWordCount
-                                    : 0);
+                                    : int.MaxValue);
 
                 case ELearnMode.Pronunciation:
                     return
@@ -57,7 +57,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                             a =>
                                 a.PronunciationCount > 0 && a.PronunciationCount > 0
                                     ? a.PronunciationSuccessCount / a.PronunciationCount
-                                    : 0);
+                                    : int.MaxValue);
 
                 case ELearnMode.Translation:
                     return
@@ -65,7 +65,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                             a =>
                                 a.TranslationCount > 0 && a.TranslationCount > 0
                                     ? a.TranslationSuccessCount / a.TranslationCount
-                                    : 0);
+                                    : int.MaxValue);
             }
 
             return scores.OrderBy(a => 0);
@@ -87,11 +87,38 @@ namespace YellowDuck.LearnChinese.Data.Ef
             }
         }
 
+        public void SetLearnMode(long userId, EGettingWordsStrategy mode)
+        {
+            var user = _context.Users.FirstOrDefault(a => a.IdUser == userId);
+
+            if (user == null)
+                throw new Exception(
+                    $"User doesn't exist. userId={userId}");
+
+            user.Mode = mode.ToString();
+
+            _context.SaveChanges();
+        }
+
+        public EGettingWordsStrategy GetLearnMode(long userId)
+        {
+            var user = _context.Users.FirstOrDefault(a => a.IdUser == userId);
+
+            if (user == null)
+                throw new Exception(
+                    $"User doesn't exist. userId={userId}");
+
+            if (!Enum.TryParse(user.Mode, true, out EGettingWordsStrategy strategy))
+                SetLearnMode(userId, EGettingWordsStrategy.Random);
+
+            return strategy;
+        }
+
         public LearnUnit GetNextWord(WordSettings settings)
         {
             var userId = settings.UserId;
             var learnMode = settings.LearnMode;
-            var strategy = settings.Strategy;
+            var strategy = GetLearnMode(userId);
             var pollAnswersCount = settings.PollAnswersCount;
 
             SetUnscoredWords(userId);
@@ -116,7 +143,6 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
                     userWords = difficultScores.ThenByDescending(a => a.LastLearned ?? DateTime.MaxValue)
                         .ThenByDescending(a => a.LastView)
-                        .ThenByDescending(a => a.Word.LastModified)
                         .Select(a => a.Word);
                     break;
 
@@ -132,7 +158,6 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
                     userWords = difficultScores.ThenBy(a => a.LastLearned ?? DateTime.MaxValue)
                         .ThenBy(a => a.LastView)
-                        .ThenBy(a => a.Word.LastModified)
                         .Select(a => a.Word);
                     break;
 
@@ -189,10 +214,12 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     score.ViewCount++;
                     questionItem.Options = new string[0];
                     questionItem.Picture = word.CardAll;
+                    questionItem.WordStatistic = GetUserWordStatistic(userId, wordId).ToString();
                     break;
             }
 
             _context.SaveChanges();
+            
 
             return questionItem;
         }
@@ -433,6 +460,12 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 scoreEntity.LastView = GetRepositoryTime();
             else
                 scoreEntity.LastLearned = GetRepositoryTime();
+
+            if (score.IsInLearnMode)
+            {
+                foreach (var scores in _context.Scores.Where(a => a.IdUser == userId))
+                    scores.IsInLearnMode = false;
+            }
 
             _context.SaveChanges();
         }

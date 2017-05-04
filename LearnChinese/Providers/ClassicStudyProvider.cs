@@ -73,18 +73,18 @@ namespace YellowDuck.LearnChinese.Providers
                     break;
             }
 
+            wordStat.Score.IsInLearnMode = false;
             _wordRepository.SetScore(wordStat.Score);
 
             return result;
         }
 
-        public LearnUnit LearnWord(long userId, ELearnMode learnMode, EGettingWordsStrategy strategy)
+        public LearnUnit LearnWord(long userId, ELearnMode learnMode)
         {
             return
                 _wordRepository.GetNextWord(new WordSettings
                 {
                     LearnMode = learnMode,
-                    Strategy = strategy,
                     UserId = userId,
                     PollAnswersCount = PollAnswersCount
                 });

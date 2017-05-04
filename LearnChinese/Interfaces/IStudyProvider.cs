@@ -5,7 +5,7 @@ namespace YellowDuck.LearnChinese.Interfaces
 {
     public interface IStudyProvider
     {
-        LearnUnit LearnWord(long userId, ELearnMode learnMode, EGettingWordsStrategy strategy);
+        LearnUnit LearnWord(long userId, ELearnMode learnMode);
 
         AnswerResult AnswerWord(long userId, string possibleAnswer);
 

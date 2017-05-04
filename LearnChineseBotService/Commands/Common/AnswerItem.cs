@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
 
-namespace YellowDuck.LearnChineseBotService.Commands
+namespace YellowDuck.LearnChineseBotService.Commands.Common
 {
     public class AnswerItem
     {

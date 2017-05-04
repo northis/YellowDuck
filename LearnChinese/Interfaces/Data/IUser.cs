@@ -8,5 +8,6 @@ namespace YellowDuck.LearnChinese.Interfaces.Data
         string Name { get; set; }
         string LastCommand { get; set; }
         DateTime JoinDate { get; set; }
+        string Mode { get; set; }
     }
 }

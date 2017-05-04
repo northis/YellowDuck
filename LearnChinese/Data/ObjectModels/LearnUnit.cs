@@ -4,5 +4,7 @@
     {
         public string[] Options { get; set; }
         public byte[] Picture { get; set; }
+
+        public string WordStatistic { get; set; }
     }
 }

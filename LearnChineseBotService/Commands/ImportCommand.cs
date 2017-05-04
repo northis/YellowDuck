@@ -7,6 +7,7 @@ using System.Text;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Interfaces.Data;
+using YellowDuck.LearnChineseBotService.Commands.Common;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
 
@@ -27,10 +28,32 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public const uint MaxImportFileSize = 1048576;//1 Мб
         public const char SeparatorChar = ';';
+        public const uint UsePinyinModeColumnsCount = 3;
+        public const uint DefaultModeColumnsCount = 2;
+
+        bool? GetUsePinyin(string[] wordStrings)
+        {
+            var firstWord = wordStrings.FirstOrDefault();
+
+            if (firstWord == null)
+                return null;
+
+            var columnsCount = firstWord.Split(SeparatorChar).Length;
+
+            if (columnsCount != UsePinyinModeColumnsCount && columnsCount != DefaultModeColumnsCount)
+                return null;
+
+            return columnsCount == UsePinyinModeColumnsCount;
+        }
 
         protected AnswerItem SaveAnswerItem(string[] wordStrings, long userId)
         {
-            var result = _parseProvider.ImportWords(wordStrings, false);
+            var usePinyin = GetUsePinyin(wordStrings);
+
+            if (usePinyin == null)
+                return null;
+
+            var result = _parseProvider.ImportWords(wordStrings, usePinyin.Value);
 
             if (result == null)
                 return null;
@@ -77,7 +100,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override AnswerItem Reply(MessageItem mItem)
         {
             var loadFileMessage =
-                $"Please give me a .csv file in '<word>{SeparatorChar}<translation>' format";
+                $"Please give me a .csv file. Rows format are '<word>{SeparatorChar}<translation>' or '<word>{SeparatorChar}<pinyin>{SeparatorChar}<translation>'. Be accurate using pinyin, write a digit after very syllable. For example, use 'shi4' for 4th tone in 'shì' or 'le' for zero  tone in 'le'";
 
             var fileStream = mItem.FileStream;
 

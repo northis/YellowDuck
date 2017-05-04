@@ -1,10 +1,8 @@
 ﻿using System;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
 
-namespace YellowDuck.LearnChineseBotService.Commands
+namespace YellowDuck.LearnChineseBotService.Commands.Common
 {
     public abstract class CommandBase
     {
@@ -12,7 +10,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public abstract ECommands GetCommandType();
 
         public const string CommandStartChar = "/";
-        public const string NextCmd = "next";
 
         public static ECommands GetCommandType(string command)
         {
@@ -31,18 +28,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
         }
 
 
-        public virtual IReplyMarkup GetLearnMarkup()
-        {
-            var mkp = new InlineKeyboardMarkup
-            {
-                InlineKeyboard = new[]
-                {
-                    new[] {new InlineKeyboardButton("Next word", NextCmd) }
-                }
-            };
-
-            return mkp;
-        }
 
         public string GetCommandDescription()
         {

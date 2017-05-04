@@ -1,4 +1,5 @@
 ﻿using System;
+using YellowDuck.LearnChineseBotService.Commands.Common;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 
 namespace YellowDuck.LearnChineseBotService.Commands

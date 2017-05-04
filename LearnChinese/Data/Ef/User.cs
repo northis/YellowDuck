@@ -41,5 +41,9 @@ namespace YellowDuck.LearnChinese.Data.Ef
         public virtual ICollection<Word> Words { get; set; }
 
         public DateTime JoinDate { get; set; }
+
+
+        [StringLength(50)]
+        public string Mode { get; set; }
     }
 }

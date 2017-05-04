@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using YellowDuck.LearnChinese.Data.ObjectModels;
+using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Interfaces
@@ -40,5 +41,9 @@ namespace YellowDuck.LearnChinese.Interfaces
         void RemoveFriendUser(long ownerUserId, long friendUserId);
 
         void RemoveUser(long userId);
+
+        void SetLearnMode(long userId, EGettingWordsStrategy mode);
+
+        EGettingWordsStrategy GetLearnMode(long userId);
     }
 }

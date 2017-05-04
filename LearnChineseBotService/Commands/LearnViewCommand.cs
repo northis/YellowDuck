@@ -1,30 +1,19 @@
-﻿using YellowDuck.LearnChinese.Enums;
+﻿using YellowDuck.LearnChinese.Data.ObjectModels;
+using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
+using YellowDuck.LearnChineseBotService.Commands.Common;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
 
 namespace YellowDuck.LearnChineseBotService.Commands
 {
-    public class LearnViewCommand : CommandBase
+    public class LearnViewCommand : NextCommand
     {
         private readonly IStudyProvider _studyProvider;
 
         public LearnViewCommand(IStudyProvider studyProvider)
         {
             _studyProvider = studyProvider;
-        }
-
-        public override AnswerItem Reply(MessageItem mItem)
-        {
-            var newWord = _studyProvider.LearnWord(mItem.ChatId, ELearnMode.FullView,
-                EGettingWordsStrategy.OldMostDifficult);
-            //TODO Вывести еще статистику сюда
-            return new AnswerItem
-            {
-                Message = GetCommandIconUnicode(),
-                Picture = newWord.Picture,
-                Markup = GetLearnMarkup()
-            };
         }
 
 
@@ -41,6 +30,29 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override string GetCommandTextDescription()
         {
             return "Just view some words";
+        }
+
+        public override AnswerItem ProcessNext(AnswerItem previousAnswerItem, LearnUnit lUnit)
+        {
+            return new AnswerItem
+            {
+                Message = lUnit.WordStatistic ?? GetCommandIconUnicode(),
+                Picture = lUnit.Picture,
+                Markup = GetLearnMarkup()
+            };
+        }
+
+        public override AnswerItem ProcessAnswer(AnswerItem previousAnswerItem, MessageItem mItem)
+        {
+            return new AnswerItem
+            {
+                Message = "This command donesn't support such options"
+            };
+        }
+
+        public override LearnUnit ProcessLearn(MessageItem mItem)
+        {
+            return _studyProvider.LearnWord(mItem.ChatId, ELearnMode.FullView);
         }
     }
 }

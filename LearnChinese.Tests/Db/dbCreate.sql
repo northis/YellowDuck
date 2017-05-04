@@ -286,6 +286,7 @@ CREATE TABLE [dbo].[User](
 	[Name] [nvarchar](50) NULL,
 	[LastCommand] [nvarchar](50) NULL,
 	[JoinDate] [datetime] NOT NULL,
+	[Mode] [nvarchar](50) NULL
  CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
 (
 	[IdUser] ASC
@@ -306,8 +307,6 @@ CREATE TABLE [dbo].[UserSharing](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[Score] ADD  CONSTRAINT [DF_Score_IsInLearnMode]  DEFAULT ((0)) FOR [IsInLearnMode]
 GO
 ALTER TABLE [dbo].[User] ADD  CONSTRAINT [DF_User_JoinDate]  DEFAULT (getdate()) FOR [JoinDate]
 GO

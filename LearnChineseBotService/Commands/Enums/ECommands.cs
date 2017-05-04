@@ -15,6 +15,7 @@
         LearnTranslation,
         LearnPronunciation,
         LearnView,
-        About
+        About,
+        Mode
     }
 }

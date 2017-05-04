@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Web.Http;
 using Ninject;
 using YellowDuck.Common.Logging;
 using YellowDuck.LearnChineseBotService.Commands;
+using YellowDuck.LearnChineseBotService.Commands.Common;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
 using YellowDuck.LearnChineseBotService.WebHook;
@@ -74,7 +74,8 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 NinjectKernel.Get<StartCommand>(),
                 NinjectKernel.Get<LearnWritingCommand>(),
                 NinjectKernel.Get<LearnViewCommand>(),
-                NinjectKernel.Get<AboutCommand>()
+                NinjectKernel.Get<AboutCommand>(),
+                NinjectKernel.Get<ModeCommand>()
             }; 
 
               CommandHandlers = handlers.OrderBy(a => a.GetCommandType().ToString())

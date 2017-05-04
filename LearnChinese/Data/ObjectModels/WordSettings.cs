@@ -7,7 +7,6 @@ namespace YellowDuck.LearnChinese.Data.ObjectModels
     {
         public long UserId { get; set; }
         public ELearnMode LearnMode { get; set; }
-        public EGettingWordsStrategy Strategy { get; set; }
         public ushort PollAnswersCount { get; set; }
     }
 }

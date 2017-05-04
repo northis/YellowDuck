@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using Ninject.Modules;
 using Telegram.Bot;
@@ -8,6 +7,7 @@ using YellowDuck.LearnChinese.Data.Ef;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Providers;
 using YellowDuck.LearnChineseBotService.Commands;
+using YellowDuck.LearnChineseBotService.Commands.Common;
 using YellowDuck.LearnChineseBotService.WebHook;
 
 namespace YellowDuck.LearnChineseBotService.LayoutRoot
