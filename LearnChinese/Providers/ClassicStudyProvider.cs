@@ -40,30 +40,45 @@ namespace YellowDuck.LearnChinese.Providers
             switch (learnMode)
             {
                 case ELearnMode.OriginalWord:
-                    wordStat.Score.OriginalWordCount = (wordStat.Score.OriginalWordCount ?? 0) + 1;
+                    if (wordStat.Score.OriginalWordCount == null)
+                        wordStat.Score.OriginalWordCount = 0;
+                    if (wordStat.Score.OriginalWordSuccessCount == null)
+                        wordStat.Score.OriginalWordSuccessCount = 0;
+
+                    wordStat.Score.OriginalWordCount = wordStat.Score.OriginalWordCount + 1;
 
                     if (wordStat.Word.OriginalWord == possibleAnswer)
                     {
-                        wordStat.Score.OriginalWordSuccessCount = (wordStat.Score.OriginalWordSuccessCount ?? 0) + 1;
+                        wordStat.Score.OriginalWordSuccessCount = wordStat.Score.OriginalWordSuccessCount + 1;
                         result.Success = true;
                     }
                     break;
 
                     case ELearnMode.Pronunciation:
-                    wordStat.Score.PronunciationCount += (wordStat.Score.PronunciationCount ?? 0) + 1;
+                    if (wordStat.Score.PronunciationCount == null)
+                        wordStat.Score.PronunciationCount = 0;
+                    if (wordStat.Score.PronunciationSuccessCount == null)
+                        wordStat.Score.PronunciationSuccessCount = 0;
+
+                    wordStat.Score.PronunciationCount += wordStat.Score.PronunciationCount + 1;
 
                     if (wordStat.Word.Pronunciation == possibleAnswer)
                     {
-                        wordStat.Score.PronunciationSuccessCount = (wordStat.Score.PronunciationSuccessCount ?? 0) + 1;
+                        wordStat.Score.PronunciationSuccessCount = wordStat.Score.PronunciationSuccessCount + 1;
                         result.Success = true;
                     }
                     break;
 
                 case ELearnMode.Translation:
-                    wordStat.Score.TranslationCount += (wordStat.Score.TranslationCount ?? 0) + 1;
+                    if (wordStat.Score.TranslationCount == null)
+                        wordStat.Score.TranslationCount = 0;
+                    if (wordStat.Score.TranslationSuccessCount == null)
+                        wordStat.Score.TranslationSuccessCount = 0;
+
+                    wordStat.Score.TranslationCount += wordStat.Score.TranslationCount + 1;
                     if (wordStat.Word.Translation == possibleAnswer)
                     {
-                        wordStat.Score.TranslationSuccessCount = (wordStat.Score.TranslationSuccessCount ?? 0) + 1;
+                        wordStat.Score.TranslationSuccessCount = wordStat.Score.TranslationSuccessCount + 1;
                         result.Success = true;
                     }
                     break;

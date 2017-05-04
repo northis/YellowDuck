@@ -86,7 +86,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                             (a.IdOwner == idUser || a.UserOwner.OwnerUserSharings.Any(b => b.IdFriend == idUser)))
                     .Select(a => a.Id);
 
-            foreach (var idWord in unscoredUserWordIds)
+            foreach (var idWord in unscoredUserWordIds.ToArray())
             {
                 GetScore(idUser, idWord);
             }
@@ -327,8 +327,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 SyllablesCount = word.SyllablesCount,
                 WordFileA = word.CardAll != null ? new WordFileA {Bytes = word.CardAll} : null,
                 WordFileO = word.CardOriginalWord != null ? new WordFileO {Bytes = word.CardOriginalWord} : null,
-                WordFileT = word.CardPronunciation != null ? new WordFileT {Bytes = word.CardPronunciation} : null,
-                WordFileP = word.CardTranslation != null ? new WordFileP {Bytes = word.CardTranslation} : null
+                WordFileT = word.CardTranslation != null ? new WordFileT {Bytes = word.CardTranslation} : null,
+                WordFileP = word.CardPronunciation != null ? new WordFileP {Bytes = word.CardPronunciation} : null
             };
 
             _context.Words.Add(wrdNew);

@@ -21,7 +21,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<IChineseWordParseProvider>().To<PinyinChineseWordParseProvider>();
             Bind<IStudyProvider>().To<ClassicStudyProvider>();
             Bind<ISyllablesToStringConverter>().To<ClassicSyllablesToStringConverter>();
-            Bind<IWordRepository>().To<EfRepository>()
+            Bind<IWordRepository>().To<EfRepository>().InThreadScope()
                 .WithConstructorArgument("useFullText", true);
             Bind<IChinesePinyinConverter>().To<Pinyin4NetConverter>();
             Bind<IFlashCardGenerator>().To<WpfFlashCardGenerator>();
