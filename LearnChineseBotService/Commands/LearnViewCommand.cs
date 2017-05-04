@@ -29,7 +29,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public override string GetCommandTextDescription()
         {
-            return "Just view some words";
+            return "Just view these words";
         }
 
         public override AnswerItem ProcessNext(AnswerItem previousAnswerItem, LearnUnit lUnit)

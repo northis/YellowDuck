@@ -7,33 +7,33 @@ using YellowDuck.LearnChineseBotService.MainExecution;
 
 namespace YellowDuck.LearnChineseBotService.Commands
 {
-    public class LearnWritingCommand : LearnCommand
+    public class LearnSpeakCommand : LearnCommand
     {
         private readonly IStudyProvider _studyProvider;
 
-        public LearnWritingCommand(IStudyProvider studyProvider) : base(studyProvider)
+        public LearnSpeakCommand(IStudyProvider studyProvider) : base(studyProvider)
         {
             _studyProvider = studyProvider;
         }
 
         public override ECommands GetCommandType()
         {
-            return ECommands.LearnWriting;
+            return ECommands.LearnPronunciation;
         }
 
         public override string GetCommandIconUnicode()
         {
-            return "🖌";
+            return "📢";
         }
 
         public override string GetCommandTextDescription()
         {
-            return "Learn how to write these words";
+            return "Learn how to prononciate these words";
         }
 
         public override LearnUnit ProcessLearn(MessageItem mItem)
         {
-            return _studyProvider.LearnWord(mItem.ChatId, ELearnMode.OriginalWord);
+            return _studyProvider.LearnWord(mItem.ChatId, ELearnMode.Pronunciation);
         }
         
     }

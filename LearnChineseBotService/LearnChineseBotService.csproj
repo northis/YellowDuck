@@ -111,8 +111,10 @@
     <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\Common\AnswerItem.cs" />
     <Compile Include="Commands\Common\LearnCommand.cs" />
+    <Compile Include="Commands\LearnTranslationCommand.cs" />
     <Compile Include="Commands\LearnViewCommand.cs" />
     <Compile Include="Commands\Common\NextCommand.cs" />
+    <Compile Include="Commands\LearnSpeakCommand.cs" />
     <Compile Include="Commands\LearnWritingCommand.cs" />
     <Compile Include="Commands\ModeCommand.cs" />
     <Compile Include="Commands\StartCommand.cs" />

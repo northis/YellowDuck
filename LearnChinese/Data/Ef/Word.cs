@@ -48,14 +48,14 @@ namespace YellowDuck.LearnChinese.Data.Ef
         [NotMapped]
         public byte[] CardTranslation
         {
-            get { return WordFileP?.Bytes; }
+            get { return WordFileT?.Bytes; }
             set { WordFileT = new WordFileT { Bytes = value }; }
         }
 
         [NotMapped]
         public byte[] CardPronunciation
         {
-            get { return WordFileT?.Bytes; }
+            get { return WordFileP?.Bytes; }
             set { WordFileP = new WordFileP { Bytes = value }; }
         }
 
