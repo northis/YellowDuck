@@ -47,8 +47,8 @@ namespace YellowDuck.LearnChinese.Providers
                 control.Arrange(new Rect(control.DesiredSize));
                 control.UpdateLayout();
 
-                height = (int) (control.Height + 1);
-                width = (int)(control.Width + 1);
+                height = (int) (control.ActualHeight + 1);
+                width = (int)(control.ActualWidth + 1);
 
                 res = SaveControlImage(control);
 

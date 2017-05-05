@@ -56,7 +56,10 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 LastModified = iCntxt.GetRepositoryTime(),
                 Pronunciation = "tǐ|yù|guǎn",
                 Translation = "Спортзал",
-                WordFileA = new WordFileA{Bytes = new byte[] { 0x1, 0x2 } },
+                WordFileA = new WordFileA{Bytes = new byte[] { 0x1, 0x2 }, Height = 1, Width = 1},
+                WordFileO = new WordFileO { Bytes = new byte[] { 0x1, 0x2 }, Height = 1, Width = 1 },
+                WordFileP = new WordFileP { Bytes = new byte[] { 0x1, 0x2 }, Height = 1, Width = 1 },
+                WordFileT = new WordFileT { Bytes = new byte[] { 0x1, 0x2 }, Height = 1, Width = 1 },
                 IdOwner = IdTestUser
             }, IdTestUser);
 

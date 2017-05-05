@@ -315,10 +315,6 @@ namespace YellowDuck.LearnChinese.Data.Ef
             if (originalWord != null)
                 throw new Exception($"Слово {chineseWord} уже есть в хранилище.");
 
-            word.CardAll.ImageBody = new byte[] { 0 };
-            word.CardOriginalWord.ImageBody = new byte[] { 0 };
-            word.CardTranslation.ImageBody = new byte[] { 0 };
-            word.CardPronunciation.ImageBody = new byte[] {0};
 
             var wrdNew = new Word
             {
