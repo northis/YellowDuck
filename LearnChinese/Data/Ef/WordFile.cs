@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Data.Ef
 {
@@ -19,5 +18,9 @@ namespace YellowDuck.LearnChinese.Data.Ef
         public byte[] Bytes { get; set; }
 
         public virtual Word Word { get; set; }
+
+
+        public int? Height { get; set; }
+        public int? Width { get; set; }
     }
 }

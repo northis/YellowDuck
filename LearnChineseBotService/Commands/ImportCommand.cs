@@ -28,6 +28,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public const uint MaxImportFileSize = 1048576;//1 Мб
         public const char SeparatorChar = ';';
+        public const char SeparatorChar1 = '；';
         public const uint UsePinyinModeColumnsCount = 3;
         public const uint DefaultModeColumnsCount = 2;
 
@@ -38,7 +39,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             if (firstWord == null)
                 return null;
 
-            var columnsCount = firstWord.Split(SeparatorChar).Length;
+            var columnsCount = firstWord.Split(SeparatorChar, SeparatorChar1).Length;
 
             if (columnsCount != UsePinyinModeColumnsCount && columnsCount != DefaultModeColumnsCount)
                 return null;

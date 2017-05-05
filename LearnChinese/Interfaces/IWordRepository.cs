@@ -11,7 +11,7 @@ namespace YellowDuck.LearnChinese.Interfaces
         WordStatistic GetCurrentUserWordStatistic(long userId);
         WordStatistic GetUserWordStatistic(long userId, long wordId);
 
-        IQueryable<WordSearchResultItem> FindFlashCard(string searchString, long userId);
+        IQueryable<WordSearchResult> FindFlashCard(string searchString, long userId);
 
         DateTime GetRepositoryTime();
 

@@ -45,11 +45,11 @@ namespace YellowDuck.LearnChinese.Providers
                     if (wordStat.Score.OriginalWordSuccessCount == null)
                         wordStat.Score.OriginalWordSuccessCount = 0;
 
-                    wordStat.Score.OriginalWordCount = wordStat.Score.OriginalWordCount + 1;
+                    wordStat.Score.OriginalWordCount++;
 
                     if (wordStat.Word.OriginalWord == possibleAnswer)
                     {
-                        wordStat.Score.OriginalWordSuccessCount = wordStat.Score.OriginalWordSuccessCount + 1;
+                        wordStat.Score.OriginalWordSuccessCount++;
                         result.Success = true;
                     }
                     break;
@@ -60,11 +60,11 @@ namespace YellowDuck.LearnChinese.Providers
                     if (wordStat.Score.PronunciationSuccessCount == null)
                         wordStat.Score.PronunciationSuccessCount = 0;
 
-                    wordStat.Score.PronunciationCount += wordStat.Score.PronunciationCount + 1;
+                    wordStat.Score.PronunciationCount++;
 
                     if (wordStat.Word.Pronunciation == possibleAnswer)
                     {
-                        wordStat.Score.PronunciationSuccessCount = wordStat.Score.PronunciationSuccessCount + 1;
+                        wordStat.Score.PronunciationSuccessCount++;
                         result.Success = true;
                     }
                     break;
@@ -75,15 +75,16 @@ namespace YellowDuck.LearnChinese.Providers
                     if (wordStat.Score.TranslationSuccessCount == null)
                         wordStat.Score.TranslationSuccessCount = 0;
 
-                    wordStat.Score.TranslationCount += wordStat.Score.TranslationCount + 1;
+                    wordStat.Score.TranslationCount++;
                     if (wordStat.Word.Translation == possibleAnswer)
                     {
-                        wordStat.Score.TranslationSuccessCount = wordStat.Score.TranslationSuccessCount + 1;
+                        wordStat.Score.TranslationSuccessCount++;
                         result.Success = true;
                     }
                     break;
 
                 case ELearnMode.FullView:
+                    
                     result.Success = true;
                     break;
             }

@@ -135,10 +135,10 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 word.Translation = "Спортзал";
                 word.Pronunciation = "tǐ|yù|guǎn";
 
-                word.WordFileA = new WordFileA {Bytes = grn.Generate(word, ELearnMode.FullView)};
-                word.WordFileO = new WordFileO {Bytes = grn.Generate(word, ELearnMode.OriginalWord)};
-                word.WordFileP = new WordFileP {Bytes = grn.Generate(word, ELearnMode.Pronunciation)};
-                word.WordFileT = new WordFileT {Bytes = grn.Generate(word, ELearnMode.Translation)};
+                word.CardAll = grn.Generate(word, ELearnMode.FullView);
+                word.CardOriginalWord = grn.Generate(word, ELearnMode.OriginalWord);
+                word.CardPronunciation = grn.Generate(word, ELearnMode.Pronunciation);
+                word.CardTranslation = grn.Generate(word, ELearnMode.Translation);
                 word.SyllablesCount = 3;
 
                 iCntxt.EditWord(word);

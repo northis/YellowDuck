@@ -177,6 +177,8 @@ CREATE TABLE [dbo].[WordFileA](
 	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
 	[Bytes] [varbinary](max) FILESTREAM  NOT NULL,
+	[Height] [int] NULL,
+	[Width] [int] NULL,
  CONSTRAINT [PK_WordFileA] PRIMARY KEY CLUSTERED 
 (
 	[IdWord] ASC
@@ -213,6 +215,8 @@ CREATE TABLE [dbo].[WordFileO](
 	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
 	[Bytes] [varbinary](max) FILESTREAM  NOT NULL,
+	[Height] [int] NULL,
+	[Width] [int] NULL,
  CONSTRAINT [PK_WordFileO] PRIMARY KEY CLUSTERED 
 (
 	[IdWord] ASC
@@ -233,6 +237,8 @@ CREATE TABLE [dbo].[WordFileP](
 	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
 	[Bytes] [varbinary](max) FILESTREAM  NOT NULL,
+	[Height] [int] NULL,
+	[Width] [int] NULL,
  CONSTRAINT [PK_WordFileP] PRIMARY KEY CLUSTERED 
 (
 	[IdWord] ASC
@@ -253,6 +259,8 @@ CREATE TABLE [dbo].[WordFileT](
 	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
 	[Bytes] [varbinary](max) FILESTREAM  NOT NULL,
+	[Height] [int] NULL,
+	[Width] [int] NULL,
  CONSTRAINT [PK_WordFileT] PRIMARY KEY CLUSTERED 
 (
 	[IdWord] ASC

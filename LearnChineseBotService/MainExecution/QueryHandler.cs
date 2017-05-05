@@ -11,6 +11,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.InputMessageContents;
+using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
 using User = YellowDuck.LearnChinese.Data.Ef.User;
@@ -52,7 +53,9 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                         {
                             Title = $"{a.OriginalWord}-{a.Pronunciation}-{a.Translation}",
                             Url = _flashCardUrl + a.FileId.ToString(),
-                            ThumbUrl = _flashCardUrl + a.FileId.ToString(),Height = 200,Width = 200,
+                            ThumbUrl = _flashCardUrl + a.FileId.ToString(),
+                            Height = a.HeightFlashCard.GetValueOrDefault(),
+                            Width = a.WidthFlashCard.GetValueOrDefault(),
                             Id = inlineQuery.Id,
                         });
             }
@@ -121,7 +124,8 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                 _repository.AddUser(new User
                 {
                     IdUser = user.Id,
-                    Name = $"{user.FirstName} {user.LastName}"
+                    Name = $"{user.FirstName} {user.LastName}",
+                    Mode = EGettingWordsStrategy.OldMostDifficult.ToString()
                 });
 
             var firstEntity = msg.Entities.FirstOrDefault();
@@ -187,9 +191,9 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
             else
             {
-                using (var ms = new MemoryStream(reply.Picture))
+                using (var ms = new MemoryStream(reply.Picture.ImageBody))
                 {
-                   await _client.SendPhotoAsync(mItem.ChatId, new FileToSend(Guid.NewGuid() + ".png", ms), reply.Message, false,
+                   await _client.SendPhotoAsync(mItem.ChatId, new FileToSend("file.jpg", ms), reply.Message, false,
                         0, reply.Markup);
                 }
 

@@ -1,4 +1,5 @@
 ﻿using Telegram.Bot.Types.ReplyMarkups;
+using YellowDuck.LearnChinese.Data.ObjectModels;
 
 namespace YellowDuck.LearnChineseBotService.Commands.Common
 {
@@ -8,6 +9,6 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
 
         public IReplyMarkup Markup { get; set; }
 
-        public byte[] Picture { get; set; }
+        public GenerateImageResult Picture { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Data.Ef
@@ -32,31 +33,91 @@ namespace YellowDuck.LearnChinese.Data.Ef
         public string Usage { get; set; }
 
         [NotMapped]
-        public byte[] CardAll
-        {
-            get { return WordFileA?.Bytes; }
-            set { WordFileA = new WordFileA {Bytes = value}; }
-        }
+        private GenerateImageResult _cardAll;
+        [NotMapped]
+        private GenerateImageResult _cardOriginalWord;
+        [NotMapped]
+        private GenerateImageResult _cardTranslation;
+        [NotMapped]
+        private GenerateImageResult _cardPronunciation;
 
         [NotMapped]
-        public byte[] CardOriginalWord
+        public GenerateImageResult CardAll
         {
-            get { return WordFileO?.Bytes; }
-            set { WordFileO = new WordFileO { Bytes = value }; }
+            get
+            {
+                return _cardAll ?? (_cardAll = new GenerateImageResult
+                {
+                    ImageBody = WordFileA?.Bytes,
+                    Height = WordFileA?.Height,
+                    Width = WordFileA?.Width
+                });
+            }
+            set
+            {
+                WordFileA = new WordFileA {Bytes = value.ImageBody, Height = value.Height, Width = value.Width};
+                _cardAll = value;
+            }
         }
 
-        [NotMapped]
-        public byte[] CardTranslation
-        {
-            get { return WordFileT?.Bytes; }
-            set { WordFileT = new WordFileT { Bytes = value }; }
-        }
 
         [NotMapped]
-        public byte[] CardPronunciation
+        public GenerateImageResult CardOriginalWord
         {
-            get { return WordFileP?.Bytes; }
-            set { WordFileP = new WordFileP { Bytes = value }; }
+            get
+            {
+                return _cardOriginalWord ?? (_cardOriginalWord = new GenerateImageResult
+                {
+                    ImageBody = WordFileO?.Bytes,
+                    Height = WordFileO?.Height,
+                    Width = WordFileO?.Width
+                });
+            }
+            set
+            {
+                WordFileO = new WordFileO { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                _cardOriginalWord = value;
+            }
+        }
+
+
+        [NotMapped]
+        public GenerateImageResult CardTranslation
+        {
+            get
+            {
+                return _cardTranslation ?? (_cardTranslation = new GenerateImageResult
+                {
+                    ImageBody = WordFileT?.Bytes,
+                    Height = WordFileT?.Height,
+                    Width = WordFileT?.Width
+                });
+            }
+            set
+            {
+                WordFileT = new WordFileT { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                _cardTranslation = value;
+            }
+        }
+
+
+        [NotMapped]
+        public GenerateImageResult CardPronunciation
+        {
+            get
+            {
+                return _cardPronunciation ?? (_cardPronunciation = new GenerateImageResult
+                {
+                    ImageBody = WordFileP?.Bytes,
+                    Height = WordFileP?.Height,
+                    Width = WordFileP?.Width
+                });
+            }
+            set
+            {
+                WordFileP = new WordFileP { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                _cardPronunciation = value;
+            }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

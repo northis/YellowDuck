@@ -73,7 +73,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                                     : 0);
             }
 
-            return scores.OrderBy(a => 0);
+            return scores.OrderBy(a => a.ViewCount);
         }
 
         void SetUnscoredWords(long idUser)
@@ -198,24 +198,24 @@ namespace YellowDuck.LearnChinese.Data.Ef
             switch (learnMode)
             {
                 case ELearnMode.OriginalWord:
-                    score.OriginalWordCount++;
                     questionItem.Options = answers.Select(a => a.OriginalWord).ToArray();
                     questionItem.Picture = word.CardOriginalWord;
                     break;
 
                 case ELearnMode.Pronunciation:
-                    score.PronunciationCount++;
                     questionItem.Options = answers.Select(a => a.Pronunciation).ToArray();
                     questionItem.Picture = word.CardPronunciation;
                     break;
 
                 case ELearnMode.Translation:
-                    score.TranslationCount++;
                     questionItem.Options = answers.Select(a => a.Translation).ToArray();
                     questionItem.Picture = word.CardTranslation;
                     break;
 
                 case ELearnMode.FullView:
+                    if (score.ViewCount == null)
+                        score.ViewCount = 0;
+
                     score.ViewCount++;
                     questionItem.Options = new string[0];
                     questionItem.Picture = word.CardAll;
@@ -279,16 +279,16 @@ namespace YellowDuck.LearnChinese.Data.Ef
             originalWord.Usage = word.Usage;
 
             if (word.CardAll != null)
-                originalWord.WordFileA = new WordFileA {Bytes = word.CardAll};
+                originalWord.CardAll = word.CardAll;
 
             if (word.CardOriginalWord != null)
-                originalWord.WordFileO = new WordFileO { Bytes = word.CardOriginalWord };
-            
+                originalWord.CardOriginalWord = word.CardOriginalWord;
+
             if (word.CardPronunciation != null)
-                originalWord.WordFileT = new WordFileT { Bytes = word.CardPronunciation };
+                originalWord.CardPronunciation = word.CardPronunciation;
 
             if (word.CardTranslation != null)
-                originalWord.WordFileP = new WordFileP { Bytes = word.CardTranslation };
+                originalWord.CardTranslation = word.CardTranslation;
 
             _context.SaveChanges();
         }
@@ -314,7 +314,12 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (originalWord != null)
                 throw new Exception($"Слово {chineseWord} уже есть в хранилище.");
-            
+
+            word.CardAll.ImageBody = new byte[] { 0 };
+            word.CardOriginalWord.ImageBody = new byte[] { 0 };
+            word.CardTranslation.ImageBody = new byte[] { 0 };
+            word.CardPronunciation.ImageBody = new byte[] {0};
+
             var wrdNew = new Word
             {
                 LastModified = GetRepositoryTime(),
@@ -325,11 +330,13 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 Id = word.Id,
                 IdOwner = idUser,
                 SyllablesCount = word.SyllablesCount,
-                WordFileA = word.CardAll != null ? new WordFileA {Bytes = word.CardAll} : null,
-                WordFileO = word.CardOriginalWord != null ? new WordFileO {Bytes = word.CardOriginalWord} : null,
-                WordFileT = word.CardTranslation != null ? new WordFileT {Bytes = word.CardTranslation} : null,
-                WordFileP = word.CardPronunciation != null ? new WordFileP {Bytes = word.CardPronunciation} : null
+
+                CardAll = word.CardAll,
+                CardOriginalWord = word.CardOriginalWord,
+                CardTranslation = word.CardTranslation,
+                CardPronunciation = word.CardPronunciation
             };
+            
 
             _context.Words.Add(wrdNew);
             _context.SaveChanges();
@@ -520,16 +527,16 @@ namespace YellowDuck.LearnChinese.Data.Ef
             return _context.UserSharings.Where(a => a.IdOwner == userId).Select(a => a.UserFriend);
         }
 
-        public IQueryable<WordSearchResultItem> FindFlashCard(string searchString, long userId)
+        public IQueryable<WordSearchResult> FindFlashCard(string searchString, long userId)
         {
             if (string.IsNullOrWhiteSpace(searchString))
-                return new WordSearchResultItem[] {}.AsQueryable();
+                return new WordSearchResult[] {}.AsQueryable();
 
             if (_useFullText)
             {
                 return
-                    _context.Database.SqlQuery<WordSearchResultItem>(
-                            $"SELECT top ({MaxSearchResults}) f.Id as FileId, w.OriginalWord, w.Pronunciation, w.Translation   FROM [LearnChinese].[dbo].[Word] w join [LearnChinese].[dbo].[WordFileA] f on (f.IdWord = w.Id and w.IdOwner={userId})  where  CONTAINS(w.OriginalWord, '{searchString}')")
+                    _context.Database.SqlQuery<WordSearchResult>(
+                            $"SELECT top ({MaxSearchResults}) f.Id as FileId, f.Height as HeightFlashCard, f.Width as WidthFlashCard, w.OriginalWord, w.Pronunciation, w.Translation   FROM [LearnChinese].[dbo].[Word] w join [LearnChinese].[dbo].[WordFileA] f on (f.IdWord = w.Id and w.IdOwner={userId})  where  CONTAINS(w.OriginalWord, '{searchString}')")
                         .AsQueryable();
             }
 
@@ -537,12 +544,14 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 .Take(MaxSearchResults)
                 .Select(
                     a =>
-                        new WordSearchResultItem
+                        new WordSearchResult
                         {
                             FileId = a.WordFileA.Id,
                             OriginalWord = a.OriginalWord,
                             Pronunciation = a.Pronunciation,
-                            Translation = a.Translation
+                            Translation = a.Translation,
+                            HeightFlashCard = a.WordFileA.Height,
+                            WidthFlashCard = a.WordFileA.Width
                         });
         }
 

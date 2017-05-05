@@ -32,11 +32,11 @@ namespace YellowDuck.LearnChineseBotService.Commands
                             {
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Hard and old first", EGettingWordsStrategy.OldMostDifficult.ToString())
+                                    new InlineKeyboardButton("‍Hard, old first", EGettingWordsStrategy.OldMostDifficult.ToString())
                                 },
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Hard and new first", EGettingWordsStrategy.NewMostDifficult.ToString())
+                                    new InlineKeyboardButton("‍Hard, new first", EGettingWordsStrategy.NewMostDifficult.ToString())
                                 },
                                 new[]
                                 {

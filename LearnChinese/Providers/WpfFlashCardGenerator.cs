@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Drawing;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
@@ -20,10 +22,12 @@ namespace YellowDuck.LearnChinese.Providers
             _wordParseProvider = wordParseProvider;
         }
 
-        public byte[] Generate(IWord word, ELearnMode learnMode)
+        public GenerateImageResult Generate(IWord word, ELearnMode learnMode)
         {
 
             byte[] res = null;
+            int height = 0;
+            int width = 0;
             var tsk = new Thread(() =>
             {
                 var isPronunciationMode = learnMode == ELearnMode.Pronunciation;
@@ -43,6 +47,9 @@ namespace YellowDuck.LearnChinese.Providers
                 control.Arrange(new Rect(control.DesiredSize));
                 control.UpdateLayout();
 
+                height = (int) (control.Height + 1);
+                width = (int)(control.Width + 1);
+
                 res = SaveControlImage(control);
 
             });
@@ -51,9 +58,8 @@ namespace YellowDuck.LearnChinese.Providers
             tsk.Start();
             tsk.Join();
 
-            return res;
+            return new GenerateImageResult {ImageBody = res, Height = height, Width = width};
         }
-        
 
         private byte[] SaveControlImage(FrameworkElement control)
         {
