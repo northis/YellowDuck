@@ -29,11 +29,22 @@ namespace YellowDuck.LearnChineseBotService.Commands
             }
             else
             {
-                IWord word;
-
                 try
                 {
-                    word = _repository.GetWord(mItem.Text);
+                    var word = _repository.GetWord(mItem.Text);
+                    var stat = _repository.GetUserWordStatistic(mItem.UserId, word.Id);
+                    
+                    if (stat != null)
+                    {
+                        if (stat.Score.ViewCount == null)
+                            stat.Score.ViewCount = 1;
+
+                        _repository.SetScore(stat.Score);
+                    }
+
+                    answer.Message = stat?.ToString();
+
+                    answer.Picture = word.CardAll;
                 }
                 catch (Exception e)
                 {
@@ -41,11 +52,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     return answer;
                 }
 
-                var stat = _repository.GetUserWordStatistic(mItem.UserId, word.Id);
-
-                answer.Message = stat?.ToString();
-
-                answer.Picture = word.CardAll;
             }
 
             return answer;
