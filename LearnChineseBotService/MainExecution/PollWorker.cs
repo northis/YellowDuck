@@ -20,7 +20,6 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             _client.OnCallbackQuery += _client_OnCallbackQuery;
             _client.OnInlineQuery += _client_OnInlineQuery;
 
-
         }
 
         private void _client_OnInlineQuery(object sender, InlineQueryEventArgs e)

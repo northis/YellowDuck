@@ -19,7 +19,11 @@ namespace YellowDuck.LearnChineseBotService.WebHook
         }
         public IHttpActionResult Get(string fileId)
         {
-            var file = _repository.GetWordFlashCard(fileId);
+            var id = fileId.Replace(".jpg","");
+
+            var longId = long.Parse(id);
+
+            var file = _repository.GetWordFlashCard(longId);
             if (file == null)
                 return new NotFoundResult(new HttpRequestMessage());
 

@@ -7,7 +7,7 @@ namespace YellowDuck.LearnChinese.Data.ObjectModels
         public string OriginalWord { get; set; }
         public string Pronunciation { get; set; }
         public string Translation { get; set; }
-        public Guid FileId { get; set; }
+        public long FileId { get; set; }
         public int? HeightFlashCard { get; set; }
         public int? WidthFlashCard { get; set; }
     }

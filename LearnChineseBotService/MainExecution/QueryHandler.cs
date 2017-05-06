@@ -40,9 +40,22 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
 
             if (!results.Any())
             {
+                await _client.AnswerInlineQueryAsync(inlineQuery.Id, new InlineQueryResult[]{ new InlineQueryResultArticle
+                        {
+                            Title = "Please, type a chinese word to view it's flashcard",
+                            Id = inlineQuery.Id,
+                            InputMessageContent = 
+                                new InputTextMessageContent
+                                {
+                                    DisableWebPagePreview = true,
+                                    MessageText ="Still can't show you a flashcard",
+                                    ParseMode = ParseMode.Default
+
+                                }
+                        }});
                 return;
             }
-
+            
             IEnumerable<InlineQueryResult> inlineQueryResults;
 
             if (MainFactory.UseWebhooks)
@@ -51,12 +64,12 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                     a =>
                         new InlineQueryResultPhoto
                         {
-                            Title = $"{a.OriginalWord}-{a.Pronunciation}-{a.Translation}",
-                            Url = _flashCardUrl + a.FileId.ToString(),
-                            ThumbUrl = _flashCardUrl + a.FileId.ToString(),
+                            Caption = a.OriginalWord,
+                            Url = _flashCardUrl + a.FileId,
+                            ThumbUrl = _flashCardUrl + a.FileId,
                             Height = a.HeightFlashCard.GetValueOrDefault(),
                             Width = a.WidthFlashCard.GetValueOrDefault(),
-                            Id = inlineQuery.Id,
+                            Id = inlineQuery.Id
                         });
             }
             else
@@ -75,12 +88,11 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                                         $"<b>{a.OriginalWord}</>{Environment.NewLine}<i>{a.Pronunciation}</i>{Environment.NewLine}{a.Translation}",
                                     ParseMode = ParseMode.Html
 
-                                },
-                            Url = MainFactory.UseWebhooks ? _flashCardUrl + a.FileId.ToString() : null
+                                }
                         });
             }
 
-            await _client.AnswerInlineQueryAsync(inlineQuery.Id, inlineQueryResults.ToArray());
+            await _client.AnswerInlineQueryAsync(inlineQuery.Id, inlineQueryResults.ToArray(),0);
 
         }
 

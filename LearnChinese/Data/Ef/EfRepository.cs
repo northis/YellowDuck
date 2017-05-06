@@ -532,7 +532,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             {
                 return
                     _context.Database.SqlQuery<WordSearchResult>(
-                            $"SELECT top ({MaxSearchResults}) f.Id as FileId, f.Height as HeightFlashCard, f.Width as WidthFlashCard, w.OriginalWord, w.Pronunciation, w.Translation   FROM [LearnChinese].[dbo].[Word] w join [LearnChinese].[dbo].[WordFileA] f on (f.IdWord = w.Id and w.IdOwner={userId})  where  CONTAINS(w.OriginalWord, '{searchString}')")
+                            $"SELECT top ({MaxSearchResults}) f.IdWord as FileId, f.Height as HeightFlashCard, f.Width as WidthFlashCard, w.OriginalWord, w.Pronunciation, w.Translation   FROM [LearnChinese].[dbo].[Word] w join [LearnChinese].[dbo].[WordFileA] f on (f.IdWord = w.Id and w.IdOwner={userId})  where  CONTAINS(w.OriginalWord, '{searchString}')")
                         .AsQueryable();
             }
 
@@ -542,7 +542,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     a =>
                         new WordSearchResult
                         {
-                            FileId = a.WordFileA.Id,
+                            FileId = a.WordFileA.IdWord,
                             OriginalWord = a.OriginalWord,
                             Pronunciation = a.Pronunciation,
                             Translation = a.Translation,
@@ -551,11 +551,9 @@ namespace YellowDuck.LearnChinese.Data.Ef
                         });
         }
 
-        public byte[] GetWordFlashCard(string fileId)
+        public byte[] GetWordFlashCard(long fileId)
         {
-            var guid = new Guid(fileId);
-
-            return _context.WordFileAs.Where(a => a.Id == guid).Select(a => a.Bytes).FirstOrDefault();
+            return _context.WordFileAs.Where(a => a.IdWord == fileId).Select(a => a.Bytes).FirstOrDefault();
         }
 
         #endregion

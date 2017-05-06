@@ -73,8 +73,8 @@ namespace YellowDuck.LearnChinese.Providers
                 ctx.DrawRectangle(brush, null, new Rect(rect.Size));
             }
             
-            var width = (int)control.ActualWidth+1;
-            var height = (int)control.ActualHeight+1;
+            var width = (int)Math.Round(control.ActualWidth);
+            var height = (int)Math.Round(control.ActualHeight);
             var rtb = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
             rtb.Render(dv);
 

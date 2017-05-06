@@ -47,7 +47,7 @@ namespace YellowDuck.LearnChinese.Interfaces
 
         LearnUnit GetNextWord(WordSettings settings);
 
-        byte[] GetWordFlashCard(string fileId);
+        byte[] GetWordFlashCard(long fileId);
 
     }
 }

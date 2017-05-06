@@ -24,6 +24,7 @@ namespace YellowDuck.LearnChineseBotService.WebHook
 
             if (update.InlineQuery != null)
                 await _queryHandler.InlineQuery(update.InlineQuery);
+            
 
             return Ok();
         }
