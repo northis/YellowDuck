@@ -171,7 +171,7 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
 
             if (!string.IsNullOrWhiteSpace(possiblePreviousCommand))
             {
-                var noEmojiCmd = GetNoEmojiString(argumentCommand);
+                var noEmojiCmd = GetNoEmojiString(argumentCommand)?? string.Empty;
 
                 var mItem = new MessageItem
                 {

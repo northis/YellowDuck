@@ -101,7 +101,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override AnswerItem Reply(MessageItem mItem)
         {
             var loadFileMessage =
-                $"Please give me a .csv file. Rows format are '<word>{SeparatorChar}<translation>' or '<word>{SeparatorChar}<pinyin>{SeparatorChar}<translation>'. Be accurate using pinyin, write a digit after very syllable. For example, use 'shi4' for 4th tone in 'shì' or 'le' for zero  tone in 'le'";
+                $"Please give me a .csv file. Rows format are '<word>{SeparatorChar}<translation>' or '<word>{SeparatorChar}<pinyin>{SeparatorChar}<translation>'. Be accurate using pinyin, write a digit after every syllable. For example, use 'shi4' for 4th tone in 'shì' or 'le' for zero  tone in 'le'";
 
             var fileStream = mItem.FileStream;
 

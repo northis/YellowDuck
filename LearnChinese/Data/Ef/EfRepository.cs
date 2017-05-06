@@ -153,7 +153,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
                 case EGettingWordsStrategy.OldFirst:
 
-                    userWords = scores.ThenBy(a => a.LastLearned ?? DateTime.MaxValue)
+                    userWords = scores.ThenBy(a => a.LastLearned ?? DateTime.MinValue)
                         .ThenBy(a => a.LastView)
                         .ThenBy(a => a.Word.LastModified)
                         .Select(a => a.Word);
@@ -161,7 +161,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
                 case EGettingWordsStrategy.OldMostDifficult:
 
-                    userWords = difficultScores.ThenBy(a => a.LastLearned ?? DateTime.MaxValue)
+                    userWords = difficultScores.ThenBy(a => a.LastLearned ?? DateTime.MinValue)
                         .ThenBy(a => a.LastView)
                         .Select(a => a.Word);
                     break;

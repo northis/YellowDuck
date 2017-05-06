@@ -22,12 +22,12 @@ namespace YellowDuck.LearnChinese.Providers
 
         public const ushort TonesTotalCount = 5;
 
-        public const string PatternA = "[āáǎàa]";
-        public const string PatternE = "[ēéěèe]";
-        public const string PatternI = "[īíǐìi]";
-        public const string PatternO = "[ōóǒòo]";
-        public const string PatternU = "[ūúǔùu]";
-        public const string PatternÜ = "[ǖǘǚǜü]";
+        public const string PatternA = "[aāáǎà]";
+        public const string PatternE = "[eēéěè]";
+        public const string PatternI = "[iīíǐì]";
+        public const string PatternO = "[oōóǒò]";
+        public const string PatternU = "[uūúǔù]";
+        public const string PatternÜ = "[üǖǘǚǜ]";
 
         #endregion
 
@@ -78,7 +78,7 @@ namespace YellowDuck.LearnChinese.Providers
 
         public string ToSyllableNumberTone(string syllableMarkTone)
         {
-            var toneNumber = 5;
+            var toneNumber = 0;
 
             if (Regex.Match(syllableMarkTone, FirstTonePattern).Success)
                 toneNumber = 1;
@@ -141,6 +141,14 @@ namespace YellowDuck.LearnChinese.Providers
             return result;
         }
 
+        public string[] ToSyllablesNumberAllTones(string syllableNumberTone)
+        {
+            var cleanSyll = Regex.Replace(syllableNumberTone, ReplaceExludeRegexPattern, string.Empty);
+
+            return new[] {cleanSyll + "0", cleanSyll + "1", cleanSyll + "2", cleanSyll + "3", cleanSyll + "4"};
+        }
+
+        public const string ReplaceExludeRegexPattern = "[^a-z]";
         #endregion
     }
 }

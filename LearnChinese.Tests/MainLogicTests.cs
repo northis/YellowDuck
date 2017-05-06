@@ -68,7 +68,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
             var pinyinProv = new Pinyin4NetConverter();
             var tostrConv = new ClassicSyllablesToStringConverter();
             var prov = new PinyinChineseWordParseProvider(colorProv, pinyinProv, tostrConv);
-
+            
             var stringsToImport = new [] { "明!!白!;míngbai;понимать" };
 
             var wordsResult = prov.ImportWords(stringsToImport, true);
