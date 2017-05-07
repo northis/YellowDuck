@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Data.ObjectModels;
@@ -23,7 +24,7 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
             {
                 buttons.Add(new[]
                 {
-                    new InlineKeyboardButton(option)
+                    new InlineKeyboardButton(string.Join("",option.Take(30)))
                 });
             }
 

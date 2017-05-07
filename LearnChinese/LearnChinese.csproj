@@ -105,6 +105,7 @@
     <Compile Include="Providers\ClassicSyllablesToStringConverter.cs" />
     <Compile Include="Providers\Pinyin4NetConverter.cs" />
     <Compile Include="Providers\PinyinChineseWordParseProvider.cs" />
+    <Compile Include="Data\ObjectModels\WordMode.cs" />
     <Compile Include="Providers\WpfFlashCardGenerator.cs" />
   </ItemGroup>
   <ItemGroup>

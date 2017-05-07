@@ -32,6 +32,14 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
         public string Usage { get; set; }
 
+        public void CleanCards()
+        {
+            _cardAll = null;
+            _cardOriginalWord = null;
+            _cardTranslation = null;
+            _cardPronunciation = null;
+        }
+
         [NotMapped]
         private GenerateImageResult _cardAll;
         [NotMapped]

@@ -131,6 +131,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var scores =
                 _context.Scores.Where(a => a.IdUser == userId).OrderBy(a => 0);
 
+
             var difficultScores = GetDifficultScores(learnMode, scores);
 
             IQueryable<IWord> userWords;
@@ -185,14 +186,21 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var wordId = word.Id;
             var score = GetScore(userId, wordId);
 
+            foreach (var sc in scores)
+            {
+                sc.IsInLearnMode = false;
+            }
+
             score.LastLearnMode = learnMode.ToString();
             score.IsInLearnMode = learnMode != ELearnMode.FullView;
             score.LastLearned = GetRepositoryTime();
 
             var answers =
-                userWords.Where(a => a.SyllablesCount == word.SyllablesCount)
-                    .Take(pollAnswersCount)
+                userWords.Where(a => a.SyllablesCount == word.SyllablesCount && a.Id != wordId)
+                    .Take(pollAnswersCount - 1)
+                    .Concat(userWords.Where(a => a.Id == wordId).Take(1))
                     .OrderBy(a => Guid.NewGuid());
+
             var questionItem = new LearnUnit();
 
             switch (learnMode)
@@ -222,7 +230,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     questionItem.WordStatistic = GetUserWordStatistic(userId, wordId).ToString();
                     break;
             }
-
+            
             _context.SaveChanges();
             
 
@@ -252,7 +260,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             };
             _context.Scores.Add(score);
             _context.SaveChanges();
-
+            
             return score;
         }
 
@@ -313,7 +321,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var originalWord = _context.Words.FirstOrDefault(a => a.OriginalWord == chineseWord);
 
             if (originalWord != null)
-                throw new Exception($"Слово {chineseWord} уже есть в хранилище.");
+                throw new Exception($"Word {chineseWord} already added to the storage.");
 
 
             var wrdNew = new Word
@@ -418,7 +426,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
             if (score == null)
             {
-                var userOwners = _context.UserSharings.Where(a => a.IdFriend == userId).Select(a=>a.IdOwner).Distinct();
+                var userOwners =
+                    _context.UserSharings.Where(a => a.IdFriend == userId).Select(a => a.IdOwner).Distinct();
                 var word =
                     _context.Words.FirstOrDefault(
                         a => a.Id == wordId && (a.IdOwner == userId || userOwners.Contains(a.IdOwner)));
@@ -439,7 +448,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             else
             {
                 score.LastView = GetRepositoryTime();
-                score.ViewCount += 1;
+                score.ViewCount ++;
             }
 
             SetScore(score);

@@ -26,7 +26,8 @@ namespace YellowDuck.LearnChineseBotService.Commands
             _flashCardGenerator = flashCardGenerator;
         }
 
-        public const uint MaxImportFileSize = 1048576;//1 Мб
+        public const uint MaxImportFileSize = 10240;//1 Кб
+        public const uint MaxImportRows = 100;
         public const char SeparatorChar = ';';
         public const char SeparatorChar1 = '；';
         public const uint UsePinyinModeColumnsCount = 3;
@@ -61,8 +62,9 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             var badWords = new List<string>();
             var goodWords = new List<IWord>();
-            foreach (var word in result.SuccessfulWords)
+            for (var index = 0; index < result.SuccessfulWords.Length; index++)
             {
+                var word = result.SuccessfulWords[index];
                 try
                 {
                     word.CardAll = _flashCardGenerator.Generate(word, ELearnMode.FullView);
@@ -77,6 +79,16 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 {
                     Trace.WriteLine(ex);
                     badWords.Add(ex.Message);
+                }
+                finally
+                {
+                    word.CleanCards();
+                    GC.Collect();
+                }
+
+                if (index % 5 == 0)
+                {
+
                 }
             }
 
@@ -101,7 +113,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override AnswerItem Reply(MessageItem mItem)
         {
             var loadFileMessage =
-                $"Please give me a .csv file. Rows format are '<word>{SeparatorChar}<translation>' or '<word>{SeparatorChar}<pinyin>{SeparatorChar}<translation>'. Be accurate using pinyin, write a digit after every syllable. For example, use 'shi4' for 4th tone in 'shì' or 'le' for zero  tone in 'le'";
+                $"Please give me a .csv file. Rows format are '<word>{SeparatorChar}<translation>' or '<word>{SeparatorChar}<pinyin>{SeparatorChar}<translation>'. Be accurate using pinyin, write a digit after every syllable. For example, use 'shi4' for 4th tone in 'shì' or 'le' for zero  tone in 'le'{Environment.NewLine}The word processing may take some time, please wait until the import will be combleted.";
 
             var fileStream = mItem.FileStream;
 
@@ -122,6 +134,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
             }
 
             var fileStrings = ReadLines(fileStream, Encoding.UTF8).ToArray();
+            if (fileStrings.Length > MaxImportRows)
+            {
+                return new AnswerItem
+                {
+                    Message =
+                        $"Too many words in the file. Maximum is {MaxImportRows}.{Environment.NewLine}{loadFileMessage}"
+                };
+            }
 
             var result = SaveAnswerItem(fileStrings, mItem.UserId);
 

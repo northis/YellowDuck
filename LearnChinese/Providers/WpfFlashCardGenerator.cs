@@ -30,6 +30,7 @@ namespace YellowDuck.LearnChinese.Providers
             int width = 0;
             var tsk = new Thread(() =>
             {
+
                 var isPronunciationMode = learnMode == ELearnMode.Pronunciation;
 
                 var syllables = _wordParseProvider.GetOrderedSyllables(word);
@@ -51,6 +52,7 @@ namespace YellowDuck.LearnChinese.Providers
                 width = (int)(control.ActualWidth + 1);
 
                 res = SaveControlImage(control);
+                control.Dispatcher.InvokeShutdown();
 
             });
             tsk.SetApartmentState(ApartmentState.STA);
