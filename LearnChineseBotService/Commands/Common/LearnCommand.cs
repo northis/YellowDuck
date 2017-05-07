@@ -10,6 +10,8 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
 {
     public abstract class LearnCommand : NextCommand
     {
+        public const int MaxAnswerLength = 30;
+
         private readonly IStudyProvider _studyProvider;
 
         protected LearnCommand(IStudyProvider studyProvider)
@@ -24,7 +26,7 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
             {
                 buttons.Add(new[]
                 {
-                    new InlineKeyboardButton(string.Join("",option.Take(30)))
+                    new InlineKeyboardButton(string.Join("",option.Take(MaxAnswerLength)))
                 });
             }
 

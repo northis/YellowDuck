@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Extentions;
@@ -14,6 +15,7 @@ namespace YellowDuck.LearnChinese.Providers
         private readonly IWordRepository _wordRepository;
 
         public const ushort PollAnswersCount = 4;
+        public const int MaxAnswerLength = 30;
 
         #endregion
 
@@ -47,7 +49,7 @@ namespace YellowDuck.LearnChinese.Providers
 
                     wordStat.Score.OriginalWordCount++;
 
-                    if (wordStat.Word.OriginalWord == possibleAnswer)
+                    if (string.Join("", wordStat.Word.OriginalWord.Take(MaxAnswerLength)) == possibleAnswer)
                     {
                         wordStat.Score.OriginalWordSuccessCount++;
                         result.Success = true;
@@ -62,7 +64,7 @@ namespace YellowDuck.LearnChinese.Providers
 
                     wordStat.Score.PronunciationCount++;
 
-                    if (wordStat.Word.Pronunciation == possibleAnswer)
+                    if (string.Join("", wordStat.Word.Pronunciation.Take(MaxAnswerLength)) == possibleAnswer)
                     {
                         wordStat.Score.PronunciationSuccessCount++;
                         result.Success = true;
@@ -76,7 +78,7 @@ namespace YellowDuck.LearnChinese.Providers
                         wordStat.Score.TranslationSuccessCount = 0;
 
                     wordStat.Score.TranslationCount++;
-                    if (wordStat.Word.Translation == possibleAnswer)
+                    if (string.Join("", wordStat.Word.Translation.Take(MaxAnswerLength)) == possibleAnswer)
                     {
                         wordStat.Score.TranslationSuccessCount++;
                         result.Success = true;

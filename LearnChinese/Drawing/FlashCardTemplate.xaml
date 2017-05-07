@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:drawing="clr-namespace:YellowDuck.LearnChinese.Drawing"
-             mc:Ignorable="d" MaxHeight="500" MaxWidth="500">
+             mc:Ignorable="d" MaxHeight="500" MaxWidth="500" MinWidth="200">
     <UserControl.Resources>
 
         <x:Array x:Key="OriginalWord"  Type="{x:Type  drawing:SyllableView}">

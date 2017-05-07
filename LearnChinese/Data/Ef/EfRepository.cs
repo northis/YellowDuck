@@ -230,7 +230,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     questionItem.WordStatistic = GetUserWordStatistic(userId, wordId).ToString();
                     break;
             }
-            
+
             _context.SaveChanges();
             
 
@@ -256,7 +256,14 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 Word = word,
                 LastView = GetRepositoryTime(),
                 LastLearnMode = ELearnMode.FullView.ToString(),
-                IsInLearnMode = false
+                IsInLearnMode = false,
+                OriginalWordCount = 0,
+                OriginalWordSuccessCount = 0,
+                PronunciationCount = 0,
+                PronunciationSuccessCount = 0,
+                TranslationCount = 0,
+                TranslationSuccessCount = 0,
+                ViewCount = 0
             };
             _context.Scores.Add(score);
             _context.SaveChanges();
@@ -334,7 +341,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 Id = word.Id,
                 IdOwner = idUser,
                 SyllablesCount = word.SyllablesCount,
-
+                
                 CardAll = word.CardAll,
                 CardOriginalWord = word.CardOriginalWord,
                 CardTranslation = word.CardTranslation,
@@ -440,15 +447,20 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     IdUser = userId,
                     IdWord = wordId,
                     LastView = GetRepositoryTime(),
-                    ViewCount = 1,
+                    ViewCount = 0,
+                    OriginalWordCount = 0,
+                    OriginalWordSuccessCount = 0,
+                    PronunciationCount = 0,
+                    PronunciationSuccessCount = 0,
+                    TranslationCount = 0,
+                    TranslationSuccessCount = 0,
                     LastLearnMode = ELearnMode.FullView.ToString()
                 };
-                
+
             }
             else
             {
                 score.LastView = GetRepositoryTime();
-                score.ViewCount ++;
             }
 
             SetScore(score);
