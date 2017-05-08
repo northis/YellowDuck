@@ -1,0 +1,21 @@
+﻿ver.0.2.1.0 (08 may 2017)
+===========================================
+
+First release, alpha version of the bot. Here is what it can do now:
+- add and import from file user-defined chinese words, translated to his native language;
+- parse chinese characters, detect a pinyin in the words and highlight the tones;
+- generate flash cards;
+- 4 learning modes - writing, pronunciation, translation and just viewing;
+- trace your progress;
+- work in the inline mode - you can find in your dictionary and send to other user a flash card with a word;
+- 5 modes of showing words  - random, the newest first, the olders first, the newest and the hardest (based on your progress), the oldest and hardest.
+
+Limitations: 
+- you cannot import more than 70 words at once or a file bigger than 10 KB;
+- maximum chinese word length is 10 characters;
+- maximum translation length is 100 characters.
+
+What I want to add:
+- cheer-message after each 10 successfully learnt words;
+- a pop-up message with the last 10 seen words in the inline mode;
+- the 6th mode for learning specified group of words, for example 20 words from a new text.

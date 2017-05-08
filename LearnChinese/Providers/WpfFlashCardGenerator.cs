@@ -57,6 +57,7 @@ namespace YellowDuck.LearnChinese.Providers
             });
             tsk.SetApartmentState(ApartmentState.STA);
 
+            tsk.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
             tsk.Start();
             tsk.Join();
 

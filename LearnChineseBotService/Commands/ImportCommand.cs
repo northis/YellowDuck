@@ -26,8 +26,8 @@ namespace YellowDuck.LearnChineseBotService.Commands
             _flashCardGenerator = flashCardGenerator;
         }
 
-        public const uint MaxImportFileSize = 10240;//1 Кб
-        public const uint MaxImportRows = 100;
+        public const uint MaxImportFileSize = 10240;
+        public const uint MaxImportRows = 70;
         public const char SeparatorChar = ';';
         public const char SeparatorChar1 = '；';
         public const uint UsePinyinModeColumnsCount = 3;
@@ -113,7 +113,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override AnswerItem Reply(MessageItem mItem)
         {
             var loadFileMessage =
-                $"Please give me a .csv file. Rows format are '<word>{SeparatorChar}<translation>' or '<word>{SeparatorChar}<pinyin>{SeparatorChar}<translation>'. Be accurate using pinyin, write a digit after every syllable. For example, use 'shi4' for 4th tone in 'shì' or 'le' for zero  tone in 'le'{Environment.NewLine}The word processing may take some time, please wait until the import will be combleted.";
+                $"Please give me a .csv file. Rows format are '<word>{SeparatorChar}<translation>' or '<word>{SeparatorChar}<pinyin>{SeparatorChar}<translation>'. Be accurate using pinyin, write a digit after every syllable. For example, use 'shi4' for 4th tone in 'shì' or 'le' for zero  tone in 'le'{Environment.NewLine}The word processing may take some time, please wait until the import will be combleted. File couldn't be larger than {MaxImportFileSize} bytes or contain more than {MaxImportRows} rows";
 
             var fileStream = mItem.FileStream;
 

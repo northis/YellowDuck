@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceProcess;
+using System.Threading;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
 
 namespace YellowDuck.LearnChineseBotService
@@ -11,6 +12,8 @@ namespace YellowDuck.LearnChineseBotService
         {
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+
             if (Environment.UserInteractive)
             {
                 var service = new MainService();

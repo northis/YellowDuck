@@ -11,6 +11,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.InputMessageContents;
+using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
@@ -196,9 +197,13 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         { 
             var handler = MainFactory.GetCommandHandler(mItem.Command);
             var reply = handler.Reply(mItem);
+            
+            if (reply.Markup == null)
+                reply.Markup = new ReplyKeyboardHide();
 
             if (reply.Picture == null)
             {
+
                 await _client.SendTextMessageAsync(mItem.ChatId, reply.Message, true, false, 0, reply.Markup);
             }
             else
@@ -207,6 +212,7 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                 {
                    await _client.SendPhotoAsync(mItem.ChatId, new FileToSend("file.jpg", ms), reply.Message, false,
                         0, reply.Markup);
+
                 }
 
             }
