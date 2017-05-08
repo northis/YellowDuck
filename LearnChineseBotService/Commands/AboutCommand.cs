@@ -29,7 +29,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             return new AnswerItem
             {
-                Message = $"YellowDuck Learning Chinese Bot{Environment.NewLine}{copywrite}{Environment.NewLine}Contact me: north@live.ru{Environment.NewLine}{_releaseNotes}",
+                Message = $"Chinese Duck Bot{Environment.NewLine}{copywrite}{Environment.NewLine}Contact me: north@live.ru{Environment.NewLine}{_releaseNotes}",
                 Markup = new ReplyKeyboardHide()
             };
         }

@@ -27,7 +27,7 @@ namespace YellowDuck.LearnChinese.Providers
 
         #region Fields
 
-        public const ushort MaxSyllablesToParse = 10;
+        public const ushort MaxSyllablesToParse = 15;
         public const char ImportSeparator1= ';';
         public const char ImportSeparator2 = '；';
 

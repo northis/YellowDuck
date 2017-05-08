@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("n_rth")]
 [assembly: AssemblyProduct("YellowDuck.LearnChineseBotService")]
-[assembly: AssemblyCopyright("Copyright © n_rth 2017")]
+[assembly: AssemblyCopyright("Copyright © Mikhail Berdnikov 2017")]
 [assembly: AssemblyTrademark("n_rth")]
 [assembly: ComVisible(false)]
 

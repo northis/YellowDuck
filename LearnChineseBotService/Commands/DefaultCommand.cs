@@ -20,7 +20,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
             try
             {
-                _repository.SetLearnMode(mItem.ChatId, EGettingWordsStrategy.OldMostDifficult);
+                _repository.SetLearnMode(mItem.ChatId, EGettingWordsStrategy.Random);
             }
             catch (Exception e)
             {

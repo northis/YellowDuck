@@ -138,7 +138,7 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                 {
                     IdUser = user.Id,
                     Name = $"{user.FirstName} {user.LastName}",
-                    Mode = EGettingWordsStrategy.OldMostDifficult.ToString()
+                    Mode = EGettingWordsStrategy.Random.ToString()
                 });
 
             var firstEntity = msg.Entities.FirstOrDefault();

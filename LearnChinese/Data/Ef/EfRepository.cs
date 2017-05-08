@@ -325,7 +325,11 @@ namespace YellowDuck.LearnChinese.Data.Ef
         public void AddWord(IWord word, long idUser)
         {
             var chineseWord = word.OriginalWord;
-            var originalWord = _context.Words.FirstOrDefault(a => a.OriginalWord == chineseWord);
+
+            var sharingFriends = _context.UserSharings.Where(a => a.IdFriend == idUser).Select(a => a.IdOwner);
+            var originalWord =
+                _context.Words.Where(a => a.IdOwner == idUser || sharingFriends.Contains(a.IdOwner))
+                    .FirstOrDefault(a => a.OriginalWord == chineseWord);
 
             if (originalWord != null)
                 throw new Exception($"Word {chineseWord} already added to the storage.");
