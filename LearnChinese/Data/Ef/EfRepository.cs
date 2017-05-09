@@ -557,7 +557,10 @@ namespace YellowDuck.LearnChinese.Data.Ef
             {
                 return
                     _context.Database.SqlQuery<WordSearchResult>(
-                            $"SELECT top ({MaxSearchResults}) f.IdWord as FileId, f.Height as HeightFlashCard, f.Width as WidthFlashCard, w.OriginalWord, w.Pronunciation, w.Translation   FROM [LearnChinese].[dbo].[Word] w join [LearnChinese].[dbo].[WordFileA] f on (f.IdWord = w.Id and w.IdOwner={userId})  where  CONTAINS(w.OriginalWord, '{searchString}')")
+                            $"SELECT top (@MaxSearchResults) f.IdWord as FileId, f.Height as HeightFlashCard, f.Width as WidthFlashCard, w.OriginalWord, w.Pronunciation, w.Translation   FROM [LearnChinese].[dbo].[Word] w join [LearnChinese].[dbo].[WordFileA] f on (f.IdWord = w.Id and w.IdOwner=@userId)  where  CONTAINS(w.OriginalWord, '@searchString')",
+                            new SqlParameter("@MaxSearchResults", MaxSearchResults),
+                            new SqlParameter("@userId", userId),
+                            new SqlParameter("@searchString", searchString))
                         .AsQueryable();
             }
 

@@ -125,6 +125,7 @@
     <Compile Include="Commands\Enums\ECommands.cs" />
     <Compile Include="Commands\DefaultCommand.cs" />
     <Compile Include="Commands\ImportCommand.cs" />
+    <Compile Include="MainExecution\AntiDdosChecker.cs" />
     <Compile Include="MainExecution\QueryHandler.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -171,7 +172,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Readme\readme.txt" />
     <Content Include="ReleaseNotes.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

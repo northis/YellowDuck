@@ -23,12 +23,16 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
     {
         private readonly TelegramBotClient _client;
         private readonly IWordRepository _repository;
+        private readonly AntiDdosChecker _checker;
         private readonly string _flashCardUrl;
 
-        public QueryHandler(TelegramBotClient client, IWordRepository repository, string flashCardUrl)
+        public int MaxInlineQueryCount = 5;
+
+        public QueryHandler(TelegramBotClient client, IWordRepository repository, AntiDdosChecker checker, string flashCardUrl)
         {
             _client = client;
             _repository = repository;
+            _checker = checker;
             _flashCardUrl = flashCardUrl;
         }
 
@@ -36,6 +40,12 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         {
             var userId = inlineQuery.From.Id;
             var q = inlineQuery.Query;
+
+            if (!_checker.AllowUser(userId))
+                return;
+
+            if (q.Length > MaxInlineQueryCount)
+                return;
 
             var results =_repository.FindFlashCard(q, userId).ToArray();
 
@@ -54,6 +64,8 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
 
                                 }
                         }});
+
+                _checker.UserQueryProcessed(userId);
                 return;
             }
             
@@ -93,15 +105,23 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                         });
             }
 
-            await _client.AnswerInlineQueryAsync(inlineQuery.Id, inlineQueryResults.ToArray(),0);
+            await _client.AnswerInlineQueryAsync(inlineQuery.Id, inlineQueryResults.ToArray(), 0);
 
+
+            _checker.UserQueryProcessed(userId);
         }
 
         public async Task CallbackQuery(CallbackQuery callbackQuery)
         {
             try
             {
+                var userId = callbackQuery.From.Id;
+                if (!_checker.AllowUser(userId))
+                    return;
+
                 await OnMessage(callbackQuery.Message, callbackQuery.Data, callbackQuery.From);
+
+                _checker.UserQueryProcessed(userId);
             }
             catch (Exception ex)
             {
@@ -113,7 +133,13 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         {
             try
             {
+                var userId = msg.From.Id;
+                if (!_checker.AllowUser(userId))
+                    return;
+
                 await OnMessage(msg, msg.Text, msg.From);
+
+                _checker.UserQueryProcessed(userId);
             }
             catch (Exception ex)
             {

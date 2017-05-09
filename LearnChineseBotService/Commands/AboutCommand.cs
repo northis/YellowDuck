@@ -19,17 +19,19 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override AnswerItem Reply(MessageItem mItem)
         {
             var copywrite = "0";
+            var version = "0";
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             if (assembly.Location != null)
             {
                 var fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
                 copywrite = fvi.LegalCopyright;
+                version = fvi.ProductVersion;
             }
 
             return new AnswerItem
             {
-                Message = $"Chinese Duck Bot{Environment.NewLine}{copywrite}{Environment.NewLine}Contact me: north@live.ru{Environment.NewLine}{_releaseNotes}",
+                Message = $"Chinese Duck Bot ver. {version}{Environment.NewLine}{copywrite}{Environment.NewLine}Contact me: @DeathWhinny{Environment.NewLine}{_releaseNotes}",
                 Markup = new ReplyKeyboardHide()
             };
         }

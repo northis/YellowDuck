@@ -49,6 +49,11 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             }
         }
 
+        public static DateTime GetDateTime()
+        {
+            return DateTime.Now;
+        }
+
         public override void Load()
         {
             Bind<ISyllableColorProvider>().To<ClassicSyllableColorProvider>();
@@ -64,6 +69,11 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<AboutCommand>()
                 .ToSelf()
                 .WithConstructorArgument("releaseNotes", ReleaseNotesInfo);
+
+            Bind<AntiDdosChecker>()
+                .ToSelf()
+                .InSingletonScope()
+                .WithConstructorArgument<Func<DateTime>>(GetDateTime);
 
             Bind<QueryHandler>()
                 .ToSelf()
