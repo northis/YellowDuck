@@ -1,7 +1,6 @@
 ﻿using System.Windows.Media;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using YellowDuck.LearnChinese.Data.Ef;
-using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChinese.Providers;
 

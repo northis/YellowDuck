@@ -1,6 +1,5 @@
 ﻿using System;
 using YellowDuck.LearnChinese.Interfaces;
-using YellowDuck.LearnChinese.Interfaces.Data;
 using YellowDuck.LearnChineseBotService.Commands.Common;
 using YellowDuck.LearnChineseBotService.Commands.Enums;
 using YellowDuck.LearnChineseBotService.MainExecution;
@@ -62,7 +61,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
         public override string GetCommandTextDescription()
         {
-            return "View a word's flash card";
+            return "View a flash card";
         }
     }
 }

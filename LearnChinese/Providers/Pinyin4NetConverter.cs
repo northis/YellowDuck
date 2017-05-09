@@ -37,19 +37,19 @@ namespace YellowDuck.LearnChinese.Providers
         {
             var format = new HanyuPinyinOutputFormat
             {
-                CaseType = HanyuPinyinCaseType.LOWERCASE,
-                ToneType = HanyuPinyinToneType.WITH_TONE_MARK,
-                VCharType = HanyuPinyinVCharType.WITH_U_UNICODE
+                CaseType = HanyuPinyinCaseType.Lowercase,
+                ToneType = HanyuPinyinToneType.WithToneMark,
+                VCharType = HanyuPinyinVCharType.WithUUnicode
             };
 
             switch (toneType)
             {
                 case EToneType.Without:
-                    format.ToneType = HanyuPinyinToneType.WITHOUT_TONE;
+                    format.ToneType = HanyuPinyinToneType.WithoutTone;
                     break;
 
                 case EToneType.Number:
-                    format.ToneType = HanyuPinyinToneType.WITH_TONE_NUMBER;
+                    format.ToneType = HanyuPinyinToneType.WithToneNumber;
                     break;
             }
             

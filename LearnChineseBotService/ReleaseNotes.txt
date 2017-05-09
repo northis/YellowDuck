@@ -1,12 +1,17 @@
-﻿ver.0.2.2.0 (09 may 2017)
-===========================================
+﻿
+Relase notes:
 
-[+] anti-ddos check - 500 ms between requests allowed, overwise user will be banned for 30 minutes
-[+] anti sql-injection check
+ver.0.2.3.0 (10 may 2017)
+=========================
+[+] change parse for 儿 
+
+ver.0.2.2.0 (09 may 2017)
+=========================
+[+] anti-ddos check - 500 ms between requests allowed, otherwise user will be banned for 30 minutes;
+[+] sql-injection check.
 
 ver.0.2.1.0 (08 may 2017)
-===========================================
-
+=========================
 First release, alpha version of the bot. Here is what it can do now:
 - add and import from file user-defined chinese words, translated to his native language;
 - parse chinese characters, detect a pinyin in the words and highlight the tones;

@@ -46,10 +46,6 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Pinyin4net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\pinyin4net.1.0.0\lib\net40\Pinyin4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -85,6 +81,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{19363817-e654-45d9-85e2-46bc0f7a0593}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ThirdParty\Pinyin4net\Pinyin4net.csproj">
+      <Project>{126a4885-0cd7-4d9f-b039-3cf235f3c9e4}</Project>
+      <Name>Pinyin4net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
