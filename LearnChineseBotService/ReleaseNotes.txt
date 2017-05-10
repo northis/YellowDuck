@@ -3,7 +3,8 @@ Relase notes:
 
 ver.0.2.3.0 (10 may 2017)
 =========================
-[+] change parse for 儿 
+[+] changed parse for 儿 
+[+] added last 7 used flashcards while inline mode 
 
 ver.0.2.2.0 (09 may 2017)
 =========================

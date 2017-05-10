@@ -49,8 +49,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return ECommands.Add;
         }
 
-
-
         public override string GetCommandIconUnicode()
         {
             return "➕";

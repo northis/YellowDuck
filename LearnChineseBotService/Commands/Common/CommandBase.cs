@@ -27,8 +27,6 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
             return commandEnum;
         }
 
-
-
         public string GetCommandDescription()
         {
             return GetCommandIconUnicode()+ GetCommandTextDescription();

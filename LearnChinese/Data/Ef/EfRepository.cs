@@ -582,6 +582,29 @@ namespace YellowDuck.LearnChinese.Data.Ef
             return _context.WordFileAs.Where(a => a.IdWord == fileId).Select(a => a.Bytes).FirstOrDefault();
         }
 
+        public IQueryable<WordSearchResult> GetLastWords(long idUser, int topCount)
+        {
+            SetUnscoredWords(idUser);
+
+            return
+                _context.Scores.Where(a => a.IdUser == idUser)
+                    .OrderByDescending(a => a.LastLearned)
+                    .ThenByDescending(a => a.LastView)
+                    .ThenByDescending(a => a.Word.LastModified)
+                    .Take(topCount)
+                    .Select(
+                        a =>
+                            new WordSearchResult
+                            {
+                                FileId = a.IdWord,
+                                OriginalWord = a.Word.OriginalWord,
+                                Pronunciation = a.Word.Pronunciation,
+                                Translation = a.Word.Translation,
+                                HeightFlashCard = a.Word.WordFileA.Height,
+                                WidthFlashCard = a.Word.WordFileA.Width
+                            });
+        }
+
         #endregion
     }
 }

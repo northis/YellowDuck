@@ -16,6 +16,7 @@
         LearnPronunciation,
         LearnView,
         About,
-        Mode
+        Mode,
+        Edit
     }
 }

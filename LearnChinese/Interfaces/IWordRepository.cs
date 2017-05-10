@@ -49,5 +49,7 @@ namespace YellowDuck.LearnChinese.Interfaces
 
         byte[] GetWordFlashCard(long fileId);
 
+        IQueryable<WordSearchResult> GetLastWords(long idUser, int topCount);
+
     }
 }

@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AboutCommand.cs" />
+    <Compile Include="Commands\EditCommand.cs" />
     <Compile Include="Commands\AddCommand.cs" />
     <Compile Include="Commands\Common\AnswerItem.cs" />
     <Compile Include="Commands\Common\LearnCommand.cs" />

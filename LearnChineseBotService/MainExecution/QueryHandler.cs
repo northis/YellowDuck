@@ -12,6 +12,7 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.InputMessageContents;
 using Telegram.Bot.Types.ReplyMarkups;
+using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChineseBotService.LayoutRoot;
@@ -26,7 +27,8 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         private readonly AntiDdosChecker _checker;
         private readonly string _flashCardUrl;
 
-        public int MaxInlineQueryCount = 5;
+        public int MaxInlineQueryLength = 5;
+        public int MaxInlineSearchResult = 7;
 
         public QueryHandler(TelegramBotClient client, IWordRepository repository, AntiDdosChecker checker, string flashCardUrl)
         {
@@ -44,10 +46,20 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             if (!_checker.AllowUser(userId))
                 return;
 
-            if (q.Length > MaxInlineQueryCount)
+            if (q.Length > MaxInlineQueryLength)
                 return;
 
-            var results =_repository.FindFlashCard(q, userId).ToArray();
+            IEnumerable<InlineQueryResult> inlineQueryResults;
+            WordSearchResult[] results;
+
+            if (q.Any())
+            {
+                results = _repository.FindFlashCard(q, userId).ToArray();
+            }
+            else
+            {
+                results = _repository.GetLastWords(userId, MaxInlineSearchResult).ToArray();
+            }
 
             if (!results.Any())
             {
@@ -69,21 +81,20 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
                 return;
             }
             
-            IEnumerable<InlineQueryResult> inlineQueryResults;
 
             if (MainFactory.UseWebhooks)
             {
                 inlineQueryResults = results.Select(
-                    a =>
-                        new InlineQueryResultPhoto
-                        {
-                            Caption = a.OriginalWord,
-                            Url = _flashCardUrl + a.FileId,
-                            ThumbUrl = _flashCardUrl + a.FileId,
-                            Height = a.HeightFlashCard.GetValueOrDefault(),
-                            Width = a.WidthFlashCard.GetValueOrDefault(),
-                            Id = inlineQuery.Id
-                        });
+                          a =>
+                              new InlineQueryResultPhoto
+                              {
+                                  Caption = a.OriginalWord,
+                                  Url = _flashCardUrl + a.FileId,
+                                  ThumbUrl = _flashCardUrl + a.FileId,
+                                  Height = a.HeightFlashCard.GetValueOrDefault(),
+                                  Width = a.WidthFlashCard.GetValueOrDefault(),
+                                  Id = Guid.NewGuid().ToString()
+                              });
             }
             else
             {
