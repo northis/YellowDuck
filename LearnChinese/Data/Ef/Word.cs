@@ -63,7 +63,17 @@ namespace YellowDuck.LearnChinese.Data.Ef
             }
             set
             {
-                WordFileA = new WordFileA {Bytes = value.ImageBody, Height = value.Height, Width = value.Width};
+                if (WordFileA == null)
+                {
+                    WordFileA = new WordFileA { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                }
+                else
+                {
+                    WordFileA.Bytes = value.ImageBody;
+                    WordFileA.Height = value.Height;
+                    WordFileA.Width = value.Width;
+                }
+
                 _cardAll = value;
             }
         }
@@ -83,7 +93,16 @@ namespace YellowDuck.LearnChinese.Data.Ef
             }
             set
             {
-                WordFileO = new WordFileO { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                if (WordFileO == null)
+                {
+                    WordFileO = new WordFileO { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                }
+                else
+                {
+                    WordFileO.Bytes = value.ImageBody;
+                    WordFileO.Height = value.Height;
+                    WordFileO.Width = value.Width;
+                }
                 _cardOriginalWord = value;
             }
         }
@@ -103,7 +122,16 @@ namespace YellowDuck.LearnChinese.Data.Ef
             }
             set
             {
-                WordFileT = new WordFileT { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                if (WordFileT == null)
+                {
+                    WordFileT = new WordFileT { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                }
+                else
+                {
+                    WordFileT.Bytes = value.ImageBody;
+                    WordFileT.Height = value.Height;
+                    WordFileT.Width = value.Width;
+                }
                 _cardTranslation = value;
             }
         }
@@ -123,7 +151,16 @@ namespace YellowDuck.LearnChinese.Data.Ef
             }
             set
             {
-                WordFileP = new WordFileP { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                if (WordFileP == null)
+                {
+                    WordFileP = new WordFileP { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                }
+                else
+                {
+                    WordFileP.Bytes = value.ImageBody;
+                    WordFileP.Height = value.Height;
+                    WordFileP.Width = value.Width;
+                }
                 _cardPronunciation = value;
             }
         }

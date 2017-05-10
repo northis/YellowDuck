@@ -14,7 +14,7 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
 
         private readonly IStudyProvider _studyProvider;
 
-        protected LearnCommand(IStudyProvider studyProvider)
+        protected LearnCommand(IStudyProvider studyProvider, EditCommand editCommand):base(editCommand)
         {
             _studyProvider = studyProvider;
         }
@@ -40,7 +40,7 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
             var checkResult = _studyProvider.AnswerWord(mItem.ChatId, mItem.TextOnly);
             previousAnswerItem.Picture = checkResult.WordStatistic.Word.CardAll;
             previousAnswerItem.Message = (checkResult.Success ? "✅ " : "⛔️ ") + checkResult.WordStatistic;
-            previousAnswerItem.Markup = GetLearnMarkup();
+            previousAnswerItem.Markup = GetLearnMarkup(checkResult.WordStatistic.Word.Id);
 
             return previousAnswerItem;
         }

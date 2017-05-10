@@ -34,7 +34,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public const uint UsePinyinModeColumnsCount = 3;
         public const uint DefaultModeColumnsCount = 2;
 
-        bool? GetUsePinyin(string[] wordStrings)
+        public bool? GetUsePinyin(string[] wordStrings)
         {
             var firstWord = wordStrings.FirstOrDefault();
 
@@ -55,7 +55,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             var answer = new AnswerItem
             {
-                Message = "🚛"
+                Message = GetCommandIconUnicode()
             };
 
             if (usePinyin == null)

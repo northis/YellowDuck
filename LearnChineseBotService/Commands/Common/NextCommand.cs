@@ -8,8 +8,15 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
 {
     public abstract class NextCommand : CommandBase
     {
+        protected EditCommand EditCommand { get; }
+
+        protected NextCommand(EditCommand editCommand)
+        {
+            EditCommand = editCommand;
+        }
+
         public const string NextCmd = "next";
-        
+
         public override AnswerItem Reply(MessageItem mItem)
         {
             var answerItem = new AnswerItem
@@ -23,6 +30,11 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
                 {
                     var learnUnit = ProcessLearn(mItem);
                     answerItem = ProcessNext(answerItem, learnUnit);
+                }
+
+                else if(mItem.TextOnly.StartsWith(EditCommand.EditCmd)|| mItem.TextOnly.Contains(ImportCommand.SeparatorChar.ToString()))
+                {
+                    answerItem = EditCommand.Reply(mItem);
                 }
                 else
                 {
@@ -42,13 +54,17 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
         public abstract AnswerItem ProcessNext(AnswerItem previousAnswerItem, LearnUnit lUnit);
         public abstract AnswerItem ProcessAnswer(AnswerItem previousAnswerItem, MessageItem mItem);
 
-        public IReplyMarkup GetLearnMarkup()
+        public IReplyMarkup GetLearnMarkup(long idCurrentWord)
         {
             var mkp = new InlineKeyboardMarkup
             {
                 InlineKeyboard = new[]
                 {
-                    new[] {new InlineKeyboardButton("Next word", NextCmd) }
+                    new[]
+                    {
+                        new InlineKeyboardButton("🖌Edit", $"{EditCommand.EditCmd}{EditCommand.EditCmdSeparator}{idCurrentWord}"),
+                        new InlineKeyboardButton("➡️Next", NextCmd)
+                    }
                 }
             };
 

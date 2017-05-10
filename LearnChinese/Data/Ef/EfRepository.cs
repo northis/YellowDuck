@@ -226,6 +226,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     questionItem.Options = new string[0];
                     questionItem.Picture = word.CardAll;
                     questionItem.WordStatistic = GetUserWordStatistic(userId, wordId).ToString();
+                    questionItem.IdWord = wordId;
                     break;
             }
 

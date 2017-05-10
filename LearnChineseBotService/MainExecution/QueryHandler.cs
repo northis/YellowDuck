@@ -49,9 +49,18 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             if (q.Length > MaxInlineQueryLength)
                 return;
 
+            if (!_repository.IsUserExist(userId))
+                _repository.AddUser(new User
+                {
+                    IdUser = userId,
+                    Name = $"{inlineQuery.From.FirstName} {inlineQuery.From.LastName}",
+                    Mode = EGettingWordsStrategy.Random.ToString()
+                });
+
             IEnumerable<InlineQueryResult> inlineQueryResults;
             WordSearchResult[] results;
 
+            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
             if (q.Any())
             {
                 results = _repository.FindFlashCard(q, userId).ToArray();
@@ -117,8 +126,7 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             }
 
             await _client.AnswerInlineQueryAsync(inlineQuery.Id, inlineQueryResults.ToArray(), 0);
-
-
+            
             _checker.UserQueryProcessed(userId);
         }
 

@@ -77,7 +77,8 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 NinjectKernel.Get<AboutCommand>(),
                 NinjectKernel.Get<ModeCommand>(),
                 NinjectKernel.Get<LearnSpeakCommand>(),
-                NinjectKernel.Get<LearnTranslationCommand>()
+                NinjectKernel.Get<LearnTranslationCommand>(),
+                NinjectKernel.Get<EditCommand>()
             }; 
 
               CommandHandlers = handlers.OrderBy(a => a.GetCommandType().ToString())

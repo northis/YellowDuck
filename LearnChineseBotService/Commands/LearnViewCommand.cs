@@ -11,7 +11,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
     {
         private readonly IStudyProvider _studyProvider;
 
-        public LearnViewCommand(IStudyProvider studyProvider)
+        public LearnViewCommand(IStudyProvider studyProvider, EditCommand editCommand) : base(editCommand)
         {
             _studyProvider = studyProvider;
         }
@@ -38,7 +38,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             {
                 Message = lUnit.WordStatistic ?? GetCommandIconUnicode(),
                 Picture = lUnit.Picture,
-                Markup = GetLearnMarkup()
+                Markup = GetLearnMarkup(lUnit.IdWord.GetValueOrDefault())
             };
         }
 

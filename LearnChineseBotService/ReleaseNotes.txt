@@ -1,6 +1,10 @@
 ﻿
 Relase notes:
 
+ver.0.2.4.0 (10 may 2017)
+=========================
+[+] added editing
+
 ver.0.2.3.0 (10 may 2017)
 =========================
 [+] changed parse for 儿 

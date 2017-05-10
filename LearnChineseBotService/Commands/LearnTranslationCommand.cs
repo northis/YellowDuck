@@ -11,7 +11,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
     {
         private readonly IStudyProvider _studyProvider;
 
-        public LearnTranslationCommand(IStudyProvider studyProvider) : base(studyProvider)
+        public LearnTranslationCommand(IStudyProvider studyProvider, EditCommand editCommand) : base(studyProvider, editCommand)
         {
             _studyProvider = studyProvider;
         }
