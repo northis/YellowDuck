@@ -30,6 +30,7 @@ namespace YellowDuck.LearnChinese.Providers
         public const ushort MaxSyllablesToParse = 15;
         public const char ImportSeparator1= ';';
         public const char ImportSeparator2 = '；';
+        public const char ReplaceSeparator = ',';
 
         public const string PinyinExludeRegexPattern = "[^a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]";
         public const string PinyinNumIncludeRegexPattern = "^[a-z0-4]+$";
@@ -245,7 +246,7 @@ namespace YellowDuck.LearnChinese.Providers
                                 OriginalWord = mainWord,
                                 Pronunciation =
                                     _syllablesToStringConverter.Join(importedSyllables.Select(a => a.Pinyin)),
-                                Translation = translationNative,
+                                Translation = translationNative.Replace(ImportSeparator1, ReplaceSeparator).Replace(ImportSeparator2, ReplaceSeparator),
                                 SyllablesCount = importedSyllables.Count
                             });
                         }

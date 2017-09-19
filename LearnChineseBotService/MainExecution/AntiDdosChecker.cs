@@ -9,8 +9,8 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
         static readonly Dictionary<long, DateTime> UserAccessTable = new Dictionary<long, DateTime>();
         static readonly Dictionary<long, DateTime> UserBackList = new Dictionary<long, DateTime>();
 
-        public TimeSpan FrequencyThreshold = TimeSpan.FromMilliseconds(500);
-        public TimeSpan BanInterval = TimeSpan.FromMinutes(30);
+        public TimeSpan FrequencyThreshold = TimeSpan.FromMilliseconds(100);
+        public TimeSpan BanInterval = TimeSpan.FromMinutes(1);
 
         public AntiDdosChecker(Func<DateTime> getTime)
         {

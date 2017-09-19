@@ -366,7 +366,13 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 throw new Exception(
                     $"Can't add this user, because he already exists. idUser={idUser}");
 
-            _context.Users.Add(new User { IdUser = user.IdUser, Name = user.Name, JoinDate = GetRepositoryTime() });
+            _context.Users.Add(new User
+            {
+                IdUser = user.IdUser,
+                Name = user.Name,
+                JoinDate = GetRepositoryTime(),
+                Mode = user.Mode
+            });
             _context.SaveChanges();
         }
 
