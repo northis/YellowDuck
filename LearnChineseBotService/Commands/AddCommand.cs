@@ -14,15 +14,28 @@ namespace YellowDuck.LearnChineseBotService.Commands
         {
         }
 
+        public override string GetCommandIconUnicode()
+        {
+            return "➕";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Add a new chinese word";
+        }
+
+        public override ECommands GetCommandType()
+        {
+            return ECommands.Add;
+        }
+
         public override AnswerItem Reply(MessageItem mItem)
         {
             var addMessage =
                 $"Type a chinese word in '<word>{SeparatorChar}<translation>' format or '<word>{SeparatorChar}<pinyin>{SeparatorChar}<translation>'.  Be accurate using pinyin, write a digit after very syllable. For example, use 'shi4' for 4th tone in 'shì' or 'le0' for zero tone in 'le'";
 
             if (string.IsNullOrEmpty(mItem.TextOnly))
-            {
-                return new AnswerItem { Message = addMessage };
-            }
+                return new AnswerItem {Message = addMessage};
 
             try
             {
@@ -35,28 +48,12 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     };
 
                 return result;
-
             }
             catch (Exception ex)
             {
                 Trace.WriteLine(ex);
-                return new AnswerItem { Message = $"Wrong format.{Environment.NewLine}{addMessage}" };
+                return new AnswerItem {Message = $"Wrong format.{Environment.NewLine}{addMessage}"};
             }
-        }
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.Add;
-        }
-
-        public override string GetCommandIconUnicode()
-        {
-            return "➕";
-        }
-
-        public override string GetCommandTextDescription()
-        {
-            return "Add a new chinese word";
         }
     }
 }

@@ -2,7 +2,9 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Pinyin4net")]
-[assembly: AssemblyDescription("Pinyin4net is a .net library supporting convertion between Chinese characters and Pinyin systems.")]
+[assembly:
+    AssemblyDescription(
+        "Pinyin4net is a .net library supporting convertion between Chinese characters and Pinyin systems.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Pinyin4net")]

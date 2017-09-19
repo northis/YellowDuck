@@ -11,14 +11,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
     {
         private readonly IStudyProvider _studyProvider;
 
-        public LearnWritingCommand(IStudyProvider studyProvider, EditCommand editCommand) : base(studyProvider, editCommand)
+        public LearnWritingCommand(IStudyProvider studyProvider, EditCommand editCommand) : base(studyProvider,
+            editCommand)
         {
             _studyProvider = studyProvider;
-        }
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.LearnWriting;
         }
 
         public override string GetCommandIconUnicode()
@@ -31,10 +27,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return "Learn how to write these words";
         }
 
+        public override ECommands GetCommandType()
+        {
+            return ECommands.LearnWriting;
+        }
+
         public override LearnUnit ProcessLearn(MessageItem mItem)
         {
             return _studyProvider.LearnWord(mItem.ChatId, ELearnMode.OriginalWord);
         }
-        
     }
 }

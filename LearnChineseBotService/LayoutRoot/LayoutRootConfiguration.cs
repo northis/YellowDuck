@@ -60,7 +60,9 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<IChineseWordParseProvider>().To<PinyinChineseWordParseProvider>();
             Bind<IStudyProvider>().To<ClassicStudyProvider>();
             Bind<ISyllablesToStringConverter>().To<ClassicSyllablesToStringConverter>();
-            Bind<IWordRepository>().To<EfRepository>().InThreadScope()
+            Bind<IWordRepository>()
+                .To<EfRepository>()
+                .InThreadScope()
                 .WithConstructorArgument("useFullText", true);
             Bind<IChinesePinyinConverter>().To<Pinyin4NetConverter>();
             Bind<IFlashCardGenerator>().To<WpfFlashCardGenerator>();
@@ -92,15 +94,15 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .InSingletonScope()
                 .WithConstructorArgument(MainFactory.TelegramBotKey)
                 .WithPropertyValue("PollingTimeout", MainFactory.PollingTimeout);
-            
+
             Bind<HelpCommand>()
                 .ToSelf()
-                .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values.ToArray());
+                .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values
+                    .ToArray());
             Bind<StartCommand>()
                 .ToSelf()
-                .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values.ToArray());
-
-
+                .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values
+                    .ToArray());
         }
     }
 }

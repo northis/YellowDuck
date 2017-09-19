@@ -16,12 +16,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
             _studyProvider = studyProvider;
         }
 
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.LearnView;
-        }
-
         public override string GetCommandIconUnicode()
         {
             return "🎓👀";
@@ -32,14 +26,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return "Just view these words";
         }
 
-        public override AnswerItem ProcessNext(AnswerItem previousAnswerItem, LearnUnit lUnit)
+
+        public override ECommands GetCommandType()
         {
-            return new AnswerItem
-            {
-                Message = lUnit.WordStatistic ?? GetCommandIconUnicode(),
-                Picture = lUnit.Picture,
-                Markup = GetLearnMarkup(lUnit.IdWord.GetValueOrDefault())
-            };
+            return ECommands.LearnView;
         }
 
         public override AnswerItem ProcessAnswer(AnswerItem previousAnswerItem, MessageItem mItem)
@@ -53,6 +43,16 @@ namespace YellowDuck.LearnChineseBotService.Commands
         public override LearnUnit ProcessLearn(MessageItem mItem)
         {
             return _studyProvider.LearnWord(mItem.ChatId, ELearnMode.FullView);
+        }
+
+        public override AnswerItem ProcessNext(AnswerItem previousAnswerItem, LearnUnit lUnit)
+        {
+            return new AnswerItem
+            {
+                Message = lUnit.WordStatistic ?? GetCommandIconUnicode(),
+                Picture = lUnit.Picture,
+                Markup = GetLearnMarkup(lUnit.IdWord.GetValueOrDefault())
+            };
         }
     }
 }

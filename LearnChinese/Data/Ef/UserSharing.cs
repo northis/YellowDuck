@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace YellowDuck.LearnChinese.Data.Ef
 {
     [Table("UserSharing")]
-    public partial class UserSharing
+    public class UserSharing
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public UserSharing()
         {
         }

@@ -2,70 +2,59 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Interfaces.Data;
 
 namespace YellowDuck.LearnChinese.Data.Ef
 {
     [Table("Word")]
-    public partial class Word : IWord
+    public class Word : IWord
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [NotMapped] private GenerateImageResult _cardAll;
+
+        [NotMapped] private GenerateImageResult _cardOriginalWord;
+
+        [NotMapped] private GenerateImageResult _cardPronunciation;
+
+        [NotMapped] private GenerateImageResult _cardTranslation;
+
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Word()
         {
             Scores = new HashSet<Score>();
         }
 
-        public long Id { get; set; }
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Score> Scores { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string OriginalWord { get; set; }
+        public long IdOwner { get; set; }
 
-        [StringLength(50)]
-        public string Pronunciation { get; set; }
 
-        public DateTime LastModified { get; set; }
+        public User UserOwner { get; set; }
 
-        [StringLength(250)]
-        public string Translation { get; set; }
+        public virtual WordFileA WordFileA { get; set; }
 
-        public string Usage { get; set; }
+        public virtual WordFileO WordFileO { get; set; }
 
-        public void CleanCards()
-        {
-            _cardAll = null;
-            _cardOriginalWord = null;
-            _cardTranslation = null;
-            _cardPronunciation = null;
-        }
+        public virtual WordFileP WordFileP { get; set; }
 
-        [NotMapped]
-        private GenerateImageResult _cardAll;
-        [NotMapped]
-        private GenerateImageResult _cardOriginalWord;
-        [NotMapped]
-        private GenerateImageResult _cardTranslation;
-        [NotMapped]
-        private GenerateImageResult _cardPronunciation;
+        public virtual WordFileT WordFileT { get; set; }
 
         [NotMapped]
         public GenerateImageResult CardAll
         {
-            get
+            get => _cardAll ?? (_cardAll = new GenerateImageResult
             {
-                return _cardAll ?? (_cardAll = new GenerateImageResult
-                {
-                    ImageBody = WordFileA?.Bytes,
-                    Height = WordFileA?.Height,
-                    Width = WordFileA?.Width
-                });
-            }
+                ImageBody = WordFileA?.Bytes,
+                Height = WordFileA?.Height,
+                Width = WordFileA?.Width
+            });
             set
             {
                 if (WordFileA == null)
                 {
-                    WordFileA = new WordFileA { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                    WordFileA = new WordFileA {Bytes = value.ImageBody, Height = value.Height, Width = value.Width};
                 }
                 else
                 {
@@ -82,20 +71,17 @@ namespace YellowDuck.LearnChinese.Data.Ef
         [NotMapped]
         public GenerateImageResult CardOriginalWord
         {
-            get
+            get => _cardOriginalWord ?? (_cardOriginalWord = new GenerateImageResult
             {
-                return _cardOriginalWord ?? (_cardOriginalWord = new GenerateImageResult
-                {
-                    ImageBody = WordFileO?.Bytes,
-                    Height = WordFileO?.Height,
-                    Width = WordFileO?.Width
-                });
-            }
+                ImageBody = WordFileO?.Bytes,
+                Height = WordFileO?.Height,
+                Width = WordFileO?.Width
+            });
             set
             {
                 if (WordFileO == null)
                 {
-                    WordFileO = new WordFileO { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                    WordFileO = new WordFileO {Bytes = value.ImageBody, Height = value.Height, Width = value.Width};
                 }
                 else
                 {
@@ -109,51 +95,19 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
 
         [NotMapped]
-        public GenerateImageResult CardTranslation
-        {
-            get
-            {
-                return _cardTranslation ?? (_cardTranslation = new GenerateImageResult
-                {
-                    ImageBody = WordFileT?.Bytes,
-                    Height = WordFileT?.Height,
-                    Width = WordFileT?.Width
-                });
-            }
-            set
-            {
-                if (WordFileT == null)
-                {
-                    WordFileT = new WordFileT { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
-                }
-                else
-                {
-                    WordFileT.Bytes = value.ImageBody;
-                    WordFileT.Height = value.Height;
-                    WordFileT.Width = value.Width;
-                }
-                _cardTranslation = value;
-            }
-        }
-
-
-        [NotMapped]
         public GenerateImageResult CardPronunciation
         {
-            get
+            get => _cardPronunciation ?? (_cardPronunciation = new GenerateImageResult
             {
-                return _cardPronunciation ?? (_cardPronunciation = new GenerateImageResult
-                {
-                    ImageBody = WordFileP?.Bytes,
-                    Height = WordFileP?.Height,
-                    Width = WordFileP?.Width
-                });
-            }
+                ImageBody = WordFileP?.Bytes,
+                Height = WordFileP?.Height,
+                Width = WordFileP?.Width
+            });
             set
             {
                 if (WordFileP == null)
                 {
-                    WordFileP = new WordFileP { Bytes = value.ImageBody, Height = value.Height, Width = value.Width };
+                    WordFileP = new WordFileP {Bytes = value.ImageBody, Height = value.Height, Width = value.Width};
                 }
                 else
                 {
@@ -165,21 +119,56 @@ namespace YellowDuck.LearnChinese.Data.Ef
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Score> Scores { get; set; }
-        public long IdOwner { get; set; }
 
+        [NotMapped]
+        public GenerateImageResult CardTranslation
+        {
+            get => _cardTranslation ?? (_cardTranslation = new GenerateImageResult
+            {
+                ImageBody = WordFileT?.Bytes,
+                Height = WordFileT?.Height,
+                Width = WordFileT?.Width
+            });
+            set
+            {
+                if (WordFileT == null)
+                {
+                    WordFileT = new WordFileT {Bytes = value.ImageBody, Height = value.Height, Width = value.Width};
+                }
+                else
+                {
+                    WordFileT.Bytes = value.ImageBody;
+                    WordFileT.Height = value.Height;
+                    WordFileT.Width = value.Width;
+                }
+                _cardTranslation = value;
+            }
+        }
 
-        public User UserOwner { get; set; }
+        public long Id { get; set; }
+
+        public DateTime LastModified { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string OriginalWord { get; set; }
+
+        [StringLength(50)]
+        public string Pronunciation { get; set; }
 
         public int SyllablesCount { get; set; }
 
-        public virtual WordFileA WordFileA { get; set; }
+        [StringLength(250)]
+        public string Translation { get; set; }
 
-        public virtual WordFileO WordFileO { get; set; }
+        public string Usage { get; set; }
 
-        public virtual WordFileP WordFileP { get; set; }
-
-        public virtual WordFileT WordFileT { get; set; }
+        public void CleanCards()
+        {
+            _cardAll = null;
+            _cardOriginalWord = null;
+            _cardTranslation = null;
+            _cardPronunciation = null;
+        }
     }
 }

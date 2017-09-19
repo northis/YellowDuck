@@ -7,18 +7,8 @@ using YellowDuck.LearnChinese.Interfaces;
 
 namespace YellowDuck.LearnChinese.Providers
 {
-    public  class ClassicStudyProvider : IStudyProvider
+    public class ClassicStudyProvider : IStudyProvider
     {
-
-        #region Fields
-        
-        private readonly IWordRepository _wordRepository;
-
-        public const ushort PollAnswersCount = 4;
-        public const int MaxAnswerLength = 30;
-
-        #endregion
-
         #region Constructors
 
         public ClassicStudyProvider(IWordRepository wordRepository)
@@ -56,7 +46,7 @@ namespace YellowDuck.LearnChinese.Providers
                     }
                     break;
 
-                    case ELearnMode.Pronunciation:
+                case ELearnMode.Pronunciation:
                     if (wordStat.Score.PronunciationCount == null)
                         wordStat.Score.PronunciationCount = 0;
                     if (wordStat.Score.PronunciationSuccessCount == null)
@@ -86,7 +76,7 @@ namespace YellowDuck.LearnChinese.Providers
                     break;
 
                 case ELearnMode.FullView:
-                    
+
                     result.Success = true;
                     break;
             }
@@ -107,5 +97,14 @@ namespace YellowDuck.LearnChinese.Providers
                     PollAnswersCount = PollAnswersCount
                 });
         }
+
+        #region Fields
+
+        private readonly IWordRepository _wordRepository;
+
+        public const ushort PollAnswersCount = 4;
+        public const int MaxAnswerLength = 30;
+
+        #endregion
     }
 }

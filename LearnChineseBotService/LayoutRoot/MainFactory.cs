@@ -38,6 +38,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
         public static string WebhookUrl = ConfigurationManager.AppSettings["WebhookUrl"];
         public static string WebhookPublicUrl = ConfigurationManager.AppSettings["WebhookPublicUrl"];
         public static string WebhookControllerName = "Webhook";
+
         #endregion
 
         #region Methods
@@ -52,7 +53,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
         {
             if (NinjectKernel == null)
                 NinjectKernel = new StandardKernel(new LayoutRootConfiguration());
-           
+
 
             if (PollWorker == null)
                 PollWorker = NinjectKernel.Get<PollWorker>();
@@ -79,16 +80,15 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 NinjectKernel.Get<LearnSpeakCommand>(),
                 NinjectKernel.Get<LearnTranslationCommand>(),
                 NinjectKernel.Get<EditCommand>()
-            }; 
+            };
 
-              CommandHandlers = handlers.OrderBy(a => a.GetCommandType().ToString())
+            CommandHandlers = handlers.OrderBy(a => a.GetCommandType().ToString())
                 .ToDictionary(a => a.GetCommandType(), a => a);
 
             VisibleCommandHandlers =
                 CommandHandlers.Where(
                         a => a.Key != ECommands.Share)
                     .ToDictionary(a => a.Key, a => a.Value);
-
         }
 
         #endregion

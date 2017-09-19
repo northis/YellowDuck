@@ -3,7 +3,6 @@ using Telegram.Bot.Args;
 
 namespace YellowDuck.LearnChineseBotService.MainExecution
 {
-
     public class PollWorker
     {
         private readonly TelegramBotClient _client;
@@ -19,12 +18,16 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             _client.OnReceiveGeneralError += _client_OnReceiveGeneralError;
             _client.OnCallbackQuery += _client_OnCallbackQuery;
             _client.OnInlineQuery += _client_OnInlineQuery;
-
         }
 
-        private void _client_OnInlineQuery(object sender, InlineQueryEventArgs e)
+        public void Start()
         {
-            _queryHandler.InlineQuery(e.InlineQuery);
+            _client.StartReceiving();
+        }
+
+        public void Stop()
+        {
+            _client.StopReceiving();
         }
 
         private void _client_OnCallbackQuery(object sender, CallbackQueryEventArgs e)
@@ -32,14 +35,9 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             _queryHandler.CallbackQuery(e.CallbackQuery);
         }
 
-        private void _client_OnReceiveGeneralError(object sender, ReceiveGeneralErrorEventArgs e)
+        private void _client_OnInlineQuery(object sender, InlineQueryEventArgs e)
         {
-            _queryHandler.OnReceiveGeneralError(e.Exception);
-        }
-
-        private void _client_OnReceiveError(object sender, ReceiveErrorEventArgs e)
-        {
-            _queryHandler.OnReceiveError(e.ApiRequestException);
+            _queryHandler.InlineQuery(e.InlineQuery);
         }
 
         private void _client_OnMessage(object sender, MessageEventArgs e)
@@ -47,15 +45,14 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             _queryHandler.OnMessage(e.Message);
         }
 
-        public void Start()
+        private void _client_OnReceiveError(object sender, ReceiveErrorEventArgs e)
         {
-                _client.StartReceiving();
+            _queryHandler.OnReceiveError(e.ApiRequestException);
         }
 
-        public void Stop()
+        private void _client_OnReceiveGeneralError(object sender, ReceiveGeneralErrorEventArgs e)
         {
-                _client.StopReceiving();
+            _queryHandler.OnReceiveGeneralError(e.Exception);
         }
     }
-
 }

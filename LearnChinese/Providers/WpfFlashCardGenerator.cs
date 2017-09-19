@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -24,19 +25,18 @@ namespace YellowDuck.LearnChinese.Providers
 
         public GenerateImageResult Generate(IWord word, ELearnMode learnMode)
         {
-
             byte[] res = null;
-            int height = 0;
-            int width = 0;
+            var height = 0;
+            var width = 0;
             var tsk = new Thread(() =>
             {
-
                 var isPronunciationMode = learnMode == ELearnMode.Pronunciation;
 
                 var syllables = _wordParseProvider.GetOrderedSyllables(word);
                 var wordSyllables =
                     syllables.Select(
-                            a => new SyllableView(a.ChineseChar.ToString(), isPronunciationMode ? Colors.Black : a.Color))
+                            a => new SyllableView(a.ChineseChar.ToString(),
+                                isPronunciationMode ? Colors.Black : a.Color))
                         .ToArray();
                 var pinYinSyllables = syllables.Select(a => new SyllableView(a.Pinyin.ToString(), a.Color)).ToArray();
 
@@ -49,15 +49,14 @@ namespace YellowDuck.LearnChinese.Providers
                 control.UpdateLayout();
 
                 height = (int) (control.ActualHeight + 1);
-                width = (int)(control.ActualWidth + 1);
+                width = (int) (control.ActualWidth + 1);
 
                 res = SaveControlImage(control);
                 control.Dispatcher.InvokeShutdown();
-
             });
             tsk.SetApartmentState(ApartmentState.STA);
 
-            tsk.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+            tsk.CurrentUICulture = new CultureInfo("en-US");
             tsk.Start();
             tsk.Join();
 
@@ -69,15 +68,15 @@ namespace YellowDuck.LearnChinese.Providers
             var rect = VisualTreeHelper.GetDescendantBounds(control);
 
             var dv = new DrawingVisual();
-            
+
             using (var ctx = dv.RenderOpen())
             {
                 var brush = new VisualBrush(control);
                 ctx.DrawRectangle(brush, null, new Rect(rect.Size));
             }
-            
-            var width = (int)Math.Round(control.ActualWidth);
-            var height = (int)Math.Round(control.ActualHeight);
+
+            var width = (int) Math.Round(control.ActualWidth);
+            var height = (int) Math.Round(control.ActualHeight);
             var rtb = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
             rtb.Render(dv);
 
@@ -91,5 +90,4 @@ namespace YellowDuck.LearnChinese.Providers
             }
         }
     }
-
 }

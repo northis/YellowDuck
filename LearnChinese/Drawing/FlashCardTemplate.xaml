@@ -1,51 +1,51 @@
 ﻿<UserControl x:Class="YellowDuck.LearnChinese.Drawing.FlashCardTemplate"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:drawing="clr-namespace:YellowDuck.LearnChinese.Drawing"
              mc:Ignorable="d" MaxHeight="500" MaxWidth="500" MinWidth="250">
     <UserControl.Resources>
 
-        <x:Array x:Key="OriginalWord"  Type="{x:Type  drawing:SyllableView}">
-            <drawing:SyllableView Brush="Blue" Text="爱"   />
-            <drawing:SyllableView Brush="Black" Text="人"  />
+        <x:Array x:Key="OriginalWord" Type="{x:Type  drawing:SyllableView}">
+            <drawing:SyllableView Brush="Blue" Text="爱" />
+            <drawing:SyllableView Brush="Black" Text="人" />
         </x:Array>
 
         <x:Array x:Key="Pinyin" Type="{x:Type  drawing:SyllableView}">
-            <drawing:SyllableView Brush="Blue" Text="ài"   />
-            <drawing:SyllableView Brush="Black" Text="ren"  />
+            <drawing:SyllableView Brush="Blue" Text="ài" />
+            <drawing:SyllableView Brush="Black" Text="ren" />
         </x:Array>
 
-        <drawing:FlashCardView  x:Key="Dc" 
-                                Usage="她是我的爱人" 
-                                TranslationNative="Spouse" 
-                                Pinyin="{StaticResource ResourceKey=Pinyin}" 
-                                OriginalWord="{StaticResource ResourceKey=OriginalWord}"
-                                Mode="FullView"/>
+        <drawing:FlashCardView x:Key="Dc"
+                               Usage="她是我的爱人"
+                               TranslationNative="Spouse"
+                               Pinyin="{StaticResource ResourceKey=Pinyin}"
+                               OriginalWord="{StaticResource ResourceKey=OriginalWord}"
+                               Mode="FullView" />
     </UserControl.Resources>
-    
 
-    <Border BorderThickness="0" 
+
+    <Border BorderThickness="0"
             Padding="5" SnapsToDevicePixels="True"
             BorderBrush="Black"
             d:DataContext="{StaticResource ResourceKey=Dc}">
         <Border.Background>
-            <SolidColorBrush Color="White"/>
+            <SolidColorBrush Color="White" />
         </Border.Background>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <ItemsControl ItemsSource="{Binding OriginalWord}" 
+            <ItemsControl ItemsSource="{Binding OriginalWord}"
                           HorizontalAlignment="Center"
-                          VerticalAlignment="Center" 
-                          MaxHeight="80" 
+                          VerticalAlignment="Center"
+                          MaxHeight="80"
                           Visibility="{Binding OriginalWordVisibility}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -54,62 +54,62 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type drawing:SyllableView}">
-                        <TextBlock FontFamily="KaiTi" 
-                                   FontSize="48" 
-                                   Foreground="{Binding Brush}" 
+                        <TextBlock FontFamily="KaiTi"
+                                   FontSize="48"
+                                   Foreground="{Binding Brush}"
                                    TextWrapping="Wrap"
                                    Text="{Binding Text}"
-                                   TextTrimming="CharacterEllipsis"  
-                                   HorizontalAlignment="Center"/>
+                                   TextTrimming="CharacterEllipsis"
+                                   HorizontalAlignment="Center" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <ItemsControl ItemsSource="{Binding Pinyin}" 
-                          Grid.Row="1" 
-                          HorizontalAlignment="Center" 
-                          VerticalAlignment="Center" 
-                          Margin="0 5 0 5" 
-                          MaxHeight="40" 
+            <ItemsControl ItemsSource="{Binding Pinyin}"
+                          Grid.Row="1"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Margin="0 5 0 5"
+                          MaxHeight="40"
                           Visibility="{Binding PinyinVisibility}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
+                        <WrapPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="{x:Type drawing:SyllableView}">
-                        <TextBlock  TextWrapping="Wrap" 
-                                    FontFamily="Georgia" 
-                                    FontSize="22"
-                                    Text="{Binding Text}" 
-                                    Foreground="{Binding Brush}" 
-                                    TextTrimming="CharacterEllipsis" 
-                                    HorizontalAlignment="Center"/>
+                        <TextBlock TextWrapping="Wrap"
+                                   FontFamily="Georgia"
+                                   FontSize="22"
+                                   Text="{Binding Text}"
+                                   Foreground="{Binding Brush}"
+                                   TextTrimming="CharacterEllipsis"
+                                   HorizontalAlignment="Center" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <TextBlock Grid.Row="2" 
-                       TextWrapping="Wrap" 
-                       FontFamily="Georgia" 
-                       FontSize="22" 
-                       Text="{Binding TranslationNative}" 
-                       TextTrimming="WordEllipsis"  
-                       HorizontalAlignment="Center" 
-                       MaxHeight="40"  
+            <TextBlock Grid.Row="2"
+                       TextWrapping="Wrap"
+                       FontFamily="Georgia"
+                       FontSize="22"
+                       Text="{Binding TranslationNative}"
+                       TextTrimming="WordEllipsis"
+                       HorizontalAlignment="Center"
+                       MaxHeight="40"
                        Visibility="{Binding TranslationVisibility}" />
 
-            <TextBlock Grid.Row="3" 
-                       TextWrapping="Wrap" 
-                       FontFamily="KaiTi" 
-                       FontSize="22" 
-                       Text="{Binding Usage}" 
-                       TextTrimming="WordEllipsis"  
-                       HorizontalAlignment="Center" 
-                       MaxHeight="20" 
+            <TextBlock Grid.Row="3"
+                       TextWrapping="Wrap"
+                       FontFamily="KaiTi"
+                       FontSize="22"
+                       Text="{Binding Usage}"
+                       TextTrimming="WordEllipsis"
+                       HorizontalAlignment="Center"
+                       MaxHeight="20"
                        Foreground="Gray"
-                       Visibility="{Binding UsageVisibility}"/>
+                       Visibility="{Binding UsageVisibility}" />
 
         </Grid>
     </Border>

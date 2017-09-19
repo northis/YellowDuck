@@ -16,7 +16,8 @@ namespace YellowDuck.LearnChinese.Providers
     {
         #region Constructors
 
-        public PinyinChineseWordParseProvider(ISyllableColorProvider syllableColorProvider, IChinesePinyinConverter chinesePinyinConverter, ISyllablesToStringConverter syllablesToStringConverter)
+        public PinyinChineseWordParseProvider(ISyllableColorProvider syllableColorProvider,
+            IChinesePinyinConverter chinesePinyinConverter, ISyllablesToStringConverter syllablesToStringConverter)
         {
             _syllableColorProvider = syllableColorProvider;
             _chinesePinyinConverter = chinesePinyinConverter;
@@ -28,7 +29,7 @@ namespace YellowDuck.LearnChinese.Providers
         #region Fields
 
         public const ushort MaxSyllablesToParse = 15;
-        public const char ImportSeparator1= ';';
+        public const char ImportSeparator1 = ';';
         public const char ImportSeparator2 = '；';
         public const char ReplaceSeparator = ',';
 
@@ -43,14 +44,15 @@ namespace YellowDuck.LearnChinese.Providers
         #endregion
 
         #region Methods
-        
-        Syllable GetSyllable(char charWord, string pinyinWithMark)
+
+        private Syllable GetSyllable(char charWord, string pinyinWithMark)
         {
             return new Syllable(charWord, pinyinWithMark,
-                _syllableColorProvider.GetSyllableColor(charWord, _chinesePinyinConverter.ToSyllableNumberTone(pinyinWithMark)));
+                _syllableColorProvider.GetSyllableColor(charWord,
+                    _chinesePinyinConverter.ToSyllableNumberTone(pinyinWithMark)));
         }
 
-        Syllable GetSyllableNumber(char charWord, string pinyinWithNum)
+        private Syllable GetSyllableNumber(char charWord, string pinyinWithNum)
         {
             return new Syllable(charWord, pinyinWithNum,
                 _syllableColorProvider.GetSyllableColor(charWord, pinyinWithNum));
@@ -61,7 +63,7 @@ namespace YellowDuck.LearnChinese.Providers
             return GetOrderedSyllables(word, EToneType.Mark);
         }
 
-        bool IsChineseCharacter(char character)
+        private bool IsChineseCharacter(char character)
         {
             return character >= 0x4e00 && character <= 0x9fbb;
         }
@@ -76,7 +78,7 @@ namespace YellowDuck.LearnChinese.Providers
 
             var sylls = new List<Syllable>();
             var chineseOnly = word.OriginalWord.ToArray();
-            
+
             var chineseCharsCount = 0;
 
             foreach (var character in chineseOnly)
@@ -96,13 +98,13 @@ namespace YellowDuck.LearnChinese.Providers
             return sylls.ToArray();
         }
 
-        bool IsNumbersInPinyinUsed(string pinyin)
+        private bool IsNumbersInPinyinUsed(string pinyin)
         {
             return Regex.IsMatch(pinyin, PinyinNumIncludeRegexPattern);
         }
 
         /// <summary>
-        /// Строит верный слог для иероглифа и латинского представления слога
+        ///     Строит верный слог для иероглифа и латинского представления слога
         /// </summary>
         /// <param name="chineseChar">Китайский иероглиф, например, 电</param>
         /// <param name="pinyinWithNumber">Представление в латинском алфавите с тоном цифрой, например, dian4</param>
@@ -114,20 +116,20 @@ namespace YellowDuck.LearnChinese.Providers
                 return null;
 
             var rightSyllableIndex = pinyinStringArray
-                    .TakeWhile(a => a != pinyinWithNumber)
-                    .Count();
-            
-            var outPinyin =  _chinesePinyinConverter.Convert(chineseChar, EToneType.Mark)[rightSyllableIndex];
+                .TakeWhile(a => a != pinyinWithNumber)
+                .Count();
+
+            var outPinyin = _chinesePinyinConverter.Convert(chineseChar, EToneType.Mark)[rightSyllableIndex];
 
             return GetSyllable(chineseChar, outPinyin);
         }
 
         /// <summary>
-        /// Формат для импорта слов: Иероглиф[ImportSeparator]Пининь[ImportSeparator]Перевод, либо в случае usePinyin=false
-        /// Иероглиф[ImportSeparator]Перевод. 
-        /// Например, 电;diàn;электричество (usePinyin=true, ImportSeparator=";")
-        /// Например, 电;электричество (usePinyin=false, ImportSeparator=";")
-        /// Например, 电;dian4;электричество (usePinyin=true, ImportSeparator=";")
+        ///     Формат для импорта слов: Иероглиф[ImportSeparator]Пининь[ImportSeparator]Перевод, либо в случае usePinyin=false
+        ///     Иероглиф[ImportSeparator]Перевод.
+        ///     Например, 电;diàn;электричество (usePinyin=true, ImportSeparator=";")
+        ///     Например, 电;электричество (usePinyin=false, ImportSeparator=";")
+        ///     Например, 电;dian4;электричество (usePinyin=true, ImportSeparator=";")
         /// </summary>
         /// <param name="rawWords">Массив строк для импорта</param>
         /// <param name="usePinyin">Флаг, использовать ли пининь из импортируемых строк</param>
@@ -139,7 +141,8 @@ namespace YellowDuck.LearnChinese.Providers
 
             foreach (var word in rawWords)
             {
-                var arrayToParse = word.Split(new[] {ImportSeparator1,ImportSeparator2 }, StringSplitOptions.RemoveEmptyEntries);
+                var arrayToParse = word.Split(new[] {ImportSeparator1, ImportSeparator2},
+                    StringSplitOptions.RemoveEmptyEntries);
                 if (arrayToParse.Length < 2)
                 {
                     badWords.Add(word);
@@ -152,7 +155,7 @@ namespace YellowDuck.LearnChinese.Providers
                 var translationNative = string.Join(ImportSeparator1.ToString(), arrayToParse.Skip(translationIndex));
 
                 var syllables = GetOrderedSyllables(mainWord, EToneType.Mark);
-                
+
                 var separatedSyllables = _syllablesToStringConverter.Join(syllables.Select(a => a.Pinyin));
 
                 var solidSyllables = separatedSyllables.Replace(_syllablesToStringConverter.GetSeparator(),
@@ -182,9 +185,9 @@ namespace YellowDuck.LearnChinese.Providers
                     else
                     {
                         var useNum = IsNumbersInPinyinUsed(pinyinStr);
-                        var leftPinyin = useNum ? pinyinStr: pinyin;
+                        var leftPinyin = useNum ? pinyinStr : pinyin;
                         var successFlag = false;
-                        
+
 
                         var importedSyllables = new List<Syllable>();
 
@@ -193,7 +196,8 @@ namespace YellowDuck.LearnChinese.Providers
                             successFlag = false;
                             var chineseChar = syllable.ChineseChar;
 
-                            foreach (var pinyinOption in _chinesePinyinConverter.Convert(chineseChar, useNum ? EToneType.Number : EToneType.Mark))
+                            foreach (var pinyinOption in _chinesePinyinConverter.Convert(chineseChar,
+                                useNum ? EToneType.Number : EToneType.Mark))
                             {
                                 var numFreePinyinOption = Regex.Replace(pinyinOption, PinyinExludeRegexPattern,
                                     string.Empty);
@@ -226,7 +230,8 @@ namespace YellowDuck.LearnChinese.Providers
                                                 _syllableColorProvider.GetSyllableColor(syllable.ChineseChar, tone);
                                         }
 
-                                        importedSyllables.Insert(0, useNum ? syllable : GetSyllable(syllable.ChineseChar, tone));
+                                        importedSyllables.Insert(0,
+                                            useNum ? syllable : GetSyllable(syllable.ChineseChar, tone));
                                         break;
                                     }
                                 }
@@ -240,20 +245,17 @@ namespace YellowDuck.LearnChinese.Providers
                         }
 
                         if (successFlag)
-                        {
                             goodWords.Add(new Word
                             {
                                 OriginalWord = mainWord,
                                 Pronunciation =
                                     _syllablesToStringConverter.Join(importedSyllables.Select(a => a.Pinyin)),
-                                Translation = translationNative.Replace(ImportSeparator1, ReplaceSeparator).Replace(ImportSeparator2, ReplaceSeparator),
+                                Translation = translationNative.Replace(ImportSeparator1, ReplaceSeparator)
+                                    .Replace(ImportSeparator2, ReplaceSeparator),
                                 SyllablesCount = importedSyllables.Count
                             });
-                        }
                         else
-                        {
                             badWords.Add(word + " (the pinyin is not quite suit for these chinese characters.)");
-                        }
                     }
                     continue;
                 }
@@ -270,7 +272,7 @@ namespace YellowDuck.LearnChinese.Providers
             return new ImportWordResult(goodWords.ToArray(), badWords.ToArray());
         }
 
-        Syllable[] GetOrderedSyllables(string word, EToneType format)
+        private Syllable[] GetOrderedSyllables(string word, EToneType format)
         {
             var outSyllables = new List<Syllable>();
 

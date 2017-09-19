@@ -20,26 +20,24 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
+
 namespace Pinyin4net.Format
 {
     /// <summary>
-    /// Define the output format of character 'ü';
-    /// 
-    /// 'ü' is a special character of Hanyu pinyin, which can not be simply
-    /// represented by English letters. In Hanyu pinyin, such characters include 'ü',
-    /// 'üe', 'üan', and 'ün'.
-    /// 
-    /// This class provides several options for output of 'ü', which are listed
-    /// below:
-    /// 
-    /// 1. WITH_U_AND_COLON -> u:
-    /// 2. WITH_V           -> v
-    /// 3. WITH_U_UNICODE   -> ü
+    ///     Define the output format of character 'ü';
+    ///     'ü' is a special character of Hanyu pinyin, which can not be simply
+    ///     represented by English letters. In Hanyu pinyin, such characters include 'ü',
+    ///     'üe', 'üan', and 'ün'.
+    ///     This class provides several options for output of 'ü', which are listed
+    ///     below:
+    ///     1. WITH_U_AND_COLON -> u:
+    ///     2. WITH_V           -> v
+    ///     3. WITH_U_UNICODE   -> ü
     /// </summary>
     public enum HanyuPinyinVCharType
     {
-        WithUAndColon,       //  This option indicates that the output of 'ü' is "u:"
-        WithV,                 //  This option indicates that the output of 'ü' is "v"
-        WithUUnicode          //  This option indicates that the output of 'ü' is "ü" in Unicode form
+        WithUAndColon, //  This option indicates that the output of 'ü' is "u:"
+        WithV, //  This option indicates that the output of 'ü' is "v"
+        WithUUnicode //  This option indicates that the output of 'ü' is "ü" in Unicode form
     }
 }

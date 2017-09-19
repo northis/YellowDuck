@@ -24,14 +24,12 @@
 namespace Pinyin4net.Format
 {
     /// <summary>
-    /// This classes define how the Hanyu Pinyin should be outputted.
-    /// 
-    /// The output feature includes:
+    ///     This classes define how the Hanyu Pinyin should be outputted.
+    ///     The output feature includes:
     ///     Output format of character 'ü';
     ///     Output format of Chinese tones;
     ///     Cases of letters in outputted string.
-    ///     
-    /// Default value of these features are list below:
+    ///     Default value of these features are list below:
     ///     HanyuPinyinVCharType: HanyuPinyinVCharType.WITH_V;
     ///     HanyuPinyinCaseType: HanyuPinyinCaseType.LOWERCASE;
     ///     HanyuPinyinToneType: HanyuPinyinToneType.WITH_TONE_NUMBER;

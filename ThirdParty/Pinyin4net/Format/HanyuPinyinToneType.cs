@@ -20,26 +20,24 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
+
 namespace Pinyin4net.Format
 {
     /// <summary>
-    /// Define the output format of Hanyu Pinyin tones.
-    /// 
-    /// Chinese has four pitched tones and a "toneless" tone. They are called Píng(平,
-    /// flat), Shǎng(上, rise), Qù(去, high drop), Rù(入, drop) and Qing(轻, toneless).
-    /// Usually, we use 1, 2, 3, 4 and 5 to represent them.
-    /// 
-    /// This class provides several options for output of Chinese tones, which are
-    /// listed below. For example, Chinese character '打'
-    /// 
-    /// 1、WITH_TONE_NUMBER  -> da3
-    /// 2、WITHOUT_TONE      -> da
-    /// 3、WITH_TONE_MARK    -> dǎ
+    ///     Define the output format of Hanyu Pinyin tones.
+    ///     Chinese has four pitched tones and a "toneless" tone. They are called Píng(平,
+    ///     flat), Shǎng(上, rise), Qù(去, high drop), Rù(入, drop) and Qing(轻, toneless).
+    ///     Usually, we use 1, 2, 3, 4 and 5 to represent them.
+    ///     This class provides several options for output of Chinese tones, which are
+    ///     listed below. For example, Chinese character '打'
+    ///     1、WITH_TONE_NUMBER  -> da3
+    ///     2、WITHOUT_TONE      -> da
+    ///     3、WITH_TONE_MARK    -> dǎ
     /// </summary>
     public enum HanyuPinyinToneType
     {
-        WithToneNumber,   //  With tone numbers, for example: li3.
-        WithoutTone,       //  Without tone numbers.
-        WithToneMark      //  With tone marks
+        WithToneNumber, //  With tone numbers, for example: li3.
+        WithoutTone, //  Without tone numbers.
+        WithToneMark //  With tone marks
     }
 }

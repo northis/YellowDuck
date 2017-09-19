@@ -14,25 +14,9 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
 
         private readonly IStudyProvider _studyProvider;
 
-        protected LearnCommand(IStudyProvider studyProvider, EditCommand editCommand):base(editCommand)
+        protected LearnCommand(IStudyProvider studyProvider, EditCommand editCommand) : base(editCommand)
         {
             _studyProvider = studyProvider;
-        }
-        
-        public override AnswerItem ProcessNext(AnswerItem previousAnswerItem, LearnUnit lUnit)
-        {
-            var buttons = new List<InlineKeyboardButton[]>();
-            foreach (var option in lUnit.Options)
-            {
-                buttons.Add(new[]
-                {
-                    new InlineKeyboardButton(string.Join("",option.Take(MaxAnswerLength)))
-                });
-            }
-
-            previousAnswerItem.Markup = new InlineKeyboardMarkup { InlineKeyboard = buttons.ToArray() };
-            previousAnswerItem.Picture = lUnit.Picture;
-            return previousAnswerItem;
         }
 
         public override AnswerItem ProcessAnswer(AnswerItem previousAnswerItem, MessageItem mItem)
@@ -42,6 +26,20 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
             previousAnswerItem.Message = (checkResult.Success ? "✅ " : "⛔️ ") + checkResult.WordStatistic;
             previousAnswerItem.Markup = GetLearnMarkup(checkResult.WordStatistic.Word.Id);
 
+            return previousAnswerItem;
+        }
+
+        public override AnswerItem ProcessNext(AnswerItem previousAnswerItem, LearnUnit lUnit)
+        {
+            var buttons = new List<InlineKeyboardButton[]>();
+            foreach (var option in lUnit.Options)
+                buttons.Add(new[]
+                {
+                    new InlineKeyboardButton(string.Join("", option.Take(MaxAnswerLength)))
+                });
+
+            previousAnswerItem.Markup = new InlineKeyboardMarkup {InlineKeyboard = buttons.ToArray()};
+            previousAnswerItem.Picture = lUnit.Picture;
             return previousAnswerItem;
         }
     }

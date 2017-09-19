@@ -12,19 +12,35 @@ namespace YellowDuck.LearnChineseBotService.Commands
 {
     public class EditCommand : CommandBase
     {
-        private readonly IWordRepository _repository;
-        private readonly IChineseWordParseProvider _parseProvider;
-        private readonly ImportCommand _importCommand;
-        private readonly IFlashCardGenerator _flashCardGenerator;
         public const string EditCmd = "edit";
         public const string EditCmdSeparator = "=";
+        private readonly IFlashCardGenerator _flashCardGenerator;
+        private readonly ImportCommand _importCommand;
+        private readonly IChineseWordParseProvider _parseProvider;
+        private readonly IWordRepository _repository;
 
-        public EditCommand(IWordRepository repository, IChineseWordParseProvider parseProvider, ImportCommand importCommand, IFlashCardGenerator flashCardGenerator)
+        public EditCommand(IWordRepository repository, IChineseWordParseProvider parseProvider,
+            ImportCommand importCommand, IFlashCardGenerator flashCardGenerator)
         {
             _repository = repository;
             _parseProvider = parseProvider;
             _importCommand = importCommand;
             _flashCardGenerator = flashCardGenerator;
+        }
+
+        public override string GetCommandIconUnicode()
+        {
+            return "🖌";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Edit an existing chinese word";
+        }
+
+        public override ECommands GetCommandType()
+        {
+            return ECommands.Edit;
         }
 
         public override AnswerItem Reply(MessageItem mItem)
@@ -54,7 +70,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     }
 
                     var lastWord = _repository.GetUserWordStatistic(idUser, idWord);
-                        //_repository.GetCurrentUserWordStatistic(idUser);
+                    //_repository.GetCurrentUserWordStatistic(idUser);
 
                     if (lastWord == null)
                     {
@@ -68,7 +84,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     message.Message =
                         $"Too much characters. Maximum is {ImportCommand.MaxImportRowLength}";
                 }
-                else 
+                else
                 {
                     var editedText = new[] {mItem.TextOnly};
                     var usePinYin = _importCommand.GetUsePinyin(editedText);
@@ -79,7 +95,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
                         if (wordToFind == null)
                         {
-
                             message.Message += "Bad text";
                             return message;
                         }
@@ -105,7 +120,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     _repository.EditWord(parsedWord);
                     message.Message += "The word has been updated";
                 }
-
             }
             catch (Exception ex)
             {
@@ -113,21 +127,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 message.Message += ex.Message;
             }
             return message;
-        }
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.Edit;
-        }
-
-        public override string GetCommandIconUnicode()
-        {
-            return "🖌";
-        }
-
-        public override string GetCommandTextDescription()
-        {
-            return "Edit an existing chinese word";
         }
     }
 }

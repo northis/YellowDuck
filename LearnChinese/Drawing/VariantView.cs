@@ -26,9 +26,10 @@ namespace YellowDuck.LearnChinese.Drawing
         public string Text { get; set; }
         public Visibility ChineseFontVisibility { get; set; }
 
-        public Visibility CommonFontVisibility => ChineseFontVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility CommonFontVisibility => ChineseFontVisibility == Visibility.Visible
+            ? Visibility.Collapsed
+            : Visibility.Visible;
 
         #endregion
-
     }
 }

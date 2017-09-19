@@ -24,7 +24,6 @@ namespace YellowDuck.LearnChineseBotService.WebHook
 
             configuration.DependencyResolver = new NinjectDependencyResolver(MainFactory.NinjectKernel);
             app.UseWebApi(configuration);
-            
         }
     }
 }

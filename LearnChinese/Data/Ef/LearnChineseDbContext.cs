@@ -14,25 +14,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
         #endregion
 
-        #region Properties
-
-        public virtual DbSet<Score> Scores { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-
-        public virtual DbSet<Word> Words { get; set; }
-
-        public virtual DbSet<WordFileA> WordFileAs { get; set; }
-        public virtual DbSet<WordFileO> WordFileOs { get; set; }
-        public virtual DbSet<WordFileP> WordFilePs { get; set; }
-        public virtual DbSet<WordFileT> WordFileTs { get; set; }
-
-        public virtual DbSet<UserSharing> UserSharings { get; set; }
-
-        #endregion
-
         #region Methods
 
-        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Word>()
@@ -46,7 +29,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             modelBuilder.Entity<Word>()
                 .Property(e => e.Translation)
                 .IsUnicode(true);
-            
+
             modelBuilder.Entity<Word>()
                 .Property(e => e.Usage)
                 .IsUnicode(true);
@@ -128,12 +111,24 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 .WithRequired(e => e.UserOwner)
                 .HasForeignKey(e => e.IdOwner)
                 .WillCascadeOnDelete(true);
-            
-
         }
 
         #endregion
 
+        #region Properties
 
+        public virtual DbSet<Score> Scores { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+
+        public virtual DbSet<Word> Words { get; set; }
+
+        public virtual DbSet<WordFileA> WordFileAs { get; set; }
+        public virtual DbSet<WordFileO> WordFileOs { get; set; }
+        public virtual DbSet<WordFileP> WordFilePs { get; set; }
+        public virtual DbSet<WordFileT> WordFileTs { get; set; }
+
+        public virtual DbSet<UserSharing> UserSharings { get; set; }
+
+        #endregion
     }
 }

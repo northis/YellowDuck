@@ -12,13 +12,6 @@ namespace YellowDuck.LearnChinese.Data.Ef
 {
     public sealed class EfRepository : IWordRepository
     {
-        #region Fields
-
-        private readonly LearnChineseDbContext _context;
-        private readonly bool _useFullText;
-        public const int MaxSearchResults = 5;
-        #endregion
-
         #region Constructors
 
         public EfRepository(LearnChineseDbContext context, bool useFullText)
@@ -29,8 +22,15 @@ namespace YellowDuck.LearnChinese.Data.Ef
 
         #endregion
 
-        #region Methods
+        #region Fields
 
+        private readonly LearnChineseDbContext _context;
+        private readonly bool _useFullText;
+        public const int MaxSearchResults = 5;
+
+        #endregion
+
+        #region Methods
 
         public IWord[] GetWords(Expression<Func<IWord, bool>> whereCondition)
         {
@@ -41,8 +41,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
         {
             return _context.Database.SqlQuery<DateTime>("select getdate()", "").FirstOrDefault();
         }
-        
-        IOrderedQueryable<Score> GetDifficultScores(ELearnMode learnMode, IQueryable<Score> scores)
+
+        private IOrderedQueryable<Score> GetDifficultScores(ELearnMode learnMode, IQueryable<Score> scores)
         {
             switch (learnMode)
             {
@@ -74,9 +74,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
             return scores.OrderBy(a => a.ViewCount);
         }
 
-        void SetUnscoredWords(long idUser)
+        private void SetUnscoredWords(long idUser)
         {
-
             var unscoredUserWordIds =
                 _context.Words.Where(
                         a =>
@@ -85,9 +84,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     .Select(a => a.Id);
 
             foreach (var idWord in unscoredUserWordIds.ToArray())
-            {
                 GetScore(idUser, idWord);
-            }
         }
 
         public void SetLearnMode(long userId, EGettingWordsStrategy mode)
@@ -173,7 +170,6 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 default:
                     userWords = scores.Select(a => a.Word);
                     break;
-
             }
 
             var word = userWords.FirstOrDefault();
@@ -185,9 +181,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var score = GetScore(userId, wordId);
 
             foreach (var sc in scores)
-            {
                 sc.IsInLearnMode = false;
-            }
 
             score.LastLearnMode = learnMode.ToString();
             score.IsInLearnMode = learnMode != ELearnMode.FullView;
@@ -231,7 +225,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             }
 
             _context.SaveChanges();
-            
+
 
             return questionItem;
         }
@@ -266,7 +260,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             };
             _context.Scores.Add(score);
             _context.SaveChanges();
-            
+
             return score;
         }
 
@@ -315,7 +309,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 throw new Exception(
                     $"Removing is not possible, there is no such word in the dictionary. Id={wordId}");
 
-            
+
             _context.Scores.RemoveRange(_context.Scores.Where(a => a.IdWord == wordId));
             _context.Words.Remove(originalWord);
             _context.SaveChanges();
@@ -344,18 +338,18 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 Id = word.Id,
                 IdOwner = idUser,
                 SyllablesCount = word.SyllablesCount,
-                
+
                 CardAll = word.CardAll,
                 CardOriginalWord = word.CardOriginalWord,
                 CardTranslation = word.CardTranslation,
                 CardPronunciation = word.CardPronunciation
             };
-            
+
 
             _context.Words.Add(wrdNew);
             _context.SaveChanges();
         }
-        
+
 
         public void AddUser(IUser user)
         {
@@ -402,7 +396,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 throw new Exception(
                     $"Can't share current word list. friendUserId={friendUserId}");
 
-            ownerUser.OwnerUserSharings.Add(new UserSharing { UserFriend = friendUser });
+            ownerUser.OwnerUserSharings.Add(new UserSharing {UserFriend = friendUser});
             _context.SaveChanges();
         }
 
@@ -432,7 +426,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             if (score == null)
                 return null;
 
-            return new WordStatistic{ Score = score, Word = score.Word};
+            return new WordStatistic {Score = score, Word = score.Word};
         }
 
         public WordStatistic GetUserWordStatistic(long userId, long wordId)
@@ -448,7 +442,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     _context.Words.FirstOrDefault(
                         a => a.Id == wordId && (a.IdOwner == userId || userOwners.Contains(a.IdOwner)));
 
-                if(word == null)
+                if (word == null)
                     return null;
 
                 score = new Score
@@ -465,7 +459,6 @@ namespace YellowDuck.LearnChinese.Data.Ef
                     TranslationSuccessCount = 0,
                     LastLearnMode = ELearnMode.FullView.ToString()
                 };
-
             }
             else
             {
@@ -473,7 +466,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             }
 
             SetScore(score);
-            return new WordStatistic{ Score = score, Word = score.Word};
+            return new WordStatistic {Score = score, Word = score.Word};
         }
 
         public void SetScore(IScore score)
@@ -482,7 +475,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
             var wordId = score.IdWord;
             var scoreEntity = GetScore(userId, wordId);
 
-            var learnMode =  score.ToELearnMode();
+            var learnMode = score.ToELearnMode();
 
             scoreEntity.LastLearnMode = score.LastLearnMode;
             scoreEntity.IsInLearnMode = score.IsInLearnMode;
@@ -500,10 +493,8 @@ namespace YellowDuck.LearnChinese.Data.Ef
                 scoreEntity.LastLearned = GetRepositoryTime();
 
             if (score.IsInLearnMode)
-            {
                 foreach (var scores in _context.Scores.Where(a => a.IdUser == userId))
                     scores.IsInLearnMode = false;
-            }
 
             _context.SaveChanges();
         }
@@ -548,6 +539,7 @@ namespace YellowDuck.LearnChinese.Data.Ef
         {
             return _context.Users;
         }
+
         public IQueryable<IUser> GetUserFriends(long userId)
         {
             return _context.UserSharings.Where(a => a.IdOwner == userId).Select(a => a.UserFriend);
@@ -556,10 +548,9 @@ namespace YellowDuck.LearnChinese.Data.Ef
         public IQueryable<WordSearchResult> FindFlashCard(string searchString, long userId)
         {
             if (string.IsNullOrWhiteSpace(searchString))
-                return new WordSearchResult[] {}.AsQueryable();
+                return new WordSearchResult[] { }.AsQueryable();
 
             if (_useFullText)
-            {
                 return
                     _context.Database.SqlQuery<WordSearchResult>(
                             "SELECT top (@MaxSearchResults) f.IdWord as FileId, f.Height as HeightFlashCard, f.Width as WidthFlashCard, w.OriginalWord, w.Pronunciation, w.Translation   FROM [LearnChinese].[dbo].[Word] w join [LearnChinese].[dbo].[WordFileA] f on (f.IdWord = w.Id and w.IdOwner=@userId)  where  CONTAINS(w.OriginalWord, @searchString)",
@@ -567,7 +558,6 @@ namespace YellowDuck.LearnChinese.Data.Ef
                             new SqlParameter("@userId", userId),
                             new SqlParameter("@searchString", searchString))
                         .AsQueryable();
-            }
 
             return _context.Words.Where(a => a.IdOwner == userId && a.OriginalWord.Contains(searchString))
                 .Take(MaxSearchResults)

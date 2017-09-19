@@ -52,7 +52,7 @@ namespace YellowDuck.LearnChinese.Providers
                     format.ToneType = HanyuPinyinToneType.WithToneNumber;
                     break;
             }
-            
+
             return PinyinHelper.ToHanyuPinyinStringArray(chineseCharacter, format);
         }
 
@@ -61,7 +61,7 @@ namespace YellowDuck.LearnChinese.Providers
             return ToSyllablesWithoutTone(pinyin1) == ToSyllablesWithoutTone(pinyin2);
         }
 
-        string ToSyllablesWithoutTone(string syllableMarkTone)
+        private string ToSyllablesWithoutTone(string syllableMarkTone)
         {
             syllableMarkTone = syllableMarkTone.ToLower();
             syllableMarkTone = Regex.Replace(syllableMarkTone, PinyinExcludeRegexPattern, string.Empty);
@@ -92,7 +92,7 @@ namespace YellowDuck.LearnChinese.Providers
             return ToSyllablesWithoutTone(syllableMarkTone) + toneNumber;
         }
 
-        string[] GetAllTonesBucket(string syllableMarkTone, string patternLetter)
+        private string[] GetAllTonesBucket(string syllableMarkTone, string patternLetter)
         {
             var result = new string[TonesTotalCount];
 
@@ -103,7 +103,8 @@ namespace YellowDuck.LearnChinese.Providers
                 var lettersOnlyLength = lettersOnly.Length;
 
                 if (lettersOnlyLength < TonesTotalCount)
-                    throw new Exception($"Letters count in the pattern [{patternLetter}] less than ({TonesTotalCount})");
+                    throw new Exception(
+                        $"Letters count in the pattern [{patternLetter}] less than ({TonesTotalCount})");
 
                 for (var i = 0; i < lettersOnlyLength; i++)
                 {
@@ -149,6 +150,7 @@ namespace YellowDuck.LearnChinese.Providers
         }
 
         public const string ReplaceExludeRegexPattern = "[^a-z]";
+
         #endregion
     }
 }

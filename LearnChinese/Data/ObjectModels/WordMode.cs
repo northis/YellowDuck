@@ -9,5 +9,4 @@ namespace YellowDuck.LearnChinese.Data.ObjectModels
         public ELearnMode LearnMode { get; set; }
         public GenerateImageResult GenerateImageResult { get; set; }
     }
-
 }

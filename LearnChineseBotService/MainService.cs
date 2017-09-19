@@ -12,6 +12,15 @@ namespace YellowDuck.LearnChineseBotService
             MainFactory.Init();
         }
 
+        public void StartUserInteractive()
+        {
+            Console.WriteLine("Press any key to quit");
+
+            OnStart(null);
+            Console.ReadKey();
+            OnStop();
+        }
+
         protected override void OnStart(string[] args)
         {
             if (MainFactory.UseWebhooks)
@@ -27,15 +36,5 @@ namespace YellowDuck.LearnChineseBotService
             else
                 MainFactory.PollWorker.Stop();
         }
-
-        public void StartUserInteractive()
-        {
-            Console.WriteLine("Press any key to quit");
-
-            OnStart(null);
-            Console.ReadKey();
-            OnStop();
-        }
     }
-
 }

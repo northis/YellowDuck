@@ -12,22 +12,15 @@ namespace YellowDuck.Common.Logging
     public class Log4NetService : ILogService
     {
         #region Constructors
+
         static Log4NetService()
         {
-            
             LoggerManager.ResetConfiguration(Assembly.GetCallingAssembly());
             XmlConfigurator.Configure();
 
-            var hierarchy = (Hierarchy)LogManager.GetRepository();
+            var hierarchy = (Hierarchy) LogManager.GetRepository();
             MainLogger = hierarchy.Root;
         }
-
-        #endregion
-
-        #region Fields
-
-        public static Log4NetService Instance = new Log4NetService();
-        private static readonly Logger MainLogger;
 
         #endregion
 
@@ -55,15 +48,19 @@ namespace YellowDuck.Common.Logging
             {
                 props.Properties = new PropertiesDictionary();
                 foreach (var pr in parameters)
-                {
                     props.Properties[pr.Key] = pr.Value;
-                }
             }
 
             MainLogger.Log(new LoggingEvent(props));
         }
 
         #endregion
-        
+
+        #region Fields
+
+        public static Log4NetService Instance = new Log4NetService();
+        private static readonly Logger MainLogger;
+
+        #endregion
     }
 }

@@ -6,10 +6,16 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
 {
     public abstract class CommandBase
     {
-        public abstract AnswerItem Reply(MessageItem mItem);
-        public abstract ECommands GetCommandType();
-
         public const string CommandStartChar = "/";
+
+        public string GetCommandDescription()
+        {
+            return GetCommandIconUnicode() + GetCommandTextDescription();
+        }
+
+        public abstract string GetCommandIconUnicode();
+        public abstract string GetCommandTextDescription();
+        public abstract ECommands GetCommandType();
 
         public static ECommands GetCommandType(string command)
         {
@@ -22,22 +28,16 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
             var cleanedCommand = command.Substring(1, command.Length - 1);
 
             if (!Enum.TryParse(cleanedCommand, true, out ECommands commandEnum))
-                throw new NotSupportedException($"Command '{ nameof(command)}' is not supported");
+                throw new NotSupportedException($"Command '{nameof(command)}' is not supported");
 
             return commandEnum;
         }
-
-        public string GetCommandDescription()
-        {
-            return GetCommandIconUnicode()+ GetCommandTextDescription();
-        }
-
-        public abstract string GetCommandIconUnicode();
-        public abstract string GetCommandTextDescription();
 
         public string GetFormattedDescription()
         {
             return $"{CommandStartChar}{GetCommandType()} - {GetCommandDescription()}";
         }
+
+        public abstract AnswerItem Reply(MessageItem mItem);
     }
 }

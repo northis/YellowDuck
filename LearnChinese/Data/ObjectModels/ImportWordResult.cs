@@ -20,6 +20,5 @@ namespace YellowDuck.LearnChinese.Data.ObjectModels
         public string[] FailedWords { get; }
 
         #endregion
-
     }
 }

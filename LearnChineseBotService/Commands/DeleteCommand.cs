@@ -10,14 +10,29 @@ namespace YellowDuck.LearnChineseBotService.Commands
 {
     public class DeleteCommand : CommandBase
     {
-        private readonly IWordRepository _repository;
-
         public const string YesAnswer = "yes";
         public const string NoAnswer = "no";
+        private readonly IWordRepository _repository;
 
         public DeleteCommand(IWordRepository repository)
         {
             _repository = repository;
+        }
+
+        public override string GetCommandIconUnicode()
+        {
+            return "🗑";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Remove a word from the dictionary";
+        }
+
+
+        public override ECommands GetCommandType()
+        {
+            return ECommands.Delete;
         }
 
         public override AnswerItem Reply(MessageItem mItem)
@@ -28,13 +43,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
 
             if (string.IsNullOrEmpty(mItem.TextOnly))
             {
-                message = "Type a chinese word to remove it from the dictionary. All word's score information will be removed too!";
+                message =
+                    "Type a chinese word to remove it from the dictionary. All word's score information will be removed too!";
             }
             else if (NoAnswer == mItem.TextOnly.ToLowerInvariant())
             {
                 message = "Delete has been cancelled";
             }
-            else if(mItem.TextOnly.ToLowerInvariant().StartsWith(YesAnswer))
+            else if (mItem.TextOnly.ToLowerInvariant().StartsWith(YesAnswer))
             {
                 try
                 {
@@ -53,7 +69,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 message = $"Do you really want to remove '{mItem.TextOnly}'?";
                 markup = new InlineKeyboardMarkup
                 {
-                    InlineKeyboard = new[] { new[] { new InlineKeyboardButton("✅Yes", $"yes{mItem.TextOnly}"), new InlineKeyboardButton("❌No", "no") } }
+                    InlineKeyboard = new[]
+                    {
+                        new[]
+                        {
+                            new InlineKeyboardButton("✅Yes", $"yes{mItem.TextOnly}"),
+                            new InlineKeyboardButton("❌No", "no")
+                        }
+                    }
                 };
             }
 
@@ -64,22 +87,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
             };
 
             return answer;
-        }
-
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.Delete;
-        }
-
-        public override string GetCommandIconUnicode()
-        {
-            return "🗑";
-        }
-
-        public override string GetCommandTextDescription()
-        {
-            return "Remove a word from the dictionary";
         }
     }
 }

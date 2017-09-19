@@ -20,6 +20,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
+
 using System;
 using NUnit.Framework;
 using Pinyin4net.Exceptions;
@@ -30,46 +31,6 @@ namespace Pinyin4net.Tests
     [TestFixture]
     public class HanyuPinyinTest
     {
-        #region Tests
-
-        [Test]
-        [Description("Test null input")]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void TestNullInput()
-        {
-            PinyinHelper.ToHanyuPinyinStringArray('李', null);
-        }
-        
-        [Test]
-        [Description("Test non Chinese character input")]
-        [TestCase('A')]
-        [TestCase('ガ')]
-        [TestCase('ç')]
-        [TestCase('匇')]
-        public void TestNonChineseCharacter(char ch)
-        {
-            Assert.IsNull(PinyinHelper.ToHanyuPinyinStringArray(ch));
-        }
-        
-        [Test]
-        [Description("Test get hanyupinyin with different VCharType format")]
-        //  Simplified Chinese
-        [TestCase('吕', HanyuPinyinVCharType.WithUAndColon, Result = "lu:3")]
-        [TestCase('李', HanyuPinyinVCharType.WithUAndColon, Result = "li3")]
-        [TestCase('吕', HanyuPinyinVCharType.WithV, Result = "lv3")]
-        [TestCase('李', HanyuPinyinVCharType.WithV, Result = "li3")]
-        [TestCase('吕', HanyuPinyinVCharType.WithUUnicode, Result = "lü3")]
-        [TestCase('李', HanyuPinyinVCharType.WithUUnicode, Result = "li3")]
-        //  Traditional Chinese
-        [TestCase('呂', HanyuPinyinVCharType.WithUAndColon, Result = "lu:3")]
-        [TestCase('呂', HanyuPinyinVCharType.WithV, Result = "lv3")]
-        [TestCase('呂', HanyuPinyinVCharType.WithUUnicode, Result = "lü3")]
-        public string TestVCharType(char ch, HanyuPinyinVCharType vcharType)
-        {
-            var format = new HanyuPinyinOutputFormat {VCharType = vcharType};
-            return PinyinHelper.ToHanyuPinyinStringArray(ch, format)[0];
-        }
-
         [Test]
         [Description("Test get hanyupinyin with upper case format")]
         //  Simplified Chinese
@@ -94,23 +55,109 @@ namespace Pinyin4net.Tests
         }
 
         [Test]
-        [Description("Test get hanyupinyin with invalid format")]
-        [ExpectedException(typeof(InvalidHanyuPinyinFormatException))]
-        [TestCase('吕', HanyuPinyinVCharType.WithUAndColon)]
-        [TestCase('呂', HanyuPinyinVCharType.WithUAndColon)]
-        public void TestToneMarkWithUAndColon(char ch, HanyuPinyinVCharType vcharType)
+        [Category("Simplified Chinese")]
+        [Description("Test character with multiple pronounciations")]
+
+        #region Test data
+
+        //  Simplified Chinese
+        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUAndColon,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lou2", "lu:3"})]
+        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUAndColon,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LOU2", "LU:3"})]
+        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Lowercase,
+            Result = new[] {"lou2", "lv3"})]
+        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase,
+            Result = new[] {"LOU2", "LV3"})]
+        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lou2", "lü3"})]
+        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LOU2", "LÜ3"})]
+        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUAndColon,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lou", "lu:"})]
+        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUAndColon,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LOU", "LU:"})]
+        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Lowercase,
+            Result = new[] {"lou", "lv"})]
+        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase,
+            Result = new[] {"LOU", "LV"})]
+        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lou", "lü"})]
+        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LOU", "LÜ"})]
+        [TestCase('偻', HanyuPinyinToneType.WithToneMark, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lóu", "lǚ"})]
+        [TestCase('偻', HanyuPinyinToneType.WithToneMark, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LÓU", "LǙ"})]
+        //  Traditional Chinese
+        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUAndColon,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lou2", "lu:3"})]
+        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUAndColon,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LOU2", "LU:3"})]
+        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Lowercase,
+            Result = new[] {"lou2", "lv3"})]
+        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase,
+            Result = new[] {"LOU2", "LV3"})]
+        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lou2", "lü3"})]
+        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LOU2", "LÜ3"})]
+        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUAndColon,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lou", "lu:"})]
+        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUAndColon,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LOU", "LU:"})]
+        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Lowercase,
+            Result = new[] {"lou", "lv"})]
+        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase,
+            Result = new[] {"LOU", "LV"})]
+        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lou", "lü"})]
+        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LOU", "LÜ"})]
+        [TestCase('僂', HanyuPinyinToneType.WithToneMark, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Lowercase, Result = new[] {"lóu", "lǚ"})]
+        [TestCase('僂', HanyuPinyinToneType.WithToneMark, HanyuPinyinVCharType.WithUUnicode,
+            HanyuPinyinCaseType.Uppercase, Result = new[] {"LÓU", "LǙ"})]
+
+        #endregion
+
+        public string[] TestCharWithMultiplePronouciations(
+            char ch, HanyuPinyinToneType toneType,
+            HanyuPinyinVCharType vcharType, HanyuPinyinCaseType caseType)
         {
             var format = new HanyuPinyinOutputFormat
             {
-                ToneType = HanyuPinyinToneType.WithToneMark,
-                VCharType = vcharType
+                ToneType = toneType,
+                VCharType = vcharType,
+                CaseType = caseType
             };
-            PinyinHelper.ToHanyuPinyinStringArray(ch, format);
+            return PinyinHelper.ToHanyuPinyinStringArray(ch, format);
+        }
+
+        [Test]
+        [Description("Test non Chinese character input")]
+        [TestCase('A')]
+        [TestCase('ガ')]
+        [TestCase('ç')]
+        [TestCase('匇')]
+        public void TestNonChineseCharacter(char ch)
+        {
+            Assert.IsNull(PinyinHelper.ToHanyuPinyinStringArray(ch));
+        }
+
+        [Test]
+        [Description("Test null input")]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TestNullInput()
+        {
+            PinyinHelper.ToHanyuPinyinStringArray('李', null);
         }
 
         [Test]
         [Description("Test get hanyupinyin with tone mark format")]
+
         #region Test data
+
         //  Simplified Chinese
         [TestCase('爸', Result = "bà")]
         [TestCase('波', Result = "bō")]
@@ -161,7 +208,9 @@ namespace Pinyin4net.Tests
         [TestCase('黃', Result = "huáng")]
         [TestCase('淵', Result = "yuān")]
         [TestCase('兒', Result = "ér")]
+
         #endregion
+
         public string TestToneMark(char ch)
         {
             var format = new HanyuPinyinOutputFormat
@@ -173,8 +222,44 @@ namespace Pinyin4net.Tests
         }
 
         [Test]
+        [Description("Test get hanyupinyin with invalid format")]
+        [ExpectedException(typeof(InvalidHanyuPinyinFormatException))]
+        [TestCase('吕', HanyuPinyinVCharType.WithUAndColon)]
+        [TestCase('呂', HanyuPinyinVCharType.WithUAndColon)]
+        public void TestToneMarkWithUAndColon(char ch, HanyuPinyinVCharType vcharType)
+        {
+            var format = new HanyuPinyinOutputFormat
+            {
+                ToneType = HanyuPinyinToneType.WithToneMark,
+                VCharType = vcharType
+            };
+            PinyinHelper.ToHanyuPinyinStringArray(ch, format);
+        }
+
+        [Test]
+        [Description("Test get hanyupinyin with different VCharType format")]
+        //  Simplified Chinese
+        [TestCase('吕', HanyuPinyinVCharType.WithUAndColon, Result = "lu:3")]
+        [TestCase('李', HanyuPinyinVCharType.WithUAndColon, Result = "li3")]
+        [TestCase('吕', HanyuPinyinVCharType.WithV, Result = "lv3")]
+        [TestCase('李', HanyuPinyinVCharType.WithV, Result = "li3")]
+        [TestCase('吕', HanyuPinyinVCharType.WithUUnicode, Result = "lü3")]
+        [TestCase('李', HanyuPinyinVCharType.WithUUnicode, Result = "li3")]
+        //  Traditional Chinese
+        [TestCase('呂', HanyuPinyinVCharType.WithUAndColon, Result = "lu:3")]
+        [TestCase('呂', HanyuPinyinVCharType.WithV, Result = "lv3")]
+        [TestCase('呂', HanyuPinyinVCharType.WithUUnicode, Result = "lü3")]
+        public string TestVCharType(char ch, HanyuPinyinVCharType vcharType)
+        {
+            var format = new HanyuPinyinOutputFormat {VCharType = vcharType};
+            return PinyinHelper.ToHanyuPinyinStringArray(ch, format)[0];
+        }
+
+        [Test]
         [Description("Test get hanyupinyin with out tone format")]
+
         #region Test data
+
         //  Simplified Chinese
         [TestCase('吕', HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Lowercase, Result = "lu:")]
         [TestCase('李', HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Lowercase, Result = "li")]
@@ -195,7 +280,9 @@ namespace Pinyin4net.Tests
         [TestCase('呂', HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase, Result = "LV")]
         [TestCase('呂', HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Lowercase, Result = "lü")]
         [TestCase('呂', HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Uppercase, Result = "LÜ")]
+
         #endregion
+
         public string TestWithoutToneNumber(
             char ch, HanyuPinyinVCharType vcharType, HanyuPinyinCaseType caseType)
         {
@@ -210,7 +297,9 @@ namespace Pinyin4net.Tests
 
         [Test]
         [Description("Test get hanyupinyin with tone number format")]
+
         #region Test data
+
         //  Simplified Chinese
         [TestCase('吕', HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Lowercase, Result = "lu:3")]
         [TestCase('李', HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Lowercase, Result = "li3")]
@@ -231,7 +320,9 @@ namespace Pinyin4net.Tests
         [TestCase('呂', HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase, Result = "LV3")]
         [TestCase('呂', HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Lowercase, Result = "lü3")]
         [TestCase('呂', HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Uppercase, Result = "LÜ3")]
+
         #endregion
+
         public string TestWithToneNumber(
             char ch, HanyuPinyinVCharType vcharType, HanyuPinyinCaseType caseType)
         {
@@ -243,59 +334,5 @@ namespace Pinyin4net.Tests
             };
             return PinyinHelper.ToHanyuPinyinStringArray(ch, format)[0];
         }
-
-        [Test]
-        [Category("Simplified Chinese")]
-        [Description("Test character with multiple pronounciations")]
-        #region Test data
-        //  Simplified Chinese
-        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Lowercase, Result = new[] {"lou2", "lu:3"})]
-        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU2", "LU:3" })]
-        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou2", "lv3" })]
-        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU2", "LV3" })]
-        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou2", "lü3" })]
-        [TestCase('偻', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU2", "LÜ3" })]
-
-        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou", "lu:" })]
-        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU", "LU:" })]
-        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou", "lv" })]
-        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU", "LV" })]
-        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou", "lü" })]
-        [TestCase('偻', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU", "LÜ" })]
-
-        [TestCase('偻', HanyuPinyinToneType.WithToneMark, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Lowercase, Result = new[] { "lóu", "lǚ" })]
-        [TestCase('偻', HanyuPinyinToneType.WithToneMark, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Uppercase, Result = new[] { "LÓU", "LǙ" })]
-        //  Traditional Chinese
-        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou2", "lu:3" })]
-        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU2", "LU:3" })]
-        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou2", "lv3" })]
-        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU2", "LV3" })]
-        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou2", "lü3" })]
-        [TestCase('僂', HanyuPinyinToneType.WithToneNumber, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU2", "LÜ3" })]
-
-        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou", "lu:" })]
-        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUAndColon, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU", "LU:" })]
-        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou", "lv" })]
-        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithV, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU", "LV" })]
-        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Lowercase, Result = new[] { "lou", "lü" })]
-        [TestCase('僂', HanyuPinyinToneType.WithoutTone, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Uppercase, Result = new[] { "LOU", "LÜ" })]
-
-        [TestCase('僂', HanyuPinyinToneType.WithToneMark, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Lowercase, Result = new[] { "lóu", "lǚ" })]
-        [TestCase('僂', HanyuPinyinToneType.WithToneMark, HanyuPinyinVCharType.WithUUnicode, HanyuPinyinCaseType.Uppercase, Result = new[] { "LÓU", "LǙ" })]
-        #endregion
-        public string[] TestCharWithMultiplePronouciations(
-            char ch, HanyuPinyinToneType toneType,
-            HanyuPinyinVCharType vcharType, HanyuPinyinCaseType caseType)
-        {
-            var format = new HanyuPinyinOutputFormat
-            {
-                ToneType = toneType,
-                VCharType = vcharType,
-                CaseType = caseType
-            };
-            return PinyinHelper.ToHanyuPinyinStringArray(ch, format);
-        }
-        
-        #endregion
     }
 }

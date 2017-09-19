@@ -7,10 +7,6 @@ namespace YellowDuck.LearnChineseBotService
     [RunInstaller(true)]
     public class ProjectInstaller : Installer
     {
-        public ServiceInstaller MainServiceInstaller { get; }
-
-        public ServiceProcessInstaller MainServiceProcessInstaller { get; }
-
         public ProjectInstaller()
         {
             MainServiceProcessInstaller = new ServiceProcessInstaller();
@@ -25,5 +21,9 @@ namespace YellowDuck.LearnChineseBotService
             MainServiceInstaller.Description = "Yellow Duck - Learn Chinese Bot Service";
             MainServiceInstaller.DisplayName = MainServiceInstaller.ServiceName = "YellowDuck.LearnChineseBotService";
         }
+
+        public ServiceInstaller MainServiceInstaller { get; }
+
+        public ServiceProcessInstaller MainServiceProcessInstaller { get; }
     }
 }

@@ -10,25 +10,43 @@ namespace YellowDuck.LearnChineseBotService.Tests
     public class MainLogicTests
     {
         [TestMethod]
-        public void ParseWordTest()
+        public void AddWordToDictionaryTest()
         {
+            var colorProv = new ClassicSyllableColorProvider();
             var pinyinProv = new Pinyin4NetConverter();
             var tostrConv = new ClassicSyllablesToStringConverter();
-            var prov = new PinyinChineseWordParseProvider(new ClassicSyllableColorProvider(), pinyinProv, tostrConv);
-            var word = "体育馆";
-            //PinyinWord = "tǐyùguǎn",
-            //TranslationNative = "Спортзал",
-            //TranslationEng = "gym"
+            var prov = new PinyinChineseWordParseProvider(colorProv, pinyinProv, tostrConv);
 
-            var syllablesToCheck = new [] { "tǐ", "yù", "guǎn" };
-            var syllables = prov.GetOrderedSyllables(word);
+            var stringsToImport = new[] {"明!!白!;míngbai;понимать"};
 
-            Assert.IsTrue(syllables.Length > 0);
+            var wordsResult = prov.ImportWords(stringsToImport, true);
 
-            for (var i = 0; i < syllablesToCheck.Length; i++)
-            {
-                Assert.AreEqual(syllablesToCheck[i], syllables[i].Pinyin);
-            }
+            Assert.IsNotNull(wordsResult);
+            Assert.IsTrue(wordsResult.FailedWords.Length == 0);
+            Assert.IsTrue(wordsResult.SuccessfulWords.Length == 1);
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].OriginalWord == "明!!白!");
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].Pronunciation == "míng|bai");
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].Translation == "понимать");
+
+            stringsToImport = new[] {"你有病吗?你有药吗?;- ты больной? (шутл.) - а есть лекарство?"};
+
+            wordsResult = prov.ImportWords(stringsToImport, false);
+
+            Assert.IsNotNull(wordsResult);
+            Assert.IsTrue(wordsResult.FailedWords.Length == 0);
+            Assert.IsTrue(wordsResult.SuccessfulWords.Length == 1);
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].OriginalWord == "你有病吗?你有药吗?");
+            //Assert.IsTrue(wordsResult.SuccessfulWords[0].PinyinWord == "míng|bai");
+            Assert.IsTrue(wordsResult.SuccessfulWords[0].Translation == "- ты больной? (шутл.) - а есть лекарство?");
+
+
+            var result = prov.GetOrderedSyllables(wordsResult.SuccessfulWords[0]);
+            Assert.AreEqual("yào", result[7].Pinyin);
+        }
+
+        [TestMethod]
+        public void AnswerPollTest()
+        {
         }
 
         [TestMethod]
@@ -46,7 +64,34 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
             Assert.AreEqual(pinyinMark, syll.Pinyin);
         }
-        
+
+        [TestMethod]
+        public void GenerateImageForWordTest()
+        {
+            var prov = GetChineseWordParseProvider();
+
+            var grn = new WpfFlashCardGenerator(prov);
+            var word = new Word
+            {
+                OriginalWord = "明?白!!",
+                Pronunciation = "míng|bai",
+                Translation = "понимать"
+            };
+
+            //var result = grn.Generate(word, ELearnMode.FullView);
+
+            //Assert.IsTrue(result.ImageBody?.Length > 0);
+            //System.IO.File.WriteAllBytes(@"D:\test.png", result);
+        }
+
+        public static IChineseWordParseProvider GetChineseWordParseProvider()
+        {
+            var colorProv = new ClassicSyllableColorProvider();
+            var pinyinProv = new Pinyin4NetConverter();
+            var tostrConv = new ClassicSyllablesToStringConverter();
+            return new PinyinChineseWordParseProvider(colorProv, pinyinProv, tostrConv);
+        }
+
         [TestMethod]
         public void GetColorTest()
         {
@@ -61,38 +106,18 @@ namespace YellowDuck.LearnChineseBotService.Tests
         }
 
         [TestMethod]
-        public void AddWordToDictionaryTest()
+        public void GetScoreTest()
         {
-            var colorProv = new ClassicSyllableColorProvider();
-            var pinyinProv = new Pinyin4NetConverter();
-            var tostrConv = new ClassicSyllablesToStringConverter();
-            var prov = new PinyinChineseWordParseProvider(colorProv, pinyinProv, tostrConv);
-            
-            var stringsToImport = new [] { "明!!白!;míngbai;понимать" };
+        }
 
-            var wordsResult = prov.ImportWords(stringsToImport, true);
+        [TestMethod]
+        public void GetWordByCharactersTest()
+        {
+        }
 
-            Assert.IsNotNull(wordsResult);
-            Assert.IsTrue(wordsResult.FailedWords.Length == 0);
-            Assert.IsTrue(wordsResult.SuccessfulWords.Length == 1);
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].OriginalWord == "明!!白!");
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].Pronunciation == "míng|bai");
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].Translation == "понимать");
-
-            stringsToImport = new [] { "你有病吗?你有药吗?;- ты больной? (шутл.) - а есть лекарство?" };
-
-            wordsResult = prov.ImportWords(stringsToImport, false);
-
-            Assert.IsNotNull(wordsResult);
-            Assert.IsTrue(wordsResult.FailedWords.Length == 0);
-            Assert.IsTrue(wordsResult.SuccessfulWords.Length == 1);
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].OriginalWord == "你有病吗?你有药吗?");
-            //Assert.IsTrue(wordsResult.SuccessfulWords[0].PinyinWord == "míng|bai");
-            Assert.IsTrue(wordsResult.SuccessfulWords[0].Translation == "- ты больной? (шутл.) - а есть лекарство?");
-
-
-            var result = prov.GetOrderedSyllables(wordsResult.SuccessfulWords[0]);
-            Assert.AreEqual("yào", result[7].Pinyin);
+        [TestMethod]
+        public void LearnRandomWordTest()
+        {
         }
 
         [TestMethod]
@@ -122,55 +147,26 @@ namespace YellowDuck.LearnChineseBotService.Tests
             Assert.IsTrue(result[2].ChineseChar == '白');
             Assert.IsTrue(result[2].Color == Colors.Black);
             Assert.IsTrue(result[2].Pinyin == "bai");
-
         }
 
         [TestMethod]
-        public void GetWordByCharactersTest()
+        public void ParseWordTest()
         {
-
-        }
-
-        [TestMethod]
-        public void LearnRandomWordTest()
-        {
-        }
-
-        [TestMethod]
-        public void AnswerPollTest()
-        {
-        }
-
-        [TestMethod]
-        public void GetScoreTest()
-        {
-        }
-
-        public static IChineseWordParseProvider GetChineseWordParseProvider()
-        {
-            var colorProv = new ClassicSyllableColorProvider();
             var pinyinProv = new Pinyin4NetConverter();
             var tostrConv = new ClassicSyllablesToStringConverter();
-            return new PinyinChineseWordParseProvider(colorProv, pinyinProv, tostrConv);
-        }
+            var prov = new PinyinChineseWordParseProvider(new ClassicSyllableColorProvider(), pinyinProv, tostrConv);
+            var word = "体育馆";
+            //PinyinWord = "tǐyùguǎn",
+            //TranslationNative = "Спортзал",
+            //TranslationEng = "gym"
 
-        [TestMethod]
-        public void GenerateImageForWordTest()
-        {
-            var prov = GetChineseWordParseProvider();
+            var syllablesToCheck = new[] {"tǐ", "yù", "guǎn"};
+            var syllables = prov.GetOrderedSyllables(word);
 
-            var grn = new WpfFlashCardGenerator(prov);
-            var word = new Word
-            {
-                OriginalWord = "明?白!!",
-                Pronunciation = "míng|bai",
-                Translation = "понимать"
-            };
+            Assert.IsTrue(syllables.Length > 0);
 
-            //var result = grn.Generate(word, ELearnMode.FullView);
-
-            //Assert.IsTrue(result.ImageBody?.Length > 0);
-            //System.IO.File.WriteAllBytes(@"D:\test.png", result);
+            for (var i = 0; i < syllablesToCheck.Length; i++)
+                Assert.AreEqual(syllablesToCheck[i], syllables[i].Pinyin);
         }
     }
 }

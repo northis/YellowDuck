@@ -2,7 +2,7 @@
 
 namespace YellowDuck.LearnChinese.Data.ObjectModels
 {
-    public  class Syllable
+    public class Syllable
     {
         #region Constructors
 
@@ -13,9 +13,8 @@ namespace YellowDuck.LearnChinese.Data.ObjectModels
             Color = color;
         }
 
-        public Syllable(char commonChar):this(commonChar,string.Empty, Colors.Black)
+        public Syllable(char commonChar) : this(commonChar, string.Empty, Colors.Black)
         {
-            
         }
 
         #endregion

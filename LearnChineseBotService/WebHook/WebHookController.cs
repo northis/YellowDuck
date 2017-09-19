@@ -9,14 +9,14 @@ namespace YellowDuck.LearnChineseBotService.WebHook
     {
         private readonly QueryHandler _queryHandler;
 
-        public WebHookController( QueryHandler queryHandler)
+        public WebHookController(QueryHandler queryHandler)
         {
             _queryHandler = queryHandler;
         }
-        
+
         public async Task<IHttpActionResult> Post(Update update)
         {
-            if(update.Message !=null)
+            if (update.Message != null)
                 await _queryHandler.OnMessage(update.Message);
 
             if (update.CallbackQuery != null)
@@ -24,7 +24,7 @@ namespace YellowDuck.LearnChineseBotService.WebHook
 
             if (update.InlineQuery != null)
                 await _queryHandler.InlineQuery(update.InlineQuery);
-            
+
 
             return Ok();
         }

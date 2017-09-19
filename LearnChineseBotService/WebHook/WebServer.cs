@@ -3,9 +3,9 @@ using Microsoft.Owin.Hosting;
 using Telegram.Bot;
 
 namespace YellowDuck.LearnChineseBotService.WebHook
-{            // Endpoint musst be configured with netsh:
-             // netsh http add urlacl url=https://+:443/ user=<username>
-             // netsh http add sslcert ipport=0.0.0.0:443 certhash=<cert thumbprint> appid=<random guid>
+{ // Endpoint musst be configured with netsh:
+    // netsh http add urlacl url=https://+:443/ user=<username>
+    // netsh http add sslcert ipport=0.0.0.0:443 certhash=<cert thumbprint> appid=<random guid>
     public class WebServer
     {
         private readonly TelegramBotClient _client;
@@ -14,9 +14,8 @@ namespace YellowDuck.LearnChineseBotService.WebHook
         private readonly string _telegramId;
         private readonly string _whControllerName;
 
-        public IDisposable WebHookWebServer { get; private set; }
-
-        public WebServer(string webhookUrl, string webhookPublicUrl, string telegramId, string whControllerName, TelegramBotClient client)
+        public WebServer(string webhookUrl, string webhookPublicUrl, string telegramId, string whControllerName,
+            TelegramBotClient client)
         {
             _innerurl = webhookUrl;
             _outerUrl = webhookPublicUrl;
@@ -24,6 +23,8 @@ namespace YellowDuck.LearnChineseBotService.WebHook
             _whControllerName = whControllerName;
             _client = client;
         }
+
+        public IDisposable WebHookWebServer { get; private set; }
 
         public void Start()
         {

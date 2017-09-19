@@ -5,10 +5,9 @@ namespace YellowDuck.LearnChinese.Interfaces
 {
     public interface IChineseWordParseProvider
     {
+        Syllable BuildSyllable(char chineseChar, string pinyinWithNumber);
         Syllable[] GetOrderedSyllables(string word);
         Syllable[] GetOrderedSyllables(IWord word);
-
-        Syllable BuildSyllable(char chineseChar, string pinyinWithNumber);
 
         ImportWordResult ImportWords(string[] rawWords, bool usePinyin);
     }

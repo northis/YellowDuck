@@ -1,5 +1,4 @@
-﻿
-namespace YellowDuck.LearnChinese.Data.ObjectModels
+﻿namespace YellowDuck.LearnChinese.Data.ObjectModels
 {
     public class GenerateImageResult
     {

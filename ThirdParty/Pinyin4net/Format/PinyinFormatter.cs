@@ -20,23 +20,23 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-
 using Pinyin4net.Exceptions;
 
 namespace Pinyin4net.Format
 {
     /// <summary>
-    /// This class can convert Hanyu pinyin between different format.
+    ///     This class can convert Hanyu pinyin between different format.
     /// </summary>
     internal class PinyinFormatter
     {
         /// <summary>
-        /// Convert Hanyu pinyin to given format
+        ///     Convert Hanyu pinyin to given format
         /// </summary>
         /// <param name="pinyin">The given Hanyu pinyin string </param>
         /// <param name="outputFormat">The given format</param>
@@ -49,7 +49,7 @@ namespace Pinyin4net.Format
 
             if (outputFormat.ToneType == HanyuPinyinToneType.WithToneMark
                 && (outputFormat.VCharType == HanyuPinyinVCharType.WithUAndColon ||
-                outputFormat.VCharType == HanyuPinyinVCharType.WithV))
+                    outputFormat.VCharType == HanyuPinyinVCharType.WithV))
                 throw new InvalidHanyuPinyinFormatException("Tone marks cannot be added to v or u:");
 
             var result = pinyin.ToLower();
@@ -71,6 +71,7 @@ namespace Pinyin4net.Format
         }
 
         #region Private Functions
+
         private static string ConvertToneNumber2ToneMark(
             string pinyinWithToneNumber)
         {
@@ -86,14 +87,15 @@ namespace Pinyin4net.Format
             var iuRule = CreateReplaceRule("iu", "iūiúiǔiùiu");
             var uiRule = CreateReplaceRule("ui", "uīuíuǐuìui");
             var rules =
-                new[] {
+                new[]
+                {
                     aRule, oRule, eRule, iuRule, uiRule, iRule, uRule, vRule
                 };
 
-            
+
             if (Regex.IsMatch(result, "^[a-zü]*[1-5]$"))
             {
-                var toneNumber = Int32.Parse(result.Last().ToString());
+                var toneNumber = int.Parse(result.Last().ToString());
                 result = Regex.Replace(result, "[1-5]", "");
 #if DEBUG
                 Console.WriteLine("The tone number of " + pinyinWithToneNumber + "is: " + toneNumber);
@@ -101,10 +103,8 @@ namespace Pinyin4net.Format
                 try
                 {
                     foreach (var t in rules)
-                    {
                         if (result.IndexOf(t.Key, StringComparison.Ordinal) > -1)
                             return ConvertPinyinToToneMarkImpl(result, toneNumber, t);
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -117,7 +117,7 @@ namespace Pinyin4net.Format
         private static KeyValuePair<string, List<string>> CreateReplaceRule(
             string ruleName, string ruleString)
         {
-            var result = 
+            var result =
                 new KeyValuePair<string, List<string>>(ruleName, new List<string>());
 
             var i = 0;
@@ -140,6 +140,7 @@ namespace Pinyin4net.Format
             var replacement = rule.Value[toneNumber - 1];
             return pinyin.Replace(rule.Key, replacement);
         }
+
         #endregion
     }
 }

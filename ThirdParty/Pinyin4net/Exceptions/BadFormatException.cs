@@ -20,17 +20,22 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
+
 using System;
 
 namespace Pinyin4net.Exceptions
 {
     /// <summary>
-    /// An exception class indicates the wrong combination of pinyin output formats
+    ///     An exception class indicates the wrong combination of pinyin output formats
     /// </summary>
     public class InvalidHanyuPinyinFormatException : ApplicationException
     {
         public InvalidHanyuPinyinFormatException()
-        { }
-        public InvalidHanyuPinyinFormatException(string message) : base(message) { }
+        {
+        }
+
+        public InvalidHanyuPinyinFormatException(string message) : base(message)
+        {
+        }
     }
 }

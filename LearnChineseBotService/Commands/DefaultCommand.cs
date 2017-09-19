@@ -7,13 +7,29 @@ using YellowDuck.LearnChineseBotService.MainExecution;
 
 namespace YellowDuck.LearnChineseBotService.Commands
 {
-    public class DefaultCommand: CommandBase
+    public class DefaultCommand : CommandBase
     {
         private readonly IWordRepository _repository;
 
         public DefaultCommand(IWordRepository repository)
         {
             _repository = repository;
+        }
+
+        public override string GetCommandIconUnicode()
+        {
+            return "👌";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Set default mode";
+        }
+
+
+        public override ECommands GetCommandType()
+        {
+            return ECommands.Default;
         }
 
         public override AnswerItem Reply(MessageItem mItem)
@@ -33,22 +49,6 @@ namespace YellowDuck.LearnChineseBotService.Commands
             {
                 Message = "Defaut mode has been set (hard, old words first)"
             };
-        }
-
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.Default;
-        }
-
-        public override string GetCommandIconUnicode()
-        {
-            return "👌";
-        }
-
-        public override string GetCommandTextDescription()
-        {
-            return "Set default mode";
         }
     }
 }

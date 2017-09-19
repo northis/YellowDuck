@@ -7,13 +7,13 @@ namespace YellowDuck.LearnChinese.Drawing
     {
         #region Constructors
 
-
         public FlashCardView()
         {
             //Mode = ELearnModes.All;
         }
 
-        public FlashCardView(SyllableView[] originalWord, SyllableView[] pinyin, string translationNative, string usage, ELearnMode mode)
+        public FlashCardView(SyllableView[] originalWord, SyllableView[] pinyin, string translationNative, string usage,
+            ELearnMode mode)
         {
             OriginalWord = originalWord;
             TranslationNative = translationNative;
@@ -48,8 +48,7 @@ namespace YellowDuck.LearnChinese.Drawing
         public Visibility UsageVisibility => Mode == ELearnMode.FullView
             ? Visibility.Visible
             : Visibility.Collapsed;
-        
-        #endregion
 
+        #endregion
     }
 }

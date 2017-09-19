@@ -1,5 +1,4 @@
-﻿
-/**
+﻿/**
  * Copyright (c) 2012 Yang Kuang
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -21,78 +20,81 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **/
+
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
-using System.Linq;
 using Pinyin4net.Format;
 
 namespace Pinyin4net
 {
     /// <summary>
-    /// Summary description for PinyinHelper.
+    ///     Summary description for PinyinHelper.
     /// </summary>
     public class PinyinHelper
     {
         private static readonly Dictionary<string, string> Dict;
 
         /// <summary>
-        /// We don't need any instances of this object.
+        ///     Load unicode-pinyin map to memery while this class first use.
+        /// </summary>
+        static PinyinHelper()
+        {
+            Dict = new Dictionary<string, string>();
+            var doc = XDocument.Load(
+                Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream(
+                        "Pinyin4net.Resources.unicode_to_hanyu_pinyin.xml"));
+            var query =
+                from item in doc.Root.Descendants("item")
+                select new
+                {
+                    Unicode = (string) item.Attribute("unicode"),
+                    Hanyu = (string) item.Attribute("hanyu")
+                };
+            foreach (var item in query)
+                if (item.Hanyu.Length > 0)
+                    Dict.Add(item.Unicode, item.Hanyu);
+        }
+
+        /// <summary>
+        ///     We don't need any instances of this object.
         /// </summary>
         private PinyinHelper()
         {
         }
 
         /// <summary>
-        /// Load unicode-pinyin map to memery while this class first use.
-        /// </summary>
-        static PinyinHelper()
-        {
-            Dict = new Dictionary<string, string>();
-            var doc = XDocument.Load(
-                Assembly.GetExecutingAssembly().GetManifestResourceStream(
-                    "Pinyin4net.Resources.unicode_to_hanyu_pinyin.xml"));
-            var query =
-                from item in doc.Root.Descendants("item")
-                select new
-                {
-                    Unicode = (string)item.Attribute("unicode"),
-                    Hanyu = (string)item.Attribute("hanyu")
-                };
-            foreach (var item in query)
-                if (item.Hanyu.Length > 0)
-                    Dict.Add(item.Unicode, item.Hanyu);
-
-        }
-
-        /// <summary>
-        /// Get all Hanyu pinyin of a single Chinese character (both
-        /// Simplified Chinese and Traditional Chinese).
-        /// 
-        /// This function is same with: 
+        ///     Get all Hanyu pinyin of a single Chinese character (both
+        ///     Simplified Chinese and Traditional Chinese).
+        ///     This function is same with:
         ///     ToHanyuPinyinStringArray(ch, new HanyuPinyinOutputFormat());
-        ///
-        /// For example, if the input is '偻', the return will be an array with 
-        /// two Hanyu pinyin strings: "lou2", "lv3". If the input is '李', the
-        /// return will be an array with one Hanyu pinyin string: "li3".
+        ///     For example, if the input is '偻', the return will be an array with
+        ///     two Hanyu pinyin strings: "lou2", "lv3". If the input is '李', the
+        ///     return will be an array with one Hanyu pinyin string: "li3".
         /// </summary>
         /// <param name="ch">The given Chinese character</param>
-        /// <returns>A string array contains all Hanyu pinyin presentations; return 
-        /// null for non-Chinese character.</returns>
+        /// <returns>
+        ///     A string array contains all Hanyu pinyin presentations; return
+        ///     null for non-Chinese character.
+        /// </returns>
         public static string[] ToHanyuPinyinStringArray(char ch)
         {
             return ToHanyuPinyinStringArray(ch, new HanyuPinyinOutputFormat());
         }
 
         /// <summary>
-        /// Get all Hanyu pinyin of a single Chinese character (both
-        /// Simplified Chinese and Traditional Chinese).
+        ///     Get all Hanyu pinyin of a single Chinese character (both
+        ///     Simplified Chinese and Traditional Chinese).
         /// </summary>
         /// <param name="ch">The given Chinese character</param>
         /// <param name="format">The given output format</param>
-        /// <returns>A string array contains all Hanyu pinyin presentations; return 
-        /// null for non-Chinese character.</returns>
+        /// <returns>
+        ///     A string array contains all Hanyu pinyin presentations; return
+        ///     null for non-Chinese character.
+        /// </returns>
         public static string[] ToHanyuPinyinStringArray(
             char ch, HanyuPinyinOutputFormat format)
         {
@@ -100,17 +102,14 @@ namespace Pinyin4net
         }
 
         #region Private Functions
+
         private static string[] GetFomattedHanyuPinyinStringArray(
             char ch, HanyuPinyinOutputFormat format)
         {
             var unformattedArr = GetUnformattedHanyuPinyinStringArray(ch);
             if (null != unformattedArr)
-            {
                 for (var i = 0; i < unformattedArr.Length; i++)
-                {
                     unformattedArr[i] = PinyinFormatter.FormatHanyuPinyin(unformattedArr[i], format);
-                }
-            }
 
             return unformattedArr;
         }
@@ -122,12 +121,11 @@ namespace Pinyin4net
             Console.WriteLine(code);
 #endif
             if (Dict.ContainsKey(code))
-            {
                 return Dict[code].Split(',');
-            }
 
             return null;
         }
+
         #endregion
     }
 }

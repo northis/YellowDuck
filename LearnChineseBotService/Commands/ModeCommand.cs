@@ -18,10 +18,24 @@ namespace YellowDuck.LearnChineseBotService.Commands
             _repository = repository;
         }
 
+        public override string GetCommandIconUnicode()
+        {
+            return "⚙️";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Choose learn words mode";
+        }
+
+        public override ECommands GetCommandType()
+        {
+            return ECommands.Mode;
+        }
+
         public override AnswerItem Reply(MessageItem mItem)
         {
             if (string.IsNullOrWhiteSpace(mItem.TextOnly))
-            {
                 return new AnswerItem
                 {
                     Message = "Choose learn words mode:",
@@ -32,11 +46,13 @@ namespace YellowDuck.LearnChineseBotService.Commands
                             {
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Hard, old first", EGettingWordsStrategy.OldMostDifficult.ToString())
+                                    new InlineKeyboardButton("‍Hard, old first",
+                                        EGettingWordsStrategy.OldMostDifficult.ToString())
                                 },
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Hard, new first", EGettingWordsStrategy.NewMostDifficult.ToString())
+                                    new InlineKeyboardButton("‍Hard, new first",
+                                        EGettingWordsStrategy.NewMostDifficult.ToString())
                                 },
                                 new[]
                                 {
@@ -48,15 +64,13 @@ namespace YellowDuck.LearnChineseBotService.Commands
                                 },
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Random", EGettingWordsStrategy.Random.ToString()),
+                                    new InlineKeyboardButton("‍Random", EGettingWordsStrategy.Random.ToString())
                                 }
                             }
                     }
                 };
-            }
 
             if (Enum.TryParse(mItem.TextOnly, true, out EGettingWordsStrategy strategy))
-            {
                 try
                 {
                     _repository.SetLearnMode(mItem.ChatId, strategy);
@@ -68,34 +82,16 @@ namespace YellowDuck.LearnChineseBotService.Commands
                         Message = e.Message
                     };
                 }
-            }
             else
-            {
                 return new AnswerItem
                 {
                     Message = "This mode is not supported"
                 };
-            }
 
             return new AnswerItem
             {
                 Message = "Mode has been set"
             };
-        }
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.Mode;
-        }
-
-        public override string GetCommandIconUnicode()
-        {
-            return "⚙️";
-        }
-
-        public override string GetCommandTextDescription()
-        {
-            return "Choose learn words mode";
         }
     }
 }

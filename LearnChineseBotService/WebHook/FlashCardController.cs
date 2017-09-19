@@ -13,13 +13,14 @@ namespace YellowDuck.LearnChineseBotService.WebHook
     {
         private readonly IWordRepository _repository;
 
-        public FlashCardController( IWordRepository repository)
+        public FlashCardController(IWordRepository repository)
         {
             _repository = repository;
         }
+
         public IHttpActionResult Get(string fileId)
         {
-            var id = fileId.Replace(".jpg","");
+            var id = fileId.Replace(".jpg", "");
 
             var longId = long.Parse(id);
 
@@ -48,7 +49,7 @@ namespace YellowDuck.LearnChineseBotService.WebHook
                 {
                     Content = new ByteArrayContent(_imageBytes)
                 };
-                
+
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
 
                 return response;

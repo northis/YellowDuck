@@ -7,10 +7,9 @@ namespace YellowDuck.LearnChinese.Providers
 {
     public class ClassicSyllableColorProvider : ISyllableColorProvider
     {
-
         #region Methods
 
-        short GetSyllableNumber(string latinSyllableNumber)
+        private short GetSyllableNumber(string latinSyllableNumber)
         {
             var numberOnly = Regex.Match(latinSyllableNumber, "[0-9]");
             short syllableNumber;

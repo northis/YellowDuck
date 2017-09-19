@@ -14,35 +14,6 @@ namespace YellowDuck.LearnChineseBotService.Tests
         private const long IdTestUser = 0;
         private const long IdFriendTestUser = 1;
 
-        private EfRepository GetCleanDb()
-        {
-            var cntxt = new EfRepository(new LearnChineseDbContext(), false);
-
-            using (var cn = GetDbContext())
-            {
-                cn.WordFileAs.RemoveRange(cn.WordFileAs);
-                cn.WordFileOs.RemoveRange(cn.WordFileOs);
-                cn.WordFilePs.RemoveRange(cn.WordFilePs);
-                cn.WordFileTs.RemoveRange(cn.WordFileTs);
-
-                cn.Scores.RemoveRange(cn.Scores);
-                cn.Words.RemoveRange(cn.Words);
-                cn.Users.RemoveRange(cn.Users);
-                cn.UserSharings.RemoveRange(cn.UserSharings);
-                cn.Users.Add(new User {IdUser = IdTestUser, Name = nameof(IdTestUser), JoinDate = cntxt.GetRepositoryTime()});
-                cn.Users.Add(new User {IdUser = IdFriendTestUser, Name = nameof(IdFriendTestUser), JoinDate = cntxt.GetRepositoryTime() });
-                cn.UserSharings.Add(new UserSharing {IdOwner = IdTestUser, IdFriend = IdFriendTestUser});
-                cn.SaveChanges();
-            }
-
-            return cntxt;
-        }
-
-        private LearnChineseDbContext GetDbContext()
-        {
-            return new LearnChineseDbContext();
-        }
-
         [TestMethod]
         public void AddWordTest()
         {
@@ -56,10 +27,10 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 LastModified = iCntxt.GetRepositoryTime(),
                 Pronunciation = "tǐ|yù|guǎn",
                 Translation = "Спортзал",
-                WordFileA = new WordFileA{Bytes = new byte[] { 0x1, 0x2 }, Height = 1, Width = 1},
-                WordFileO = new WordFileO { Bytes = new byte[] { 0x1, 0x2 }, Height = 1, Width = 1 },
-                WordFileP = new WordFileP { Bytes = new byte[] { 0x1, 0x2 }, Height = 1, Width = 1 },
-                WordFileT = new WordFileT { Bytes = new byte[] { 0x1, 0x2 }, Height = 1, Width = 1 },
+                WordFileA = new WordFileA {Bytes = new byte[] {0x1, 0x2}, Height = 1, Width = 1},
+                WordFileO = new WordFileO {Bytes = new byte[] {0x1, 0x2}, Height = 1, Width = 1},
+                WordFileP = new WordFileP {Bytes = new byte[] {0x1, 0x2}, Height = 1, Width = 1},
+                WordFileT = new WordFileT {Bytes = new byte[] {0x1, 0x2}, Height = 1, Width = 1},
                 IdOwner = IdTestUser
             }, IdTestUser);
 
@@ -70,39 +41,6 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
                 Assert.IsNotNull(word.CardAll);
             }
-        }
-
-        [TestMethod]
-        public void RemoveWordFromRepTest()
-        {
-            var cntxt = GetCleanDb();
-            IWordRepository iCntxt = cntxt;
-
-            var chineseWord = "体育馆";
-            using (var cn = GetDbContext())
-            {
-                cn.Words.Add(new Word
-                {
-                    OriginalWord = chineseWord,
-                    LastModified = iCntxt.GetRepositoryTime(),
-                    Pronunciation = "tǐyùguǎn",
-                    Translation = "Спортзал",
-                    IdOwner = IdTestUser
-                });
-                cn.SaveChanges();
-            }
-
-            using (var cn = GetDbContext())
-            {
-                var wordInDb = cn.Words.FirstOrDefault(a => a.OriginalWord == chineseWord);
-                Assert.IsNotNull(wordInDb);
-
-                iCntxt.DeleteWord(wordInDb.Id);
-
-
-                Assert.IsFalse(cn.Words.Any(a => a.OriginalWord == chineseWord));
-            }
-
         }
 
         [TestMethod]
@@ -152,7 +90,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 Assert.IsNotNull(newWord.CardOriginalWord);
                 Assert.IsNotNull(newWord.CardPronunciation);
                 Assert.IsNotNull(newWord.CardTranslation);
-                
+
                 //System.IO.File.WriteAllBytes($@"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}\CardAll.png", newWord.CardAll);
                 //System.IO.File.WriteAllBytes($@"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}\CardOriginalWord.png", newWord.CardOriginalWord);
                 //System.IO.File.WriteAllBytes($@"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}\CardPronunciation.png", newWord.CardPronunciation);
@@ -172,7 +110,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
             var cntxt = GetCleanDb();
             IWordRepository iCntxt = cntxt;
             var iStudyProvider = new ClassicStudyProvider(iCntxt);
-            
+
             var idUser = IdFriendTestUser;
             var baseTime = iCntxt.GetRepositoryTime();
 
@@ -184,7 +122,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 IdOwner = IdTestUser,
                 LastModified = baseTime
             };
-            newWord1.Scores.Add(new Score{IdUser = idUser, IsInLearnMode = false, LastView = baseTime });
+            newWord1.Scores.Add(new Score {IdUser = idUser, IsInLearnMode = false, LastView = baseTime});
 
             var prevTime = baseTime.AddMinutes(-10);
             var newWord2 = new Word
@@ -195,7 +133,7 @@ namespace YellowDuck.LearnChineseBotService.Tests
                 IdOwner = IdTestUser,
                 LastModified = prevTime
             };
-            newWord2.Scores.Add(new Score { IdUser = idUser, IsInLearnMode = false, LastView = prevTime });
+            newWord2.Scores.Add(new Score {IdUser = idUser, IsInLearnMode = false, LastView = prevTime});
 
             prevTime = prevTime.AddMinutes(-10);
             var middleWord = new Word
@@ -277,7 +215,6 @@ namespace YellowDuck.LearnChineseBotService.Tests
 
             using (var cn = GetDbContext())
             {
-
                 foreach (var word in words)
                 {
                     cn.Words.Add(word);
@@ -317,6 +254,38 @@ namespace YellowDuck.LearnChineseBotService.Tests
         }
 
         [TestMethod]
+        public void RemoveWordFromRepTest()
+        {
+            var cntxt = GetCleanDb();
+            IWordRepository iCntxt = cntxt;
+
+            var chineseWord = "体育馆";
+            using (var cn = GetDbContext())
+            {
+                cn.Words.Add(new Word
+                {
+                    OriginalWord = chineseWord,
+                    LastModified = iCntxt.GetRepositoryTime(),
+                    Pronunciation = "tǐyùguǎn",
+                    Translation = "Спортзал",
+                    IdOwner = IdTestUser
+                });
+                cn.SaveChanges();
+            }
+
+            using (var cn = GetDbContext())
+            {
+                var wordInDb = cn.Words.FirstOrDefault(a => a.OriginalWord == chineseWord);
+                Assert.IsNotNull(wordInDb);
+
+                iCntxt.DeleteWord(wordInDb.Id);
+
+
+                Assert.IsFalse(cn.Words.Any(a => a.OriginalWord == chineseWord));
+            }
+        }
+
+        [TestMethod]
         public void UserAddRemoveTest()
         {
             var cntxt = GetDbContext();
@@ -331,6 +300,45 @@ namespace YellowDuck.LearnChineseBotService.Tests
             iCntxt.RemoveUser(idUser);
 
             Assert.IsFalse(cntxt.Users.Any(a => a.IdUser == idUser));
+        }
+
+        private EfRepository GetCleanDb()
+        {
+            var cntxt = new EfRepository(new LearnChineseDbContext(), false);
+
+            using (var cn = GetDbContext())
+            {
+                cn.WordFileAs.RemoveRange(cn.WordFileAs);
+                cn.WordFileOs.RemoveRange(cn.WordFileOs);
+                cn.WordFilePs.RemoveRange(cn.WordFilePs);
+                cn.WordFileTs.RemoveRange(cn.WordFileTs);
+
+                cn.Scores.RemoveRange(cn.Scores);
+                cn.Words.RemoveRange(cn.Words);
+                cn.Users.RemoveRange(cn.Users);
+                cn.UserSharings.RemoveRange(cn.UserSharings);
+                cn.Users.Add(new User
+                {
+                    IdUser = IdTestUser,
+                    Name = nameof(IdTestUser),
+                    JoinDate = cntxt.GetRepositoryTime()
+                });
+                cn.Users.Add(new User
+                {
+                    IdUser = IdFriendTestUser,
+                    Name = nameof(IdFriendTestUser),
+                    JoinDate = cntxt.GetRepositoryTime()
+                });
+                cn.UserSharings.Add(new UserSharing {IdOwner = IdTestUser, IdFriend = IdFriendTestUser});
+                cn.SaveChanges();
+            }
+
+            return cntxt;
+        }
+
+        private LearnChineseDbContext GetDbContext()
+        {
+            return new LearnChineseDbContext();
         }
     }
 }

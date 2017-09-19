@@ -2,13 +2,12 @@
 
 namespace YellowDuck.LearnChinese.Drawing
 {
-    public sealed class SyllableView 
+    public sealed class SyllableView
     {
         #region Constructors
 
         public SyllableView()
         {
-            
         }
 
         public SyllableView(string text, Color color)

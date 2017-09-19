@@ -11,14 +11,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
     {
         private readonly IStudyProvider _studyProvider;
 
-        public LearnSpeakCommand(IStudyProvider studyProvider, EditCommand editCommand) : base(studyProvider, editCommand)
+        public LearnSpeakCommand(IStudyProvider studyProvider, EditCommand editCommand) : base(studyProvider,
+            editCommand)
         {
             _studyProvider = studyProvider;
-        }
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.LearnPronunciation;
         }
 
         public override string GetCommandIconUnicode()
@@ -31,10 +27,14 @@ namespace YellowDuck.LearnChineseBotService.Commands
             return "Learn how to prononciate these words";
         }
 
+        public override ECommands GetCommandType()
+        {
+            return ECommands.LearnPronunciation;
+        }
+
         public override LearnUnit ProcessLearn(MessageItem mItem)
         {
             return _studyProvider.LearnWord(mItem.ChatId, ELearnMode.Pronunciation);
         }
-        
     }
 }

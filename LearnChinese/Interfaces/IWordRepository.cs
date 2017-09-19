@@ -8,34 +8,37 @@ namespace YellowDuck.LearnChinese.Interfaces
 {
     public interface IWordRepository
     {
-        WordStatistic GetCurrentUserWordStatistic(long userId);
-        WordStatistic GetUserWordStatistic(long userId, long wordId);
+        void AddFriendUser(long ownerUserId, long friendUserId);
 
-        IQueryable<WordSearchResult> FindFlashCard(string searchString, long userId);
+        void AddUser(IUser user);
 
-        DateTime GetRepositoryTime();
-
-        void SetScore(IScore score);
-        
-        void EditWord(IWord word);
+        void AddWord(IWord word, long idUser);
 
         void DeleteWord(long wordId);
 
-        void AddWord(IWord word, long idUser);
-        
-        void AddUser(IUser user);
+        void EditWord(IWord word);
+
+        IQueryable<WordSearchResult> FindFlashCard(string searchString, long userId);
+        WordStatistic GetCurrentUserWordStatistic(long userId);
+
+        IQueryable<WordSearchResult> GetLastWords(long idUser, int topCount);
+
+        EGettingWordsStrategy GetLearnMode(long userId);
+
+        LearnUnit GetNextWord(WordSettings settings);
+
+        DateTime GetRepositoryTime();
+        string GetUserCommand(long userId);
+        IQueryable<IUser> GetUserFriends(long userId);
 
         IQueryable<IUser> GetUsers();
-        IQueryable<IUser> GetUserFriends(long userId);
+        WordStatistic GetUserWordStatistic(long userId, long wordId);
 
         IWord GetWord(string wordOriginal);
 
+        byte[] GetWordFlashCard(long fileId);
+
         bool IsUserExist(long userId);
-
-        void SetUserCommand(long userId, string command);
-        string GetUserCommand(long userId);
-
-        void AddFriendUser(long ownerUserId, long friendUserId);
 
         void RemoveFriendUser(long ownerUserId, long friendUserId);
 
@@ -43,13 +46,8 @@ namespace YellowDuck.LearnChinese.Interfaces
 
         void SetLearnMode(long userId, EGettingWordsStrategy mode);
 
-        EGettingWordsStrategy GetLearnMode(long userId);
+        void SetScore(IScore score);
 
-        LearnUnit GetNextWord(WordSettings settings);
-
-        byte[] GetWordFlashCard(long fileId);
-
-        IQueryable<WordSearchResult> GetLastWords(long idUser, int topCount);
-
+        void SetUserCommand(long userId, string command);
     }
 }

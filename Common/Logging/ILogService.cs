@@ -5,6 +5,6 @@ namespace YellowDuck.Common.Logging
 {
     public interface ILogService
     {
-        void Write(string message, Exception ex, Dictionary<string,object> parameters);
+        void Write(string message, Exception ex, Dictionary<string, object> parameters);
     }
 }

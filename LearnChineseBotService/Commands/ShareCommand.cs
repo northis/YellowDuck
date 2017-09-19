@@ -22,6 +22,21 @@ namespace YellowDuck.LearnChineseBotService.Commands
             _repository = repository;
         }
 
+        public override string GetCommandIconUnicode()
+        {
+            return "🤝";
+        }
+
+        public override string GetCommandTextDescription()
+        {
+            return "Share your word list with a friend";
+        }
+
+        public override ECommands GetCommandType()
+        {
+            return ECommands.Share;
+        }
+
         public override AnswerItem Reply(MessageItem mItem)
         {
             int friendUser;
@@ -35,12 +50,10 @@ namespace YellowDuck.LearnChineseBotService.Commands
             if (parameterArray.Length == 2 && int.TryParse(parameterArray[1], out friendUser))
             {
                 if (isAdd == isRemove)
-                {
                     return new AnswerItem
                     {
                         Message = "Command is not supported."
                     };
-                }
 
                 try
                 {
@@ -58,16 +71,15 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     {
                         Message = "The friend has been removed from your sharing list"
                     };
-
                 }
                 catch (Exception ex)
                 {
                     Trace.WriteLine(ex);
-                    return new AnswerItem { Message = ex.Message };
+                    return new AnswerItem {Message = ex.Message};
                 }
             }
 
-            var otherUsers = _repository.GetUsers().Where(a => a.IdUser != userId) ;
+            var otherUsers = _repository.GetUsers().Where(a => a.IdUser != userId);
             var friends = _repository.GetUserFriends(userId).Select(a => a.IdUser).ToList();
 
             var offerFriends = otherUsers.Take(MaxShareUsers).ToArray();
@@ -82,32 +94,17 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     new InlineKeyboardButton("(" + (isFriendInShares ? "➖" : "➕") + $") {friend.Name}",
                         isFriendInShares ? $"remove={friend.IdUser}" : $"add={friend.IdUser}")
                 });
-
             }
 
             return new AnswerItem
             {
-                Message = "List of persons who use this bot. ➕ - to invite and add to your sharing list, ➖ - to remove from your sharing list",
+                Message =
+                    "List of persons who use this bot. ➕ - to invite and add to your sharing list, ➖ - to remove from your sharing list",
                 Markup = new InlineKeyboardMarkup
                 {
                     InlineKeyboard = buttons.ToArray()
                 }
             };
-        }
-
-        public override ECommands GetCommandType()
-        {
-            return ECommands.Share;
-        }
-
-        public override string GetCommandIconUnicode()
-        {
-            return "🤝";
-        }
-
-        public override string GetCommandTextDescription()
-        {
-            return "Share your word list with a friend";
         }
     }
 }
