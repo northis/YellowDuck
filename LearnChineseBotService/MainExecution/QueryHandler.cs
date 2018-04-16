@@ -221,10 +221,11 @@ namespace YellowDuck.LearnChineseBotService.MainExecution
             var reply = handler.Reply(mItem);
 
             if (reply.Markup == null)
-                reply.Markup = new ReplyKeyboardHide();
+                reply.Markup = new ReplyKeyboardRemove();
 
             if (reply.Picture == null)
-                await _client.SendTextMessageAsync(mItem.ChatId, reply.Message, true, false, 0, reply.Markup);
+                await _client.SendTextMessageAsync(mItem.ChatId, reply.Message, ParseMode.Default, true, false, 0,
+                    reply.Markup);
             else
                 using (var ms = new MemoryStream(reply.Picture.ImageBody))
                 {

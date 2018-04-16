@@ -1,5 +1,6 @@
 ﻿using System;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InlineKeyboardButtons;
 using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChineseBotService.Commands.Common;
@@ -69,12 +70,12 @@ namespace YellowDuck.LearnChineseBotService.Commands
                 message = $"Do you really want to remove '{mItem.TextOnly}'?";
                 markup = new InlineKeyboardMarkup
                 {
-                    InlineKeyboard = new[]
+                    InlineKeyboard = new InlineKeyboardButton[][]
                     {
                         new[]
                         {
-                            new InlineKeyboardButton("✅Yes", $"yes{mItem.TextOnly}"),
-                            new InlineKeyboardButton("❌No", "no")
+                            new InlineKeyboardCallbackButton("✅Yes", $"yes{mItem.TextOnly}"),
+                            new InlineKeyboardCallbackButton("❌No", "no")
                         }
                     }
                 };

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InlineKeyboardButtons;
 using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChinese.Interfaces;
@@ -33,9 +34,9 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
         {
             var buttons = new List<InlineKeyboardButton[]>();
             foreach (var option in lUnit.Options)
-                buttons.Add(new[]
+                buttons.Add(new InlineKeyboardButton[]
                 {
-                    new InlineKeyboardButton(string.Join("", option.Take(MaxAnswerLength)))
+                    new InlineKeyboardCallbackButton(string.Join("", option.Take(MaxAnswerLength)),"")
                 });
 
             previousAnswerItem.Markup = new InlineKeyboardMarkup {InlineKeyboard = buttons.ToArray()};

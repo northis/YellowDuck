@@ -13,6 +13,7 @@ namespace YellowDuck.LearnChineseBotService
         {
             MainFactory.Log.Write("CurrentDomain_UnhandledException", (Exception) e.ExceptionObject,
                 new Dictionary<string, object> {{nameof(e.IsTerminating), e.IsTerminating}});
+            Console.ReadKey();
             Environment.Exit(-1);
         }
 

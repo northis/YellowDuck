@@ -1,5 +1,11 @@
 ﻿
 Relase notes:
+ver.0.3.0.0 (16 april 2018)
+=========================
+[+] added socks support for beloved RKN
+[+] migrate to new lib versions
+
+A new updated version with web site is coming soon!
 
 ver.0.2.4.0 (10 may 2017)
 =========================

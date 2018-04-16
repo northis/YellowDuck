@@ -1,5 +1,6 @@
 ﻿using System;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InlineKeyboardButtons;
 using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Data.ObjectModels;
 using YellowDuck.LearnChineseBotService.MainExecution;
@@ -25,13 +26,13 @@ namespace YellowDuck.LearnChineseBotService.Commands.Common
         {
             var mkp = new InlineKeyboardMarkup
             {
-                InlineKeyboard = new[]
+                InlineKeyboard = new InlineKeyboardButton[][]
                 {
                     new[]
                     {
-                        new InlineKeyboardButton("🖌Edit",
+                        new InlineKeyboardCallbackButton("🖌Edit",
                             $"{EditCommand.EditCmd}{EditCommand.EditCmdSeparator}{idCurrentWord}"),
-                        new InlineKeyboardButton("➡️Next", NextCmd)
+                        new InlineKeyboardCallbackButton("➡️Next", NextCmd)
                     }
                 }
             };

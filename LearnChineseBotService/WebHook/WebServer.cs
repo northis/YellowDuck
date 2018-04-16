@@ -33,12 +33,12 @@ namespace YellowDuck.LearnChineseBotService.WebHook
 
             //NOTE This bot uses the webhooks web-server to provide a jpeg-url for the inline mode. So don't use irregular ports (such as 8433), because Telegram cannot show a jpeg picture inside an inline message while you use those ports and the message will be hold in not-delivered status forever. Use the 443 port and don't specify the port in the url.
             WebHookWebServer = WebApp.Start<Startup>(_innerurl);
-            _client.SetWebhook(_outerUrl + $"/{_telegramId}/{_whControllerName}").Wait();
+            _client.SetWebhookAsync(_outerUrl + $"/{_telegramId}/{_whControllerName}").Wait();
         }
 
         public void Stop()
         {
-            _client.SetWebhook().Wait();
+            _client.SetWebhookAsync().Wait();
             WebHookWebServer.Dispose();
         }
     }

@@ -49,7 +49,7 @@ namespace YellowDuck.LearnChineseBotService.Commands
             {
                 Message =
                     $"Chinese Duck Bot ver. {version}{Environment.NewLine}{copywrite}{Environment.NewLine}Contact me: @DeathWhinny{Environment.NewLine}Rate me: http://bit.ly/2pWjKuc {Environment.NewLine}{_releaseNotes}",
-                Markup = new ReplyKeyboardHide()
+                Markup = new ReplyKeyboardRemove()
             };
         }
     }

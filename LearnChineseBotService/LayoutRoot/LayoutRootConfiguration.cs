@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using com.LandonKey.SocksWebProxy;
+using com.LandonKey.SocksWebProxy.Proxy;
 using Ninject.Modules;
 using Telegram.Bot;
 using YellowDuck.Common.Logging;
@@ -68,6 +71,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
             Bind<IFlashCardGenerator>().To<WpfFlashCardGenerator>();
             Bind<ILogService>().To<Log4NetService>().InSingletonScope();
 
+
             Bind<AboutCommand>()
                 .ToSelf()
                 .WithConstructorArgument("releaseNotes", ReleaseNotesInfo);
@@ -89,11 +93,29 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .WithConstructorArgument("telegramId", MainFactory.TelegramBotKey)
                 .WithConstructorArgument("whControllerName", MainFactory.WebhookControllerName);
 
+
+            IWebProxy proxy = null;
+            if (MainFactory.UseProxy)
+            {
+                proxy = new SocksWebProxy(new ProxyConfig(
+                    //This is an internal http->socks proxy that runs in process
+                    IPAddress.Parse("127.0.0.1"),
+                    //This is the port your in process http->socks proxy will run on
+                    MainFactory.ProxyPort,
+                    //This could be an address to a local socks proxy (ex: Tor / Tor Browser, If Tor is running it will be on 127.0.0.1)
+                    IPAddress.Parse(MainFactory.ProxyName),
+                    //This is the port that the socks proxy lives on (ex: Tor / Tor Browser, Tor is 9150)
+                    MainFactory.ProxyPort,
+                    //This Can be Socks4 or Socks5
+                    ProxyConfig.SocksVersion.Five
+                ));
+            }
+
+            var tClient =
+                new TelegramBotClient(MainFactory.TelegramBotKey, proxy) {Timeout = MainFactory.PollingTimeout};
+
             Bind<TelegramBotClient>()
-                .ToSelf()
-                .InSingletonScope()
-                .WithConstructorArgument(MainFactory.TelegramBotKey)
-                .WithPropertyValue("PollingTimeout", MainFactory.PollingTimeout);
+                .ToConstant(tClient);
 
             Bind<HelpCommand>()
                 .ToSelf()
@@ -103,6 +125,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .ToSelf()
                 .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values
                     .ToArray());
+
         }
     }
 }

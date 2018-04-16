@@ -1,5 +1,6 @@
 ﻿using System;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InlineKeyboardButtons;
 using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Enums;
 using YellowDuck.LearnChinese.Interfaces;
@@ -42,29 +43,29 @@ namespace YellowDuck.LearnChineseBotService.Commands
                     Markup = new InlineKeyboardMarkup
                     {
                         InlineKeyboard =
-                            new[]
+                            new InlineKeyboardButton[][]
                             {
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Hard, old first",
+                                    new InlineKeyboardCallbackButton("‍Hard, old first",
                                         EGettingWordsStrategy.OldMostDifficult.ToString())
                                 },
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Hard, new first",
+                                    new InlineKeyboardCallbackButton("‍Hard, new first",
                                         EGettingWordsStrategy.NewMostDifficult.ToString())
                                 },
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍New first", EGettingWordsStrategy.NewFirst.ToString())
+                                    new InlineKeyboardCallbackButton("‍New first", EGettingWordsStrategy.NewFirst.ToString())
                                 },
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Old first", EGettingWordsStrategy.OldFirst.ToString())
+                                    new InlineKeyboardCallbackButton("‍Old first", EGettingWordsStrategy.OldFirst.ToString())
                                 },
                                 new[]
                                 {
-                                    new InlineKeyboardButton("‍Random", EGettingWordsStrategy.Random.ToString())
+                                    new InlineKeyboardCallbackButton("‍Random", EGettingWordsStrategy.Random.ToString())
                                 }
                             }
                     }

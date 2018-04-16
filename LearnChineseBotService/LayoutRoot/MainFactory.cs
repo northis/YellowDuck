@@ -37,8 +37,11 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
         public static TimeSpan PollingTimeout = TimeSpan.Parse(ConfigurationManager.AppSettings["PollingTimeout"]);
         public static string WebhookUrl = ConfigurationManager.AppSettings["WebhookUrl"];
         public static string WebhookPublicUrl = ConfigurationManager.AppSettings["WebhookPublicUrl"];
+        public static bool UseProxy = bool.Parse(ConfigurationManager.AppSettings["UseProxy"]);
         public static string WebhookControllerName = "Webhook";
 
+        public static string ProxyName => ConfigurationManager.AppSettings["ProxyName"];
+        public static int ProxyPort => int.Parse(ConfigurationManager.AppSettings["ProxyPort"]);
         #endregion
 
         #region Methods
@@ -53,8 +56,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
         {
             if (NinjectKernel == null)
                 NinjectKernel = new StandardKernel(new LayoutRootConfiguration());
-
-
+            
             if (PollWorker == null)
                 PollWorker = NinjectKernel.Get<PollWorker>();
 

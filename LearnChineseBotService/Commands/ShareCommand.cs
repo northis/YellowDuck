@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.InlineKeyboardButtons;
 using Telegram.Bot.Types.ReplyMarkups;
 using YellowDuck.LearnChinese.Interfaces;
 using YellowDuck.LearnChineseBotService.Commands.Common;
@@ -89,9 +90,9 @@ namespace YellowDuck.LearnChineseBotService.Commands
             {
                 var isFriendInShares = friends.Contains(friend.IdUser);
 
-                buttons.Add(new[]
+                buttons.Add(new InlineKeyboardButton[]
                 {
-                    new InlineKeyboardButton("(" + (isFriendInShares ? "➖" : "➕") + $") {friend.Name}",
+                    new InlineKeyboardCallbackButton("(" + (isFriendInShares ? "➖" : "➕") + $") {friend.Name}",
                         isFriendInShares ? $"remove={friend.IdUser}" : $"add={friend.IdUser}")
                 });
             }
