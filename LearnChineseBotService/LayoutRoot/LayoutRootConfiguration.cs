@@ -2,10 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using com.LandonKey.SocksWebProxy;
 using com.LandonKey.SocksWebProxy.Proxy;
 using Ninject.Modules;
+using Org.Mentalis.Network.ProxySocket;
 using Telegram.Bot;
 using YellowDuck.Common.Logging;
 using YellowDuck.LearnChinese.Data.Ef;
@@ -93,22 +95,28 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .WithConstructorArgument("telegramId", MainFactory.TelegramBotKey)
                 .WithConstructorArgument("whControllerName", MainFactory.WebhookControllerName);
 
+            
 
             IWebProxy proxy = null;
             if (MainFactory.UseProxy)
             {
-                proxy = new SocksWebProxy(new ProxyConfig(
-                    //This is an internal http->socks proxy that runs in process
+                var ip = Dns.GetHostAddresses(MainFactory.ProxyName)[0];
+                
+                var pCfg = new ProxyConfig(
                     IPAddress.Parse("127.0.0.1"),
-                    //This is the port your in process http->socks proxy will run on
+                    GetNextFreePort(),
+                    ip,
                     MainFactory.ProxyPort,
-                    //This could be an address to a local socks proxy (ex: Tor / Tor Browser, If Tor is running it will be on 127.0.0.1)
-                    IPAddress.Parse(MainFactory.ProxyName),
-                    //This is the port that the socks proxy lives on (ex: Tor / Tor Browser, Tor is 9150)
-                    MainFactory.ProxyPort,
-                    //This Can be Socks4 or Socks5
                     ProxyConfig.SocksVersion.Five
-                ));
+                );
+
+                if (!string.IsNullOrEmpty(MainFactory.ProxyUser) && !string.IsNullOrEmpty(MainFactory.ProxyPassword))
+                {
+                    pCfg.Username = MainFactory.ProxyUser;
+                    pCfg.Password = MainFactory.ProxyPassword;
+                }
+
+                proxy = new SocksWebProxy(pCfg);
             }
 
             var tClient =
@@ -126,6 +134,16 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values
                     .ToArray());
 
+        }
+
+        private static int GetNextFreePort()
+        {
+            var listener = new TcpListener(IPAddress.Loopback, 0);
+            listener.Start();
+            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop();
+
+            return port;
         }
     }
 }

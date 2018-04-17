@@ -42,6 +42,8 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
 
         public static string ProxyName => ConfigurationManager.AppSettings["ProxyName"];
         public static int ProxyPort => int.Parse(ConfigurationManager.AppSettings["ProxyPort"]);
+        public static string ProxyUser => ConfigurationManager.AppSettings["ProxyUser"];
+        public static string ProxyPassword => ConfigurationManager.AppSettings["ProxyPassword"];
         #endregion
 
         #region Methods
