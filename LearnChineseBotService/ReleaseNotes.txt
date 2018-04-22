@@ -1,6 +1,6 @@
 ﻿
 Relase notes:
-ver.0.3.2.0 (18 april 2018)
+ver.0.3.2.0 (22 april 2018)
 =========================
 [+] changed socks5 proxy
 
@@ -10,7 +10,6 @@ ver.0.3.1.0 (18 april 2018)
 =========================
 [+] added proxy support for beloved RKN
 [+] migrate to a new lib versions
-
 
 ver.0.2.4.0 (10 may 2017)
 =========================
