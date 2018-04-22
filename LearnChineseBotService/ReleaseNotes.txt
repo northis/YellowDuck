@@ -1,11 +1,16 @@
 ﻿
 Relase notes:
-ver.0.3.0.0 (16 april 2018)
+ver.0.3.2.0 (18 april 2018)
 =========================
-[+] added socks support for beloved RKN
-[+] migrate to new lib versions
+[+] changed socks5 proxy
 
-A new updated version with web site is coming soon!
+A new updated version with the web site is coming soon!
+
+ver.0.3.1.0 (18 april 2018)
+=========================
+[+] added proxy support for beloved RKN
+[+] migrate to a new lib versions
+
 
 ver.0.2.4.0 (10 may 2017)
 =========================

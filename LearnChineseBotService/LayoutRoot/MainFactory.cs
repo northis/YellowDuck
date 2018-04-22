@@ -37,7 +37,7 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
         public static TimeSpan PollingTimeout = TimeSpan.Parse(ConfigurationManager.AppSettings["PollingTimeout"]);
         public static string WebhookUrl = ConfigurationManager.AppSettings["WebhookUrl"];
         public static string WebhookPublicUrl = ConfigurationManager.AppSettings["WebhookPublicUrl"];
-        public static bool UseProxy = bool.Parse(ConfigurationManager.AppSettings["UseProxy"]);
+        public static bool UseProxy = bool.Parse(ConfigurationManager.AppSettings["UseProxySocks5"]);
         public static string WebhookControllerName = "Webhook";
 
         public static string ProxyName => ConfigurationManager.AppSettings["ProxyName"];

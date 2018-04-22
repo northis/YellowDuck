@@ -2,12 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Reflection;
-using com.LandonKey.SocksWebProxy;
-using com.LandonKey.SocksWebProxy.Proxy;
+using Extreme.Net;
 using Ninject.Modules;
-using Org.Mentalis.Network.ProxySocket;
 using Telegram.Bot;
 using YellowDuck.Common.Logging;
 using YellowDuck.LearnChinese.Data.Ef;
@@ -45,8 +44,6 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 if (_currentDir != null) return _currentDir;
 
                 var thisLocation = Assembly.GetCallingAssembly().Location;
-                if (thisLocation == null)
-                    _currentDir = Directory.GetCurrentDirectory();
 
                 _currentDir = Path.GetDirectoryName(thisLocation);
 
@@ -95,32 +92,26 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .WithConstructorArgument("telegramId", MainFactory.TelegramBotKey)
                 .WithConstructorArgument("whControllerName", MainFactory.WebhookControllerName);
 
-            
 
-            IWebProxy proxy = null;
+            HttpClient httpClient = null;
             if (MainFactory.UseProxy)
             {
-                var ip = Dns.GetHostAddresses(MainFactory.ProxyName)[0];
-                
-                var pCfg = new ProxyConfig(
-                    IPAddress.Parse("127.0.0.1"),
-                    GetNextFreePort(),
-                    ip,
-                    MainFactory.ProxyPort,
-                    ProxyConfig.SocksVersion.Five
-                );
+                var useAuth = !string.IsNullOrEmpty(MainFactory.ProxyUser) &&
+                             !string.IsNullOrEmpty(MainFactory.ProxyPassword);
 
-                if (!string.IsNullOrEmpty(MainFactory.ProxyUser) && !string.IsNullOrEmpty(MainFactory.ProxyPassword))
-                {
-                    pCfg.Username = MainFactory.ProxyUser;
-                    pCfg.Password = MainFactory.ProxyPassword;
-                }
+                var socksProxy = useAuth
+                    ? new Socks5ProxyClient(MainFactory.ProxyName, MainFactory.ProxyPort, MainFactory.ProxyUser,
+                        MainFactory.ProxyPassword)
+                    : new Socks5ProxyClient(MainFactory.ProxyName, MainFactory.ProxyPort);
 
-                proxy = new SocksWebProxy(pCfg);
+
+                var handler = new ProxyHandler(socksProxy);
+                httpClient = new HttpClient(handler);
             }
 
             var tClient =
-                new TelegramBotClient(MainFactory.TelegramBotKey, proxy) {Timeout = MainFactory.PollingTimeout};
+                new TelegramBotClient(MainFactory.TelegramBotKey, httpClient) { Timeout = MainFactory.PollingTimeout };
+
 
             Bind<TelegramBotClient>()
                 .ToConstant(tClient);
@@ -134,16 +125,6 @@ namespace YellowDuck.LearnChineseBotService.LayoutRoot
                 .WithConstructorArgument<Func<CommandBase[]>>(() => MainFactory.VisibleCommandHandlers.Values
                     .ToArray());
 
-        }
-
-        private static int GetNextFreePort()
-        {
-            var listener = new TcpListener(IPAddress.Loopback, 0);
-            listener.Start();
-            var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-            listener.Stop();
-
-            return port;
         }
     }
 }

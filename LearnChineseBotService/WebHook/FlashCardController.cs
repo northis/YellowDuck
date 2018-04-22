@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -22,7 +23,15 @@ namespace YellowDuck.LearnChineseBotService.WebHook
         {
             var id = fileId.Replace(".jpg", "");
 
-            var longId = long.Parse(id);
+            long longId = 0;
+            try
+            {
+                longId = long.Parse(id);
+            }
+            catch (Exception)
+            {
+                return new NotFoundResult(new HttpRequestMessage());
+            }
 
             var file = _repository.GetWordFlashCard(longId);
             if (file == null)
